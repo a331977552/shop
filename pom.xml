@@ -29,6 +29,7 @@
     <properties>
         <java.version>11</java.version>
         <spring.version>2.4.5</spring.version>
+        <mybatis.dynamic.version>1.2.1</mybatis.dynamic.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -119,6 +120,11 @@
                 <artifactId>spring-security-test</artifactId>
                 <version>${spring.version}</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.mybatis.dynamic-sql</groupId>
+                <artifactId>mybatis-dynamic-sql</artifactId>
+                <version>${mybatis.dynamic.version}</version>
             </dependency>
         </dependencies>
 

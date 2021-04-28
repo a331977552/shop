@@ -1,0 +1,27 @@
+<!DOCTYPE generatorConfiguration PUBLIC
+        "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <context id="dsql" targetRuntime="MyBatis3DynamicSql">
+        <commentGenerator>
+            <property name="dateFormat" value="yyyy-mm-dd HH:mm:ss"/>
+        </commentGenerator>
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        userId="root"
+                        password="Aa123456."
+                        connectionURL="jdbc:mysql://localhost/shop" />
+        <javaModelGenerator targetPackage="org.shop.org.shop.model" targetProject="mybatis-generator/src/main/java"/>
+        <javaClientGenerator targetPackage="org.shop.org.shop.mapper" targetProject="mybatis-generator/src/main/java"/>
+        <table tableName="cart_item" ></table>
+        <table tableName="customer"></table>
+        <table tableName="customer_address"></table>
+        <table tableName="image"></table>
+        <table tableName="image_product"></table>
+        <table tableName="order_item"></table>
+        <table tableName="product"></table>
+        <table tableName="product_detail"></table>
+        <table tableName="shop_order"></table>
+        <table tableName="shopping_cart"></table>
+        <table tableName="snapshot_product"></table>
+    </context>
+</generatorConfiguration>
