@@ -16,7 +16,7 @@ import org.mybatis.dynamic.sql.update.UpdateModel;
 import org.mybatis.dynamic.sql.update.render.UpdateStatementProvider;
 import org.mybatis.dynamic.sql.util.SqlProviderAdapter;
 import org.mybatis.dynamic.sql.util.mybatis3.MyBatis3Utils;
-import org.shop.model.Customer;
+import org.shop.model.dao.CustomerDAO;
 
 import javax.annotation.Generated;
 import java.util.Collection;
@@ -51,16 +51,16 @@ public interface CustomerMapper {
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:42.996956+08:00", comments="Source Table: customer")
     @InsertProvider(type=SqlProviderAdapter.class, method="insert")
-    int insert(InsertStatementProvider<Customer> insertStatement);
+    int insert(InsertStatementProvider<CustomerDAO> insertStatement);
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:42.997006+08:00", comments="Source Table: customer")
     @InsertProvider(type=SqlProviderAdapter.class, method="insertMultiple")
-    int insertMultiple(MultiRowInsertStatementProvider<Customer> multipleInsertStatement);
+    int insertMultiple(MultiRowInsertStatementProvider<CustomerDAO> multipleInsertStatement);
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:42.997061+08:00", comments="Source Table: customer")
     @SelectProvider(type=SqlProviderAdapter.class, method="select")
     @ResultMap("CustomerResult")
-    Optional<Customer> selectOne(SelectStatementProvider selectStatement);
+    Optional<CustomerDAO> selectOne(SelectStatementProvider selectStatement);
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:42.997153+08:00", comments="Source Table: customer")
     @SelectProvider(type=SqlProviderAdapter.class, method="select")
@@ -76,7 +76,7 @@ public interface CustomerMapper {
         @Result(column="created_time", property="createdTime", jdbcType=JdbcType.DATE),
         @Result(column="updated_time", property="updatedTime", jdbcType=JdbcType.DATE)
     })
-    List<Customer> selectMany(SelectStatementProvider selectStatement);
+    List<CustomerDAO> selectMany(SelectStatementProvider selectStatement);
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:42.999011+08:00", comments="Source Table: customer")
     @UpdateProvider(type=SqlProviderAdapter.class, method="update")
@@ -100,7 +100,7 @@ public interface CustomerMapper {
     }
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:42.999472+08:00", comments="Source Table: customer")
-    default int insert(Customer record) {
+    default int insert(CustomerDAO record) {
         return MyBatis3Utils.insert(this::insert, record, customer, c ->
             c.map(id).toProperty("id")
             .map(username).toProperty("username")
@@ -116,7 +116,7 @@ public interface CustomerMapper {
     }
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:43.005256+08:00", comments="Source Table: customer")
-    default int insertMultiple(Collection<Customer> records) {
+    default int insertMultiple(Collection<CustomerDAO> records) {
         return MyBatis3Utils.insertMultiple(this::insertMultiple, records, customer, c ->
             c.map(id).toProperty("id")
             .map(username).toProperty("username")
@@ -132,7 +132,7 @@ public interface CustomerMapper {
     }
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:43.006303+08:00", comments="Source Table: customer")
-    default int insertSelective(Customer record) {
+    default int insertSelective(CustomerDAO record) {
         return MyBatis3Utils.insert(this::insert, record, customer, c ->
             c.map(id).toPropertyWhenPresent("id", record::getId)
             .map(username).toPropertyWhenPresent("username", record::getUsername)
@@ -148,22 +148,22 @@ public interface CustomerMapper {
     }
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:43.006629+08:00", comments="Source Table: customer")
-    default Optional<Customer> selectOne(SelectDSLCompleter completer) {
+    default Optional<CustomerDAO> selectOne(SelectDSLCompleter completer) {
         return MyBatis3Utils.selectOne(this::selectOne, selectList, customer, completer);
     }
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:43.006725+08:00", comments="Source Table: customer")
-    default List<Customer> select(SelectDSLCompleter completer) {
+    default List<CustomerDAO> select(SelectDSLCompleter completer) {
         return MyBatis3Utils.selectList(this::selectMany, selectList, customer, completer);
     }
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:43.006773+08:00", comments="Source Table: customer")
-    default List<Customer> selectDistinct(SelectDSLCompleter completer) {
+    default List<CustomerDAO> selectDistinct(SelectDSLCompleter completer) {
         return MyBatis3Utils.selectDistinct(this::selectMany, selectList, customer, completer);
     }
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:43.006818+08:00", comments="Source Table: customer")
-    default Optional<Customer> selectByPrimaryKey(String id_) {
+    default Optional<CustomerDAO> selectByPrimaryKey(String id_) {
         return selectOne(c ->
             c.where(id, isEqualTo(id_))
         );
@@ -175,7 +175,7 @@ public interface CustomerMapper {
     }
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:43.006949+08:00", comments="Source Table: customer")
-    static UpdateDSL<UpdateModel> updateAllColumns(Customer record, UpdateDSL<UpdateModel> dsl) {
+    static UpdateDSL<UpdateModel> updateAllColumns(CustomerDAO record, UpdateDSL<UpdateModel> dsl) {
         return dsl.set(id).equalTo(record::getId)
                 .set(username).equalTo(record::getUsername)
                 .set(password).equalTo(record::getPassword)
@@ -189,7 +189,7 @@ public interface CustomerMapper {
     }
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:43.007607+08:00", comments="Source Table: customer")
-    static UpdateDSL<UpdateModel> updateSelectiveColumns(Customer record, UpdateDSL<UpdateModel> dsl) {
+    static UpdateDSL<UpdateModel> updateSelectiveColumns(CustomerDAO record, UpdateDSL<UpdateModel> dsl) {
         return dsl.set(id).equalToWhenPresent(record::getId)
                 .set(username).equalToWhenPresent(record::getUsername)
                 .set(password).equalToWhenPresent(record::getPassword)
@@ -203,7 +203,7 @@ public interface CustomerMapper {
     }
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:43.007884+08:00", comments="Source Table: customer")
-    default int updateByPrimaryKey(Customer record) {
+    default int updateByPrimaryKey(CustomerDAO record) {
         return update(c ->
             c.set(username).equalTo(record::getUsername)
             .set(password).equalTo(record::getPassword)
@@ -219,7 +219,7 @@ public interface CustomerMapper {
     }
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:43.008004+08:00", comments="Source Table: customer")
-    default int updateByPrimaryKeySelective(Customer record) {
+    default int updateByPrimaryKeySelective(CustomerDAO record) {
         return update(c ->
             c.set(username).equalToWhenPresent(record::getUsername)
             .set(password).equalToWhenPresent(record::getPassword)

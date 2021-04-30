@@ -16,7 +16,7 @@ import org.mybatis.dynamic.sql.update.UpdateModel;
 import org.mybatis.dynamic.sql.update.render.UpdateStatementProvider;
 import org.mybatis.dynamic.sql.util.SqlProviderAdapter;
 import org.mybatis.dynamic.sql.util.mybatis3.MyBatis3Utils;
-import org.shop.model.CustomerAddress;
+import org.shop.model.dao.CustomerAddressDAO;
 
 import javax.annotation.Generated;
 import java.util.Collection;
@@ -48,16 +48,16 @@ public interface CustomerAddressMapper {
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:43.018012+08:00", comments="Source Table: customer_address")
     @InsertProvider(type=SqlProviderAdapter.class, method="insert")
-    int insert(InsertStatementProvider<CustomerAddress> insertStatement);
+    int insert(InsertStatementProvider<CustomerAddressDAO> insertStatement);
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:43.020108+08:00", comments="Source Table: customer_address")
     @InsertProvider(type=SqlProviderAdapter.class, method="insertMultiple")
-    int insertMultiple(MultiRowInsertStatementProvider<CustomerAddress> multipleInsertStatement);
+    int insertMultiple(MultiRowInsertStatementProvider<CustomerAddressDAO> multipleInsertStatement);
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:43.020208+08:00", comments="Source Table: customer_address")
     @SelectProvider(type=SqlProviderAdapter.class, method="select")
     @ResultMap("CustomerAddressResult")
-    Optional<CustomerAddress> selectOne(SelectStatementProvider selectStatement);
+    Optional<CustomerAddressDAO> selectOne(SelectStatementProvider selectStatement);
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:43.020294+08:00", comments="Source Table: customer_address")
     @SelectProvider(type=SqlProviderAdapter.class, method="select")
@@ -70,7 +70,7 @@ public interface CustomerAddressMapper {
         @Result(column="created_time", property="createdTime", jdbcType=JdbcType.DATE),
         @Result(column="updated_time", property="updatedTime", jdbcType=JdbcType.DATE)
     })
-    List<CustomerAddress> selectMany(SelectStatementProvider selectStatement);
+    List<CustomerAddressDAO> selectMany(SelectStatementProvider selectStatement);
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:43.020463+08:00", comments="Source Table: customer_address")
     @UpdateProvider(type=SqlProviderAdapter.class, method="update")
@@ -94,7 +94,7 @@ public interface CustomerAddressMapper {
     }
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:43.022064+08:00", comments="Source Table: customer_address")
-    default int insert(CustomerAddress record) {
+    default int insert(CustomerAddressDAO record) {
         return MyBatis3Utils.insert(this::insert, record, customerAddress, c ->
             c.map(id).toProperty("id")
             .map(customerId).toProperty("customerId")
@@ -107,7 +107,7 @@ public interface CustomerAddressMapper {
     }
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:43.022224+08:00", comments="Source Table: customer_address")
-    default int insertMultiple(Collection<CustomerAddress> records) {
+    default int insertMultiple(Collection<CustomerAddressDAO> records) {
         return MyBatis3Utils.insertMultiple(this::insertMultiple, records, customerAddress, c ->
             c.map(id).toProperty("id")
             .map(customerId).toProperty("customerId")
@@ -120,7 +120,7 @@ public interface CustomerAddressMapper {
     }
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:43.022317+08:00", comments="Source Table: customer_address")
-    default int insertSelective(CustomerAddress record) {
+    default int insertSelective(CustomerAddressDAO record) {
         return MyBatis3Utils.insert(this::insert, record, customerAddress, c ->
             c.map(id).toPropertyWhenPresent("id", record::getId)
             .map(customerId).toPropertyWhenPresent("customerId", record::getCustomerId)
@@ -133,22 +133,22 @@ public interface CustomerAddressMapper {
     }
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:43.022545+08:00", comments="Source Table: customer_address")
-    default Optional<CustomerAddress> selectOne(SelectDSLCompleter completer) {
+    default Optional<CustomerAddressDAO> selectOne(SelectDSLCompleter completer) {
         return MyBatis3Utils.selectOne(this::selectOne, selectList, customerAddress, completer);
     }
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:43.022587+08:00", comments="Source Table: customer_address")
-    default List<CustomerAddress> select(SelectDSLCompleter completer) {
+    default List<CustomerAddressDAO> select(SelectDSLCompleter completer) {
         return MyBatis3Utils.selectList(this::selectMany, selectList, customerAddress, completer);
     }
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:43.02263+08:00", comments="Source Table: customer_address")
-    default List<CustomerAddress> selectDistinct(SelectDSLCompleter completer) {
+    default List<CustomerAddressDAO> selectDistinct(SelectDSLCompleter completer) {
         return MyBatis3Utils.selectDistinct(this::selectMany, selectList, customerAddress, completer);
     }
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:43.022668+08:00", comments="Source Table: customer_address")
-    default Optional<CustomerAddress> selectByPrimaryKey(String id_) {
+    default Optional<CustomerAddressDAO> selectByPrimaryKey(String id_) {
         return selectOne(c ->
             c.where(id, isEqualTo(id_))
         );
@@ -160,7 +160,7 @@ public interface CustomerAddressMapper {
     }
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:43.022793+08:00", comments="Source Table: customer_address")
-    static UpdateDSL<UpdateModel> updateAllColumns(CustomerAddress record, UpdateDSL<UpdateModel> dsl) {
+    static UpdateDSL<UpdateModel> updateAllColumns(CustomerAddressDAO record, UpdateDSL<UpdateModel> dsl) {
         return dsl.set(id).equalTo(record::getId)
                 .set(customerId).equalTo(record::getCustomerId)
                 .set(postCode).equalTo(record::getPostCode)
@@ -171,7 +171,7 @@ public interface CustomerAddressMapper {
     }
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:43.02298+08:00", comments="Source Table: customer_address")
-    static UpdateDSL<UpdateModel> updateSelectiveColumns(CustomerAddress record, UpdateDSL<UpdateModel> dsl) {
+    static UpdateDSL<UpdateModel> updateSelectiveColumns(CustomerAddressDAO record, UpdateDSL<UpdateModel> dsl) {
         return dsl.set(id).equalToWhenPresent(record::getId)
                 .set(customerId).equalToWhenPresent(record::getCustomerId)
                 .set(postCode).equalToWhenPresent(record::getPostCode)
@@ -182,7 +182,7 @@ public interface CustomerAddressMapper {
     }
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:43.023103+08:00", comments="Source Table: customer_address")
-    default int updateByPrimaryKey(CustomerAddress record) {
+    default int updateByPrimaryKey(CustomerAddressDAO record) {
         return update(c ->
             c.set(customerId).equalTo(record::getCustomerId)
             .set(postCode).equalTo(record::getPostCode)
@@ -195,7 +195,7 @@ public interface CustomerAddressMapper {
     }
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:43.023182+08:00", comments="Source Table: customer_address")
-    default int updateByPrimaryKeySelective(CustomerAddress record) {
+    default int updateByPrimaryKeySelective(CustomerAddressDAO record) {
         return update(c ->
             c.set(customerId).equalToWhenPresent(record::getCustomerId)
             .set(postCode).equalToWhenPresent(record::getPostCode)

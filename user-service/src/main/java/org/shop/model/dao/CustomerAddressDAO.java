@@ -1,9 +1,9 @@
-package org.shop.model;
+package org.shop.model.dao;
 
 import javax.annotation.Generated;
 import java.util.Date;
 
-public class CustomerAddress {
+public class CustomerAddressDAO {
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-04-27T21:17:43.008701+08:00", comments="Source field: customer_address.id")
     private String id;
 

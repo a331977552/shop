@@ -13,7 +13,7 @@
         <javaModelGenerator targetPackage="org.shop.org.shop.model" targetProject="mybatis-generator/src/main/java"/>
         <javaClientGenerator targetPackage="org.shop.org.shop.mapper" targetProject="mybatis-generator/src/main/java"/>
         <table tableName="cart_item" ></table>
-        <table tableName="customer"></table>
+        <table tableName="customerDAO"></table>
         <table tableName="customer_address"></table>
         <table tableName="image"></table>
         <table tableName="image_product"></table>
