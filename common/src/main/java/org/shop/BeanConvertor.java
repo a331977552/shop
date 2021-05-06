@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class BeanConvertor {
+public final class BeanConvertor {
 
 	/**
 	 * convert vo to dao and vice versa.
@@ -18,7 +18,7 @@ public class BeanConvertor {
 	 * @param <S>
 	 * @return
 	 */
-	public static final <T, S> Optional<T> convert(Optional<S> source, Class<T> targetClass) {
+	public static <T, S> Optional<T> convert(Optional<S> source, Class<T> targetClass) {
 
 		return  source.map(s->convert(s, targetClass));
 
