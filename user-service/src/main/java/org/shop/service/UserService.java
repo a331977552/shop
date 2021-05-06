@@ -17,10 +17,13 @@ public interface UserService {
 	Optional<CustomerVO> login(CustomerVO customerVO);
 	void updateInfo(CustomerVO customerVO);
 	Optional<CustomerVO> findUserById(String id);
-	List<CustomerVO> findAllUsers();
+	List<CustomerVO> findAllUsers(int offset,int limit);
+
 	Long count();
 	Long count(CustomerVO customerVO);
 	List<CustomerVO> findUserByExample(CustomerVO customerVO);
+	List<CustomerVO> findUserByExample(CustomerVO customerVO,int limit,int offset);
+	List<CustomerVO> findUserByExample(CustomerVO customerVO,int limit,int offset,String orderBy);
 
 
 

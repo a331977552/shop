@@ -2,14 +2,18 @@ package org.shop.model.vo;
 
 
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
+@ToString
 public class CustomerVO {
 
 	private String id;
@@ -21,12 +25,13 @@ public class CustomerVO {
 	@Email(regexp = "[a-zA-Z0-9_-]{2,15}@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)",message = "电子邮件格式不正确")
 	private String email;
 	@NotNull(message = "生日不能为空")
-	private Date dateOfBirth;
+	private LocalDateTime dateOfBirth;
 	private String password;
 	private String alias;
 	private Integer avatar;
 
+	private String phone;
 	private String role;
-	private Date createdTime;
-	private Date updatedTime;
+	private LocalDateTime createdTime;
+	private LocalDateTime updatedTime;
 }

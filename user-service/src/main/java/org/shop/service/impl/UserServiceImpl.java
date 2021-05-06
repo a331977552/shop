@@ -1,46 +1,50 @@
 package org.shop.service.impl;
 
 import lombok.extern.java.Log;
-import org.apache.logging.log4j.util.Strings;
+import lombok.extern.slf4j.Slf4j;
 import org.mybatis.dynamic.sql.render.RenderingStrategies;
 import org.mybatis.dynamic.sql.select.CountDSLCompleter;
 import org.mybatis.dynamic.sql.select.QueryExpressionDSL;
 import org.mybatis.dynamic.sql.select.SelectModel;
 import org.mybatis.dynamic.sql.select.aggregate.Count;
 import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
-import org.mybatis.dynamic.sql.update.UpdateDSL;
-import org.mybatis.dynamic.sql.update.UpdateModel;
-import org.mybatis.dynamic.sql.update.render.UpdateStatementProvider;
 import org.shop.BeanConvertor;
+import org.shop.TextUtil;
 import org.shop.UUIDUtils;
-import org.shop.mapper.CustomerMapper;
+import org.shop.mapper.CustomerDAOMapper;
 import org.shop.model.dao.CustomerDAO;
 import org.shop.model.vo.CustomerVO;
 import org.shop.service.UserService;
+import org.shop.validator.PhoneValidator;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.mybatis.dynamic.sql.SqlBuilder.*;
-import static org.shop.mapper.CustomerDynamicSqlSupport.*;
+import static org.shop.mapper.CustomerDAODynamicSqlSupport.*;
 
 @Service
-@Log
+@Slf4j
 public class UserServiceImpl implements UserService {
 
-	private CustomerMapper mapper;
-	@Autowired
-	Validator validator;
+	private CustomerDAOMapper mapper;
+	final Validator validator;
+	private final PasswordEncoder passwordEncoder;
+	private PhoneValidator phoneValidator;
 
-	public UserServiceImpl(CustomerMapper mapper) {
+	public UserServiceImpl(CustomerDAOMapper mapper, Validator validator, PasswordEncoder passwordEncoder, PhoneValidator phoneValidator) {
 		this.mapper = mapper;
+		this.validator = validator;
+		this.passwordEncoder = passwordEncoder;
+		this.phoneValidator = phoneValidator;
 	}
 
 
@@ -48,7 +52,7 @@ public class UserServiceImpl implements UserService {
 	public synchronized Optional<CustomerVO> register(CustomerVO customerVO) {
 		Set<ConstraintViolation<CustomerVO>> validate = validator.validate(customerVO);
 		if (validate.size() > 0) {
-			log.warning("errors in validation:");
+			log.debug("errors in validation:");
 			validate.forEach(System.out::println);
 			return Optional.empty();
 		}
@@ -57,14 +61,35 @@ public class UserServiceImpl implements UserService {
 
 	@Transactional
 	protected Optional<CustomerVO> registerWrapper(CustomerVO customerVO) {
+		if(TextUtil.isEmpty(customerVO.getUsername(),customerVO.getPhone(),customerVO.getPassword()))
+			return Optional.empty();
+
+		CustomerVO test =new CustomerVO();
+		test.setUsername(customerVO.getUsername());
+		Long duplicateCount = UserServiceImpl.this.count(test);
+		if (duplicateCount >0) {
+			log.info("multiple user {}",customerVO.getUsername());
+			return Optional.empty();
+		}
+		boolean validate = phoneValidator.validate(customerVO.getPhone());
+		if (!validate)
+		{
+			log.info("invalid phone number {}",phone);
+			return Optional.empty();
+		}
+		test.setUsername(null);
+		test.setPhone(customerVO.getPhone());
+		duplicateCount = UserServiceImpl.this.count(test);
+		if (duplicateCount >0) {
+			return Optional.empty();
+		}
+
 		customerVO.setId(UUIDUtils.generateID());
 		CustomerDAO customerDAO = new CustomerDAO();
 		BeanUtils.copyProperties(customerVO, customerDAO);
-		customerDAO.setUpdatedTime(Date.from(Instant.now()));
-		customerDAO.setCreatedTime(Date.from(Instant.now()));
-		List<CustomerVO> result = UserServiceImpl.this.findUserByExample(customerVO);
-		if (!result.isEmpty())
-			return Optional.empty();
+		customerDAO.setUpdatedTime(LocalDateTime.now());
+		customerDAO.setCreatedTime(LocalDateTime.now());
+		customerDAO.setPassword(passwordEncoder.encode(customerVO.getPassword()));
 		mapper.insert(customerDAO);
 		return BeanConvertor.convert(Optional.of(customerVO), CustomerVO.class);
 	}
@@ -83,22 +108,12 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	@Override
 	public void updateInfo(CustomerVO customerVO) {
-		UpdateDSL<UpdateModel> update = update(customer).
-				set(alias).equalTo(customerVO.getAlias()).
-				set(dateOfBirth).equalTo(customerVO.getDateOfBirth()).
-				set(updatedTime).equalTo(Calendar.getInstance().getTime());
-		if (StringUtils.hasText(customerVO.getPassword())) {
-			update = update.set(password).equalTo(customerVO.getPassword());
+		CustomerDAO dao =new CustomerDAO();
+		BeanUtils.copyProperties(customerVO,dao);
+		if(TextUtil.hasText(dao.getPassword())){
+			dao.setPassword(passwordEncoder.encode(dao.getPassword()));
 		}
-
-		UpdateStatementProvider render = update.where(id, isEqualTo(customerVO.getId())).
-				build().
-				render(RenderingStrategies.MYBATIS3);
-		Map<String, Object> parameters = render.getParameters();
-		parameters.forEach((k, v) -> {
-			System.out.println(k + "  " + v);
-		});
-		int result = mapper.update(render);
+		int result = mapper.updateByPrimaryKeySelective(dao);
 	}
 
 	@Override
@@ -108,9 +123,15 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<CustomerVO> findAllUsers() {
+	public List<CustomerVO> findAllUsers(int offset,int limit) {
+		QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder where = select(customerDAO.allColumns()).from(customerDAO).where();
 
-		return null;
+		paginate(limit, offset,where);
+
+		SelectStatementProvider render = where.build().render(RenderingStrategies.MYBATIS3);
+		List<CustomerDAO> customerDAOS = mapper.selectMany(render);
+		List<CustomerVO> convert = BeanConvertor.convert(customerDAOS, CustomerVO.class);
+		return convert;
 	}
 
 	@Override
@@ -120,17 +141,20 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Long count(CustomerVO customerVO) {
-		QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder where = select(Count.of(id)).from(customer).where();
+		QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder where = select(Count.of(id)).from(customerDAO).where();
 		if (customerVO.getDateOfBirth() != null) {
-			where = where.and(customer.dateOfBirth, isEqualTo(customerVO.getDateOfBirth()));
+			where = where.and(customerDAO.dateOfBirth, isEqualTo(customerVO.getDateOfBirth()));
 		}
 
 		if (StringUtils.hasText(customerVO.getAlias())) {
-			where = where.and(customer.alias, isEqualTo(customerVO.getAlias()));
+			where = where.and(customerDAO.alias, isEqualTo(customerVO.getAlias()));
 		}
 
 		if (StringUtils.hasText(customerVO.getUsername())) {
-			where = where.and(customer.username, isEqualTo(customerVO.getUsername()));
+			where = where.and(customerDAO.username, isEqualTo(customerVO.getUsername()));
+		}
+		if (StringUtils.hasText(customerVO.getPhone())) {
+			where = where.and(customerDAO.phone, isEqualTo(customerVO.getPhone()));
 		}
 
 		SelectStatementProvider render = where.build().
@@ -140,7 +164,17 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<CustomerVO> findUserByExample(CustomerVO customerVO) {
-		QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder where = select(id, username, alias, email, avatar, dateOfBirth).from(customer).where();
+		return this.findUserByExample(customerVO, 0, 0);
+	}
+
+	@Override
+	public List<CustomerVO> findUserByExample(CustomerVO customerVO, int limit, int offset) {
+		return this.findUserByExample(customerVO,limit,offset,null);
+	}
+
+	@Override
+	public List<CustomerVO> findUserByExample(CustomerVO customerVO, int limit, int offset, String orderBy) {
+		QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder where = select(id, username,password, alias,phone, email, avatar, dateOfBirth).from(customerDAO).where();
 
 		if (StringUtils.hasText(customerVO.getUsername())) {
 			where = where.and(username, isEqualTo(customerVO.getUsername()));
@@ -151,12 +185,26 @@ public class UserServiceImpl implements UserService {
 		if (customerVO.getDateOfBirth()!=null) {
 			where = where.and(dateOfBirth, isEqualTo(customerVO.getDateOfBirth()));
 		}
-		if (StringUtils.hasText(customerVO.getPassword())) {
-			where = where.and(password, isEqualTo(customerVO.getPassword()));
+		if (TextUtil.hasText(orderBy)){
+			where.orderBy(customerDAO.column(orderBy));
+
 		}
+		paginate(limit, offset, where);
 		SelectStatementProvider render = where.build().
 				render(RenderingStrategies.MYBATIS3);
 		List<CustomerDAO> customerDAO = mapper.selectMany(render);
+
+		if (TextUtil.hasText(customerVO.getPassword())) {
+			customerDAO = customerDAO.stream().filter(cus -> passwordEncoder.matches(customerVO.getPassword(), cus.getPassword())).collect(Collectors.toList());
+		}
 		return BeanConvertor.convert(customerDAO, CustomerVO.class);
+	}
+
+	private void paginate(int limit, int offset, QueryExpressionDSL<?>.QueryExpressionWhereBuilder where) {
+		if(limit > 0){
+		   where.limit(limit);
+			where.offset(offset>0?offset:0);
+		}
+
 	}
 }

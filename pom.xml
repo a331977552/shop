@@ -132,6 +132,11 @@
                 <artifactId>mybatis-dynamic-sql</artifactId>
                 <version>${mybatis.dynamic.version}</version>
             </dependency>
+            <dependency>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>2.10.10</version>
+            </dependency>
         </dependencies>
 
     </dependencyManagement>
@@ -160,6 +165,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.10.10</version>
         </dependency>
     </dependencies>
 
