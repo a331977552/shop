@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,11 +20,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = "/user",method = {RequestMethod.POST,RequestMethod.GET})
+@RequestMapping(value = "/user")
 public class UserController {
 
 	private UserServiceImpl userServiceImpl;
-	private Validator validator;
 	public UserController(UserServiceImpl userServiceImpl) {
 		this.userServiceImpl = userServiceImpl;
 	}
@@ -37,11 +37,11 @@ public class UserController {
 	}
 
 	@RequestMapping("/login")
-	public Result<CustomerVO> login(@Validated(CustomerVO.LoginGroup.class)  CustomerVO vo, BindingResult result){
+	public Result<CustomerVO> login(@RequestBody @Validated(CustomerVO.LoginGroup.class)  CustomerVO vo, BindingResult result){
 		if (result.hasErrors()){
 				return Result.validationError(result);
 		}
-		return Result.of(userServiceImpl.login(vo).orElse(null));
+		return userServiceImpl.login(vo).map(Result::of).orElse(Result.badRequest("用户名或密码错误"));
 	}
 
 }

@@ -1,13 +1,11 @@
 package org.shop;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.validation.BindingResult;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Data
@@ -26,16 +24,19 @@ public final class Result<T> {
 		this.msgDetail = msgDetail;
 	}
 
-	public static Result<?> error(String errorMsg) {
-		return new Result<>(ResultCode.REQUEST_ERROR, errorMsg);
+	public static Result<?> unknownError(String errorMsg) {
+		return new Result<>(ResultCode.SERVER_ERROR, errorMsg);
 	}
 
 	public static <T> Result<T> validationError(String errorMsg) {
-		return new Result<T>(ResultCode.REQUEST_ERROR, errorMsg);
+		return new Result<T>(ResultCode.BAD_REQUEST, errorMsg);
+	}
+	public static <T> Result<T> badRequest(String errorMsg) {
+		return new Result<T>(ResultCode.BAD_REQUEST, errorMsg);
 	}
 
 	public static <T> Result<T> validationError(BindingResult result) {
-		return new Result<T>(ResultCode.REQUEST_ERROR, ErrorResultConvertor.getErrorMsg(result));
+		return new Result<T>(ResultCode.BAD_REQUEST, ErrorResultConvertor.getErrorMsg(result));
 	}
 
 	public static <T> Result<T> of(T t) {
@@ -62,22 +63,33 @@ public final class Result<T> {
 	}
 
 	public static <T> Result<T> empty(String msgDetail) {
-		Result<T> objectResult = new Result<>(ResultCode.NOT_FOUND, msgDetail);
-		return objectResult;
+		return new Result<>(ResultCode.EMPTY, msgDetail);
+	}
+	public static <T> Result<T> notFound(String msgDetail) {
+		return new Result<>(ResultCode.NOT_FOUND, msgDetail);
 	}
 
 	public static <T> Result<T> emptyList() {
-		Result<T> objectResult = new Result<>(ResultCode.NOT_FOUND, null);
+		Result<T> objectResult = new Result<>(ResultCode.EMPTY, null);
 		objectResult.setResult((T) new ArrayList());
+		return objectResult;
+	}
+
+	public static<T> Result accessDenied(String message) {
+		Result<T> objectResult = new Result<>(ResultCode.ACCESS_DENIED, message);
 		return objectResult;
 	}
 
 
 	public enum ResultCode {
 		INTERNAL_ERROR(500, "服务器异常，请稍微再试"),
-		REQUEST_ERROR(400, "请求异常"),
+		BAD_REQUEST(400, "请求异常"),
 		SUCCESS(200, "成功"),
-		NOT_FOUND(404, "请求内容未找到");
+		EMPTY(204, "empty"),
+		NOT_FOUND(404, "请求内容未找到"),
+		ACCESS_DENIED(403, "没有权限"),
+		SERVER_ERROR(599,"unknown error");
+
 		private int code;
 		private String msg;
 
