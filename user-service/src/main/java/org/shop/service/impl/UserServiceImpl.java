@@ -17,11 +17,15 @@ import org.shop.model.vo.CustomerVO;
 import org.shop.service.UserService;
 import org.shop.validator.PhoneValidator;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.ListOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.time.LocalDateTime;
@@ -34,6 +38,10 @@ import static org.shop.mapper.CustomerDAODynamicSqlSupport.*;
 @Service
 @Slf4j
 public class UserServiceImpl implements UserService {
+
+	@Autowired
+	private RedisTemplate<String, String> redisTemplate;
+
 
 	private CustomerDAOMapper mapper;
 	final Validator validator;
@@ -56,7 +64,12 @@ public class UserServiceImpl implements UserService {
 			validate.forEach(System.out::println);
 			return Optional.empty();
 		}
-		return this.registerWrapper(customerVO);
+
+		Optional<CustomerVO> customerVO1 = this.registerWrapper(customerVO);
+
+//		template.boundListOps(customerVO.getUsername()).
+
+		return customerVO1;
 	}
 
 	@Transactional
