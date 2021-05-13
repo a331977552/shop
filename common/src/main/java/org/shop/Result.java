@@ -5,26 +5,29 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.validation.BindingResult;
 
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @ToString
-public final class Result<T> {
-
+public final class Result<T>{
+	private Date timestamp;
 	private int code;
 	private String msg;
 	private String msgDetail;
 	private T result;
-
+//	private String path;
 	public Result(ResultCode resultCode, String msgDetail) {
 		this.code = resultCode.getCode();
 		this.msg = resultCode.getMsg();
 		this.msgDetail = msgDetail;
+		timestamp = Date.from(Instant.now());
 	}
 
-	public static Result<?> unknownError(String errorMsg) {
+	public static Result unknownError(String errorMsg) {
 		return new Result<>(ResultCode.SERVER_ERROR, errorMsg);
 	}
 

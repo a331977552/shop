@@ -1,6 +1,5 @@
 package org.shop.service.impl;
 
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.dynamic.sql.render.RenderingStrategies;
 import org.mybatis.dynamic.sql.select.CountDSLCompleter;
@@ -9,50 +8,58 @@ import org.mybatis.dynamic.sql.select.SelectModel;
 import org.mybatis.dynamic.sql.select.aggregate.Count;
 import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
 import org.shop.BeanConvertor;
+import org.shop.RedisService;
 import org.shop.TextUtil;
 import org.shop.UUIDUtils;
+import org.shop.exception.RegistrationException;
 import org.shop.mapper.CustomerDAOMapper;
 import org.shop.model.dao.CustomerDAO;
 import org.shop.model.vo.CustomerVO;
 import org.shop.service.UserService;
+import org.shop.utils.JwtTokenUtil;
 import org.shop.validator.PhoneValidator;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.ListOperations;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.Resource;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.mybatis.dynamic.sql.SqlBuilder.*;
+import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
+import static org.mybatis.dynamic.sql.SqlBuilder.select;
+import static org.shop.Constants.REDIS_USER_LOGIN_ATTEMPT;
 import static org.shop.mapper.CustomerDAODynamicSqlSupport.*;
 
 @Service
 @Slf4j
 public class UserServiceImpl implements UserService {
-
-	@Autowired
-	private RedisTemplate<String, String> redisTemplate;
-
-
+	final RedisService redisService;
 	private CustomerDAOMapper mapper;
+	@Autowired
+	JwtTokenUtil jwtTokenUtil;
 	final Validator validator;
 	private final PasswordEncoder passwordEncoder;
 	private PhoneValidator phoneValidator;
 
-	public UserServiceImpl(CustomerDAOMapper mapper, Validator validator, PasswordEncoder passwordEncoder, PhoneValidator phoneValidator) {
+	public UserServiceImpl(CustomerDAOMapper mapper, Validator validator, PasswordEncoder passwordEncoder, PhoneValidator phoneValidator, RedisService redisService) {
 		this.mapper = mapper;
 		this.validator = validator;
 		this.passwordEncoder = passwordEncoder;
 		this.phoneValidator = phoneValidator;
+		this.redisService = redisService;
 	}
 
 
@@ -82,21 +89,20 @@ public class UserServiceImpl implements UserService {
 		Long duplicateCount = UserServiceImpl.this.count(test);
 		if (duplicateCount >0) {
 			log.info("multiple user {}",customerVO.getUsername());
-			return Optional.empty();
+			throw new RegistrationException("用户已存在");
 		}
 		boolean validate = phoneValidator.validate(customerVO.getPhone());
 		if (!validate)
 		{
 			log.info("invalid phone number {}",phone);
-			return Optional.empty();
+			throw new RegistrationException("电话号码不确证");
 		}
 		test.setUsername(null);
 		test.setPhone(customerVO.getPhone());
 		duplicateCount = UserServiceImpl.this.count(test);
 		if (duplicateCount >0) {
-			return Optional.empty();
+			throw new RegistrationException("电话号码已经被注册");
 		}
-
 		customerVO.setId(UUIDUtils.generateID());
 		CustomerDAO customerDAO = new CustomerDAO();
 		BeanUtils.copyProperties(customerVO, customerDAO);
@@ -108,12 +114,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Optional<CustomerVO> login(CustomerVO customerVO) {
-
-		List<CustomerVO> userByExample = this.findUserByExample(customerVO);
+	public Optional<CustomerVO> login(CustomerVO user) {
+		List<CustomerVO> userByExample = this.findUserByExample(new CustomerVO(user.getUsername(),user.getPassword()));
 		if (userByExample.size() == 1) {
 			return Optional.of(userByExample.get(0));
 		} else {
+			log.debug("login failed {}",user);
 			return Optional.empty();
 		}
 	}
@@ -145,6 +151,22 @@ public class UserServiceImpl implements UserService {
 		List<CustomerDAO> customerDAOS = mapper.selectMany(render);
 		List<CustomerVO> convert = BeanConvertor.convert(customerDAOS, CustomerVO.class);
 		return convert;
+	}
+
+	@Override
+	public CustomerVO findByToken(String token) {
+		CustomerVO vo = jwtTokenUtil.parseToken(token);
+		String username = vo.getUsername();
+		Optional<CustomerVO> byUserName = this.findByUserName(username);
+		return byUserName.orElse(null);
+	}
+
+	@Override
+	public Optional<CustomerVO> findByUserName(String username) {
+		CustomerVO customerVO = new CustomerVO();
+		customerVO.setUsername(username);
+		List<CustomerVO> userByExample = this.findUserByExample(customerVO);
+		return userByExample.stream().findFirst();
 	}
 
 	@Override
@@ -218,6 +240,18 @@ public class UserServiceImpl implements UserService {
 		   where.limit(limit);
 			where.offset(offset>0?offset:0);
 		}
+
+	}
+	@Override
+	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+		Optional<CustomerVO> results = findUserById(userId);
+		if (results.isEmpty()) {
+			throw new UsernameNotFoundException("usrname "+ username +" doesn't exist");
+		}
+		CustomerVO user = results.get();
+		return new User(
+				user.getUsername(), user.getPassword(),true, true, true, true,
+				Arrays.asList(new SimpleGrantedAuthority(user.getRole())));
 
 	}
 }

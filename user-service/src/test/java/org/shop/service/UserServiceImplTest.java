@@ -2,6 +2,8 @@ package org.shop.service;
 
 import org.junit.jupiter.api.*;
 import org.mybatis.spring.MyBatisSystemException;
+import org.shop.Constants;
+import org.shop.RedisService;
 import org.shop.UUIDUtils;
 import org.shop.mapper.CustomerDAOMapper;
 import org.shop.model.UserRole;
@@ -10,6 +12,8 @@ import org.shop.model.vo.CustomerVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
@@ -261,6 +265,20 @@ class UserServiceImplTest {
 		vo.setPassword("a123451");
 		List<CustomerVO> count5 = service.findUserByExample(vo);
 		assertEquals(1, count5.size());
+	}
 
+	@Autowired
+	RedisService redisService;
+
+
+	@Test
+	public void testRedis(){
+		System.out.println(redisService.toString());
+		long increment = redisService.increment(Constants.REDIS_USER_LOGIN_ATTEMPT, 1);
+		long increment2 = redisService.increment(Constants.REDIS_USER_LOGIN_ATTEMPT, 1);
+		Object o = redisService.get(Constants.REDIS_USER_LOGIN_ATTEMPT);
+		System.out.println(increment);
+		System.out.println(increment2);
+		System.out.println(o);
 	}
 }

@@ -1,10 +1,7 @@
-package org.shop;
+package org.shop;//package org.shop.service;
 
 import lombok.extern.log4j.Log4j2;
-import org.springframework.data.redis.core.Cursor;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ScanOptions;
-import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -14,9 +11,9 @@ import java.util.concurrent.TimeUnit;
 @Log4j2
 public class RedisServiceImpl implements RedisService {
 
-	private final RedisTemplate<String, Object> redisTemplate;
+	private final RedisTemplate<String,Object> redisTemplate;
 
-	public RedisServiceImpl(RedisTemplate<String, Object> redisTemplate) {
+	public RedisServiceImpl(RedisTemplate<String,Object> redisTemplate) {
 		this.redisTemplate = redisTemplate;
 	}
 
