@@ -30,5 +30,21 @@
             <version>1.4.0</version>
         </dependency>
     </dependencies>
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <testResources>
+            <testResource>
+                <directory>src/test/java</directory>
+            </testResource>
+        </testResources>
+        <testSourceDirectory>src/test/resources</testSourceDirectory>
+        <outputDirectory>target/classes</outputDirectory>
+        <directory>target</directory>
+    </build>
 
 </project>

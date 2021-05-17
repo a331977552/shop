@@ -1,20 +1,19 @@
 package org.shop;
 
-import io.jsonwebtoken.Claims;
 import org.junit.jupiter.api.Test;
 import org.shop.model.vo.CustomerVO;
 import org.shop.utils.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Map;
-import java.util.Set;
-
 @SpringBootTest
 public class GeneralTests {
 
 	@Autowired
 	JwtTokenUtil jwtTokenUtil;
+	@Autowired
+	RedisService redisService;
+
 	@Test
 	void testJWTUtils(){
 		String s = jwtTokenUtil.generateToken("123");
@@ -26,7 +25,16 @@ public class GeneralTests {
 		System.out.println(tokenExpired);
 		CustomerVO customerVO = jwtTokenUtil.parseToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjMiLCJpYXQiOjE2MjA4ODQ0NTQsImV4cCI6MTYyMDg4NDQ2MH0.IkhWq5FeRL6kx_DJSBKYBf4iV1wsVbqNDSC6Pv-ZuoNUFWRdIThAekqdL9IIfha44-rgNHaBIcUA1YYM0WmTwg");
 		System.out.println(customerVO);
-
 	}
+	@Test
+	void testRedis(){
+		redisService.set("123",new CustomerVO("123","456"),100000 );
+		CustomerVO o = (CustomerVO) redisService.get("123");
+
+		System.out.println(o.getPassword());
+	}
+
+
+
 
 }

@@ -1,60 +1,123 @@
 package org.shop.controller;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.shop.Constants;
+import org.shop.RedisService;
 import org.shop.Result;
+import org.shop.UserApplication;
 import org.shop.model.vo.CustomerVO;
+import org.shop.utils.RestTestHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = UserApplication.class,webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserControllerTest {
+	@Autowired
+	private RestTestHelper helper;
 
+	ParameterizedTypeReference stringRef = new ParameterizedTypeReference<String>() {};
+	ParameterizedTypeReference resStringRef = new ParameterizedTypeReference<Result<String>>() {};
+	ParameterizedTypeReference cusRef = new ParameterizedTypeReference<Result<CustomerVO>>() {};
 	@LocalServerPort
 	private int port;
 
 	@Autowired
-	private TestRestTemplate restTemplate;
+	RedisService redisService;
 
-
+	@BeforeEach
+	void contextLoad(){
+		helper.setPort(port);
+		final String uipath = "/user/authenticate";
+		helper.setUIPath(uipath);
+		System.out.println(helper.hashCode());
+	}
 	@Test
-	void testLogin(){
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<?> empty = new HttpEntity<>(headers);
-		ResponseEntity<Result> resultResponseEntity = restTemplate.postForEntity("http://localhost:"+port+"/user/login",empty, Result.class);
+	void testLogin1(){
+		ResponseEntity<String> resultResponseEntity = helper.builder().build().post(stringRef) ;
 		assertEquals( 400,resultResponseEntity.getStatusCodeValue());
-
-
-		HttpEntity<?> empty2 = new HttpEntity<>(new CustomerVO(),headers);
-		ResponseEntity<Result> response = restTemplate.postForEntity("http://localhost:"+port+"/user/login",empty2,Result.class);
-		assertEquals( "用户名不能为空,密码不能为空",response.getBody().getMsgDetail());
-		assertEquals( 400,response.getBody().getCode());
-
-		CustomerVO customerVO=new CustomerVO();
-		customerVO.setUsername("wrongname");
-		customerVO.setPassword("wrongpassword");
-		HttpEntity<CustomerVO> httpEntity = new HttpEntity<>(customerVO);
-		ResponseEntity<Result> responseEntity = restTemplate.postForEntity("http://localhost:"+port+"/user/login",httpEntity, Result.class);
-		assertEquals(400, responseEntity.getBody().getCode());
-		assertEquals("用户名或密码错误", responseEntity.getBody().getMsgDetail());
-
-		customerVO.setUsername("15803012301");
-		customerVO.setPassword("a123451");
-		ResponseEntity<Result> correct = restTemplate.postForEntity("http://localhost:"+port+"/user/login",httpEntity, Result.class);
-		assertEquals(200, correct.getBody().getCode());
-		assertEquals("成功", correct.getBody().getMsg());
 	}
 
+	@Test
+	void testLogin2(){
+		ResponseEntity<Result<CustomerVO>> response = helper.builder().build().post( new CustomerVO(),cusRef);
+		System.out.println("用户名不能为空,密码不能为空 test");
+		assertEquals( true,
+				response.getBody().getMsgDetail().equals("用户名不能为空,密码不能为空")
+						||response.getBody().getMsgDetail().equals("密码不能为空,用户名不能为空"));
+	}
+	@Test
+	void testLogin3(){
+		ResponseEntity<Result<CustomerVO>> responseEntity = helper.builder().build().post( new CustomerVO("wsdorng","pasasdss"),cusRef);
+		assertEquals(400, responseEntity.getBody().getCode());
+		assertEquals("用户名或密码错误", responseEntity.getBody().getMsgDetail());
+	}
+	@Test
+	void testLogin4(){
+		ResponseEntity<Result<String>> success = helper.builder().build().post(new CustomerVO("15803012301","a123451"),resStringRef);
+		System.out.println(success);
+		assertEquals(200,
+				success.getStatusCodeValue());
+		assertEquals("成功", success.getBody().getMsg());
+	}
+
+	@Test
+	void testGetInfo(){
+		ResponseEntity<Result<String>> success = helper.builder().build().post(new CustomerVO("15803012301","a123451"),resStringRef);
+		System.out.println(success);
+		assertEquals(200, success.getBody().getCode());
+		assertEquals("成功", success.getBody().getMsg());
+		helper.setUIPath("/user/getInfo");
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.add( HttpHeaders.AUTHORIZATION, "Bearer "+success.getBody().getResult());
+		ResponseEntity<Result<CustomerVO>> post = helper.builder().build().post(httpHeaders,success.getBody().getResult(),cusRef);
+		System.out.println(post);
+		assertEquals(200, post.getBody().getCode());
+		CustomerVO result1 = post.getBody().getResult();
+		assertEquals("test", result1.getUsername());
+	}
+
+	@Test
+	void testBlockLogin(){
+		try {
+			redisService.delete(Constants.REDIS_USER_LOGIN_ATTEMPT + "_127.0.0.1");
+			for (int i = 0; i < 11; i++) {
+				ResponseEntity<Result<CustomerVO>> resultResponseEntity = helper.builder().build().post(new CustomerVO(),cusRef);
+				System.out.println(resultResponseEntity.getBody());
+				assertEquals(400,resultResponseEntity.getStatusCodeValue());
+			}
+			ResponseEntity<Result<CustomerVO>> resultResponseEntity = helper.builder().build().post(new CustomerVO(),cusRef);
+			System.out.println(resultResponseEntity.getBody());
+			assertEquals( 400,resultResponseEntity.getStatusCodeValue());
+//			assertEquals( "请求太过频繁",resultResponseEntity.getBody().getMsgDetail());
+		}catch (Exception e){
+			e.printStackTrace();
+		}finally {
+			redisService.delete(Constants.REDIS_USER_LOGIN_ATTEMPT + "_127.0.0.1");
+		}
+	}
+
+	@Test
+	void testGetUserInfo(){
+		ResponseEntity<Result<String>> success = helper.builder().setUipath("/user/authenticate").build().post(new CustomerVO("15803012301","a123451"),resStringRef);
+		System.out.println(success);
+		assertEquals(200, success.getStatusCodeValue());
+		String token = success.getBody().getResult();
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.add( HttpHeaders.AUTHORIZATION, "Bearer "+token);
+		ResponseEntity<Result<CustomerVO>> post = helper.builder().setUipath("/user").build().get(httpHeaders,cusRef,null);
+		System.out.println(post);
+		assertEquals(200, post.getBody().getCode());
+		CustomerVO result1 = post.getBody().getResult();
+		System.out.println(result1);
+		assertEquals("15803012351", result1.getUsername());
+	}
 
 
 

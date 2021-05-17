@@ -1,38 +1,26 @@
 package org.shop.controller;
 
-import org.shop.ErrorResultConvertor;
 import org.shop.Result;
-import org.shop.model.dao.CustomerDAO;
 import org.shop.model.vo.CustomerVO;
-import org.shop.service.impl.UserServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.shop.service.UserService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Validator;
-import java.util.Date;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/user")
 public class UserController {
 
-	private UserServiceImpl userServiceImpl;
+	private UserService userService;
 
-	public UserController(UserServiceImpl userServiceImpl) {
-		this.userServiceImpl = userServiceImpl;
+	public UserController(UserService userService) {
+		this.userService = userService;
 	}
 
 	@RequestMapping("/signup")
@@ -40,7 +28,7 @@ public class UserController {
 		if (result.hasErrors()) {
 			return Result.validationError(result);
 		}
-		return Result.of(userServiceImpl.register(vo).orElse(null));
+		return Result.of(userService.register(vo).orElse(null));
 	}
 
 
@@ -50,5 +38,12 @@ public class UserController {
 		vo.setUsername("test");
 		return Result.of(vo);
 	}
+
+	@GetMapping()
+	public Result<CustomerVO> get(@AuthenticationPrincipal String username) {
+		Optional<CustomerVO> userById = userService.findByUserName(username);
+		return Result.of(userById.get());
+}
+
 
 }

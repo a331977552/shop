@@ -1,14 +1,11 @@
 package org.shop.config;
 
 import org.shop.filter.JwtAuthenticationFilter;
-import org.shop.security.CustomAccessDeniedHandler;
 import org.shop.security.JWTAuthenticationProvider;
-import org.shop.security.RestAuthenticationEntryPoint;
 import org.shop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,7 +15,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.header.Header;
 import org.springframework.security.web.header.writers.StaticHeadersWriter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -62,8 +58,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				and().
 				authorizeRequests().antMatchers("/user/signup", "/user/authenticate").permitAll().anyRequest().authenticated().
 				and().
-				exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler()).authenticationEntryPoint(new RestAuthenticationEntryPoint()).
-				and().
+				/**
+				 * bug, GLOBAL exception handler will catch the authentication exception before this security exception handling does.
+				 */
+//				exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler()).authenticationEntryPoint(new RestAuthenticationEntryPoint()).
+//				and().
 				sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().
 				addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class).
 				formLogin().disable();

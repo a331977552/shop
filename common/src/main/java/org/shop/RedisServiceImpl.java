@@ -21,7 +21,7 @@ public class RedisServiceImpl implements RedisService {
 	public boolean expire(String key, long time) {
 		try {
 			if (time > 0) {
-				redisTemplate.expire(key, time, TimeUnit.SECONDS);
+				redisTemplate.expire(key, time, TimeUnit.MILLISECONDS);
 			}
 			return true;
 		} catch (Exception e) {
@@ -32,7 +32,7 @@ public class RedisServiceImpl implements RedisService {
 
 	@Override
 	public long getExpire(String key) {
-		return redisTemplate.getExpire(key, TimeUnit.SECONDS);
+		return redisTemplate.getExpire(key, TimeUnit.MILLISECONDS);
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class RedisServiceImpl implements RedisService {
 		if (time > 0) {
 			Objects.requireNonNull(key);
 			Objects.requireNonNull(value);
-			redisTemplate.opsForValue().set(key, value, time, TimeUnit.SECONDS);
+			redisTemplate.opsForValue().set(key, value, time, TimeUnit.MILLISECONDS);
 			return true;
 		} else {
 			return set(key, value);

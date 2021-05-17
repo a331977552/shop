@@ -170,6 +170,12 @@
                 <version>0.11.1</version>
                 <scope>runtime</scope>
             </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>4.5.13</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
 
     </dependencyManagement>
@@ -204,6 +210,12 @@
             <artifactId>joda-time</artifactId>
             <version>2.10.10</version>
         </dependency>
+        <!--solve 401 request issue in TestRestTemplate-->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -221,6 +233,20 @@
                 </configuration>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <testResources>
+            <testResource>
+                <directory>src/test/java</directory>
+            </testResource>
+        </testResources>
+        <testSourceDirectory>src/test/resources</testSourceDirectory>
+        <outputDirectory>target/classes</outputDirectory>
+        <directory>target</directory>
     </build>
 
 </project>

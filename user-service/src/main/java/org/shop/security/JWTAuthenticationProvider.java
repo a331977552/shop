@@ -1,7 +1,6 @@
 package org.shop.security;
 
 import lombok.extern.log4j.Log4j2;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;

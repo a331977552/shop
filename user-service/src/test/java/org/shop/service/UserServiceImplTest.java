@@ -1,10 +1,13 @@
 package org.shop.service;
 
+import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.*;
+import org.mockito.internal.matchers.GreaterThan;
 import org.mybatis.spring.MyBatisSystemException;
 import org.shop.Constants;
 import org.shop.RedisService;
 import org.shop.UUIDUtils;
+import org.shop.exception.RegistrationException;
 import org.shop.mapper.CustomerDAOMapper;
 import org.shop.model.UserRole;
 import org.shop.model.dao.CustomerDAO;
@@ -25,9 +28,10 @@ import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+import static org.hamcrest.Matchers.*;
 @SpringBootTest
 class UserServiceImplTest {
 	@Autowired
@@ -80,22 +84,35 @@ class UserServiceImplTest {
 	@Test
 	void testValidationOfCustomer() {
 		CustomerVO customerVO = new CustomerVO();
-		Set<ConstraintViolation<CustomerVO>> validate = validator.validate(customerVO);
-		assertEquals(3, validate.size(), "customer validation error");
+		Set<ConstraintViolation<CustomerVO>> validate = validator.validate(customerVO, CustomerVO.RegistryGroup.class);
+
+		assertEquals(5, validate.size(), "customer validation error"+validate.stream().map(v->v.getMessage()).collect(Collectors.joining()));
+		customerVO.setUsername("a123321");
+
+		validate = validator.validate(customerVO, CustomerVO.LoginGroup.class);
+		System.out.println(validate.stream().map(v->v.getMessage()).collect(Collectors.joining()));
+		assertEquals(1, validate.size(), "customer validation error");
+
 		customerVO.setUsername("a123321");
 		customerVO.setAlias("tom");
 		customerVO.setPassword("a123321");
 		customerVO.setEmail("a331977554@qqcom");
 		customerVO.setRole(UserRole.CUSTOMER.name());
-		int size = validator.validate(customerVO).size();
-		assertEquals(2, size, "email or dateOfBirth has error");
+		validate= validator.validate(customerVO, CustomerVO.RegistryGroup.class);
+		System.out.println(validate.stream().map(v->v.getMessage()).collect(Collectors.joining()));
+		assertEquals(2, validate.size(), "email or dateOfBirth has error");
 		customerVO.setDateOfBirth(LocalDateTime.of(1992, 2, 2,0,0,0));
 		customerVO.setEmail("a331977554qq.com");
-		Set<ConstraintViolation<CustomerVO>> size1 = validator.validate(customerVO);
-		assertEquals(1, size1.size(), "dateOfBirth has error");
-		assertEquals(size1.stream().findFirst().get().getMessage(), "电子邮件格式不正确", "dateOfBirth has error");
+		validate = validator.validate(customerVO, CustomerVO.RegistryGroup.class);
+		System.out.println(validate.stream().map(v->v.getMessage()).collect(Collectors.joining()));
+
+		assertEquals(1, validate.size(), "dateOfBirth has error");
+		assertEquals("电话号码不能为空",validate.stream().findFirst().get().getMessage() , "dateOfBirth has error");
+		customerVO.setPhone("15932032132");
 		customerVO.setEmail("a312@qq.com");
-		int size2 = validator.validate(customerVO).size();
+		int size2 = validator.validate(customerVO, CustomerVO.RegistryGroup.class).size();
+		System.out.println(validate.stream().map(v->v.getMessage()).collect(Collectors.joining()));
+
 		assertEquals(0, size2, "dateOfBirth has error");
 	}
 
@@ -106,21 +123,22 @@ class UserServiceImplTest {
 		CustomerVO customerVO = new CustomerVO();
 		customerVO.setAlias("rose2");
 		customerVO.setPassword("a123321");
-		customerVO.setEmail("a_33197755@qq.com");
+		customerVO.setEmail("a_331977552@qq.com");
 		customerVO.setRole(UserRole.CUSTOMER.name());
 		customerVO.setDateOfBirth(LocalDateTime.now());
 		customerVO.setUsername("AAAAAD");
 		customerVO.setPhone("130953245");
-		assertEquals(false,service.register(customerVO).isPresent());
+		assertThrows(RegistrationException.class,()->service.register(customerVO));
 		customerVO.setPhone("13095324542");
 		Long count = service.count();
+
 		Optional<CustomerVO> register = service.register(customerVO);
+
 		assertEquals(true, register.isPresent());
 		Long count2 = service.count();
 		//successful, so should be plus one.
-		assertEquals(count2, count + 1, "customer registration error 2");
-		Optional<CustomerVO> register2 = service.register(customerVO);//failure, because same username AAAAAA
-		assertEquals(register2.isEmpty(), true);
+		assertEquals(count2, count + 1, "customer registration error ");
+		assertThrows(RegistrationException.class,()->service.register(customerVO),"should throw multiple user found error");
 	}
 
 
@@ -129,8 +147,12 @@ class UserServiceImplTest {
 		CustomerVO customerVO = new CustomerVO();
 		customerVO.setUsername("15803012301");
 		customerVO.setPassword("a123451");
-		Optional<CustomerVO> register = service.login(customerVO);
-		String id = register.get().getId();
+		Optional<CustomerVO> register = service.login(new CustomerVO());
+		assertEquals(true, register.isEmpty(),"customer registeration error: empty username password");
+		Optional<CustomerVO> register2 = service.login(new CustomerVO("1234234","231231"));
+		assertEquals(true, register2.isEmpty(),"customer registeration error: wrong username and password");
+		Optional<CustomerVO> success = service.login(customerVO);
+		String id = success.get().getId();
 		assertEquals(id.length(), 32, "customer registeration error");
 	}
 
@@ -165,6 +187,8 @@ class UserServiceImplTest {
 					}
 				} catch (MyBatisSystemException e) {
 					e.printStackTrace();
+				}catch (RegistrationException e){
+					System.out.println(e.getMessage());
 				}
 				latchMain.countDown();
 			});
@@ -212,7 +236,7 @@ class UserServiceImplTest {
 	@Test
 	void count() {
 		Long count = service.count();
-		assertEquals(100, count);
+		MatcherAssert.assertThat("count", count, greaterThan((long)100));
 		CustomerVO vo = new CustomerVO();
 		vo.setAlias("jack");
 		Long count1 = service.count(vo);
@@ -240,7 +264,7 @@ class UserServiceImplTest {
 	@Test
 	void findUserByExample() {
 		List<CustomerVO> count = service.findUserByExample(new CustomerVO());
-		assertEquals(100, count.size());
+		MatcherAssert.assertThat("count", count.size(), greaterThan(100));
 		CustomerVO vo = new CustomerVO();
 		vo.setAlias("jack");
 		List<CustomerVO> count1 = service.findUserByExample(vo);

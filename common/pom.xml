@@ -14,6 +14,35 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
+            <scope>provided</scope>
+
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <scope>provided</scope>
+
         </dependency>
     </dependencies>
+    <build>
+    <resources>
+        <resource>
+            <directory>src/main/resources</directory>
+        </resource>
+    </resources>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <testResources>
+        <testResource>
+            <directory>src/test/java</directory>
+        </testResource>
+    </testResources>
+    <testSourceDirectory>src/test/resources</testSourceDirectory>
+        <outputDirectory>target/classes</outputDirectory>
+        <directory>target</directory>
+</build>
 </project>

@@ -1,6 +1,5 @@
 package org.shop;
 
-import lombok.val;
 import org.springframework.beans.BeanUtils;
 
 import java.lang.reflect.InvocationTargetException;
@@ -19,9 +18,7 @@ public final class BeanConvertor {
 	 * @return
 	 */
 	public static <T, S> Optional<T> convert(Optional<S> source, Class<T> targetClass) {
-
 		return  source.map(s->convert(s, targetClass));
-
 	}
 
 

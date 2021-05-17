@@ -2,7 +2,11 @@ package org.shop.handler;
 
 import lombok.extern.log4j.Log4j2;
 import org.shop.Result;
+import org.shop.exception.InvalidUserIDException;
 import org.shop.exception.RegistrationException;
+import org.shop.exception.UserOperationException;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +19,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 @Log4j2
-public class RestResponseEntityExceptionHandler
+@Order(Ordered.HIGHEST_PRECEDENCE)
+public class CommonResponseExceptionHandler
 		extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -26,25 +31,16 @@ public class RestResponseEntityExceptionHandler
 			result = Result.internalError(ex.getLocalizedMessage());
 		} else if (status == HttpStatus.NOT_FOUND) {
 			result = Result.notFound(ex.getLocalizedMessage());
-		} else if (ex instanceof RegistrationException){
+		} else if (ex instanceof RegistrationException) {
 			result = Result.badRequest(ex.getMessage());
-		}else {
+		} else {
 			result = Result.unknownError(ex.getLocalizedMessage());
 		}
-		log.debug("handleExceptionInternal Exception {}",ex.getLocalizedMessage());
+		log.debug(ex.getLocalizedMessage());
 		return new ResponseEntity(result, headers, status);
 	}
 
-	@ExceptionHandler(RegistrationException.class)
-	protected ResponseEntity<Object> handleMyExceptionInternal(Exception ex, WebRequest request) {
-		Result result;
-		if (ex instanceof RegistrationException){
-			result = Result.badRequest(ex.getMessage());
-		}else {
-			result = Result.unknownError(ex.getLocalizedMessage());
-		}
-		log.debug("handleMyExceptionInternal Exception {}",ex.getLocalizedMessage());
-		return new ResponseEntity(result, new HttpHeaders(), HttpStatus.BAD_REQUEST);
-	}
+
+
 
 }
