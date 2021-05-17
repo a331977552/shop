@@ -28,10 +28,9 @@ public class GeneralTests {
 	}
 	@Test
 	void testRedis(){
-		redisService.set("123",new CustomerVO("123","456"),100000 );
-		CustomerVO o = (CustomerVO) redisService.get("123");
+		Object o = redisService.get("15803012301");
 
-		System.out.println(o.getPassword());
+		System.out.println(o);
 	}
 
 

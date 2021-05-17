@@ -1,8 +1,7 @@
 package org.shop.service;
 
 import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.*;
-import org.mockito.internal.matchers.GreaterThan;
+import org.junit.jupiter.api.Test;
 import org.mybatis.spring.MyBatisSystemException;
 import org.shop.Constants;
 import org.shop.RedisService;
@@ -15,23 +14,26 @@ import org.shop.model.vo.CustomerVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 class UserServiceImplTest {
 	@Autowired
@@ -236,11 +238,11 @@ class UserServiceImplTest {
 	@Test
 	void count() {
 		Long count = service.count();
-		MatcherAssert.assertThat("count", count, greaterThan((long)100));
+		MatcherAssert.assertThat("count", count, greaterThan((long)97));
 		CustomerVO vo = new CustomerVO();
 		vo.setAlias("jack");
 		Long count1 = service.count(vo);
-		assertEquals(25, count1);
+		assertEquals(24, count1);
 		vo =new CustomerVO();
 		vo.setUsername("15803012301");
 		Long count2 = service.count(vo);
@@ -249,7 +251,7 @@ class UserServiceImplTest {
 
 		vo.setDateOfBirth(LocalDateTime.of(2000, 2, 2,0,0,0));
 		Long count3 = service.count(vo);
-		assertEquals(34, count3);
+		assertEquals(32, count3);
 
 	}
 
@@ -264,11 +266,11 @@ class UserServiceImplTest {
 	@Test
 	void findUserByExample() {
 		List<CustomerVO> count = service.findUserByExample(new CustomerVO());
-		MatcherAssert.assertThat("count", count.size(), greaterThan(100));
+		MatcherAssert.assertThat("count", count.size(), greaterThan(97));
 		CustomerVO vo = new CustomerVO();
 		vo.setAlias("jack");
 		List<CustomerVO> count1 = service.findUserByExample(vo);
-		assertEquals(25, count1.size());
+		assertEquals(24, count1.size());
 		vo =new CustomerVO();
 		vo.setUsername("15803012301");
 		List<CustomerVO> count2 = service.findUserByExample(vo);
@@ -277,7 +279,7 @@ class UserServiceImplTest {
 
 		vo.setDateOfBirth(LocalDateTime.of(2000, 2, 2,0,0));
 		List<CustomerVO> count3 = service.findUserByExample(vo);
-		assertEquals(34, count3.size());
+		assertEquals(32, count3.size());
 
 		vo =new CustomerVO();
 		vo.setUsername("15803012301");
@@ -305,4 +307,6 @@ class UserServiceImplTest {
 		System.out.println(increment2);
 		System.out.println(o);
 	}
+
+
 }

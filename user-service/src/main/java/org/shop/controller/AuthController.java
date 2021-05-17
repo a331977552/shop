@@ -1,7 +1,7 @@
 package org.shop.controller;
 
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.shop.Constants;
 import org.shop.RedisService;
 import org.shop.Result;
@@ -23,8 +23,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 @RestController()
-@Slf4j
-@RequestMapping(value = "/user", consumes = {})
+@Log4j2
+@RequestMapping(value = "/user")
 public class AuthController {
 
 	@Autowired
@@ -37,11 +37,9 @@ public class AuthController {
 	private  int JWT_EXPIRATION_TIME ;
 	private final int MAXIMUM_ATTEMPT = 10;
 
-	@RequestMapping(value = "/authenticate", consumes = {})
+	@RequestMapping(value = "/authenticate")
 	public ResponseEntity<Result<String>> login(@RequestBody @Validated(CustomerVO.LoginGroup.class) CustomerVO vo, BindingResult result, HttpServletRequest request) throws Exception {
-
 		String ip = getClientIP(request);
-
 		Object obj = redisService.get(Constants.REDIS_USER_LOGIN_ATTEMPT + "_" + ip);
 		log.debug("ip address {}, times:{}", ip, obj);
 		if (obj != null && ((int) obj) > MAXIMUM_ATTEMPT) {
@@ -62,7 +60,7 @@ public class AuthController {
 		} else {
 			redisService.delete(Constants.REDIS_USER_LOGIN_ATTEMPT + "_" + ip);
 		}
-		redisService.set(login.get().getUsername(), login,JWT_EXPIRATION_TIME);
+		redisService.set(login.get().getUsername(), login.get(),JWT_EXPIRATION_TIME);
 		return new ResponseEntity(Result.of(jwtTokenUtil.generateToken(login.get().getUsername())), HttpStatus.OK);
 	}
 

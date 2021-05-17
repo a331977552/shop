@@ -51,8 +51,8 @@ public class JwtTokenUtil {
 		}
 	}
 
-	public String generateToken(String userId) {
-		 return Jwts.builder().setSubject(userId).setIssuedAt(Date.from(Instant.now())).
+	public String generateToken(String username) {
+		 return Jwts.builder().setSubject(username).setIssuedAt(Date.from(Instant.now())).
 				setExpiration(Date.from(Instant.now().plusMillis(expiration)))
 				.signWith(secretKey, SignatureAlgorithm.HS512).compact();
 	}
@@ -77,7 +77,7 @@ public class JwtTokenUtil {
 			Jws<Claims> headerClaimsJwt = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
 			String subject = headerClaimsJwt.getBody().getSubject();
 			CustomerVO u = new CustomerVO();
-			u.setId(subject);
+			u.setUsername(subject);
 			return u;
 		} catch (JwtException | ClassCastException e) {
 			e.printStackTrace();
