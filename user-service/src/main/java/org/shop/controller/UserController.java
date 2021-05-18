@@ -44,9 +44,10 @@ public class UserController {
 	@GetMapping()
 	public Result<CustomerVO> get(@AuthenticationPrincipal String username) {
 		Optional<CustomerVO> userById = userService.findByUserName(username);
-		System.out.println("get Real Info");
-		return Result.of(userById.get());
-}
+		CustomerVO customerVO = userById.get();
+		customerVO.setPassword("");
+		return Result.of(customerVO);
+	}
 
 
 }

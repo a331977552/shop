@@ -1,9 +1,8 @@
-package org.shop.filter;
+package org.shop.security;
 
 import lombok.extern.log4j.Log4j2;
 import org.shop.TextUtil;
 import org.shop.model.vo.CustomerVO;
-import org.shop.security.JWTAuthenticationToken;
 import org.shop.utils.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -21,14 +20,14 @@ import java.io.IOException;
 
 @Component
 @Log4j2
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class JwtAuthFilter extends OncePerRequestFilter {
 
 	private final JwtTokenUtil jwtTokenUtil;
 
 	@Autowired
 	AuthenticationManager authenticationManager;
 
-	public JwtAuthenticationFilter(JwtTokenUtil jwtTokenUtil) {
+	public JwtAuthFilter(JwtTokenUtil jwtTokenUtil) {
 		this.jwtTokenUtil = jwtTokenUtil;
 	}
 
@@ -48,11 +47,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			return;
 		}
 		log.debug("authenticate on token : {}, result: {}", token, result);
-
 		Authentication authenticate = authenticationManager.authenticate(new JWTAuthenticationToken(result.getUsername(), null));
 		SecurityContextHolder.getContext().setAuthentication(authenticate);
 		filterChain.doFilter(request, response);
-		System.out.println("after");
 	}
 
 

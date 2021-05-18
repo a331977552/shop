@@ -20,10 +20,11 @@ public class JWTAuthenticationProvider implements AuthenticationProvider {
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-		log.debug("authenticate on result: {}",authentication);
 		UserDetails userDetails = this.userDetailsService.loadUserByUsername((String) authentication.getPrincipal());
 		JWTAuthenticationToken jwtAuthenticationToken =new JWTAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(),userDetails.getAuthorities());
 		jwtAuthenticationToken.setDetails(userDetails);
+		log.debug("JWTAuthenticationToken: {}",jwtAuthenticationToken);
+
 		return jwtAuthenticationToken;
 	}
 

@@ -79,7 +79,7 @@
         <sourceDirectory>src/main/java</sourceDirectory>
         <testResources>
             <testResource>
-                <directory>src/test/java</directory>
+                <directory>src/test/resources</directory>
             </testResource>
         </testResources>
         <testSourceDirectory>src/test/java</testSourceDirectory>

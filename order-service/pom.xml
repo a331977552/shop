@@ -24,10 +24,10 @@
         <sourceDirectory>src/main/java</sourceDirectory>
         <testResources>
             <testResource>
-                <directory>src/test/java</directory>
+                <directory>src/test/resources</directory>
             </testResource>
         </testResources>
-        <testSourceDirectory>src/test/resources</testSourceDirectory>
+        <testSourceDirectory>src/test/java</testSourceDirectory>
         <outputDirectory>target/classes</outputDirectory>
         <directory>target</directory>
     </build>

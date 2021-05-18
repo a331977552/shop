@@ -1,5 +1,6 @@
 package org.shop.controller;
 
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shop.Constants;
@@ -21,6 +22,7 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Log4j2
 @SpringBootTest(classes = UserApplication.class,webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserControllerTest {
 	@Autowired
@@ -104,7 +106,7 @@ public class UserControllerTest {
 		ResponseEntity<Result<String>> stringResult = login("15803012301","a123451");
 		String token = stringResult.getBody().getResult();
 		ResponseEntity<Result<CustomerVO>> post = getUserInfo(token);
-		System.out.println(post);
+		log.debug(post);
 		assertEquals(200, post.getBody().getCode());
 		CustomerVO result1 = post.getBody().getResult();
 		System.out.println(result1);

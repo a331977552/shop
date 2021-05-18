@@ -216,7 +216,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<CustomerVO> findUserByExample(CustomerVO customerVO, int limit, int offset, String orderBy) {
-		QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder where = select(id, username,password, alias,phone, email, avatar, dateOfBirth).from(customerDAO).where();
+		QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder where = select(id, username,password,role, alias,phone, email, avatar, dateOfBirth).from(customerDAO).where();
 
 		if (StringUtils.hasText(customerVO.getUsername())) {
 			where = where.and(username, isEqualTo(customerVO.getUsername()));
@@ -250,9 +250,6 @@ public class UserServiceImpl implements UserService {
 	}
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		CustomerVO o = (CustomerVO) redisService.get(username);
-		if(o!=null)
-			return o;
 		Optional<CustomerVO> results = findByUserName(username);
 		return  results.orElseThrow(()->new UsernameNotFoundException("usrname "+ username +" doesn't exist"));
 	}

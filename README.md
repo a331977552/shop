@@ -46,6 +46,9 @@ example:
 
 ---
 
+###issue4. 
+* `PreAuthorize()` on a controller doesn't work because PreAuthorize is based on AOP which in this case uses jdk proxy, and proxy needs interface to work properly and controller generally doesn't implement interface.
+
 # redis  
 1.  import `jedis` and `spring-boot-starter-data-redis`
 2.  by default, there will be two default redisTemplates: `redisTemplate` and `StringRedisTemplate` configured in `RedisAutoConfiguration` class 

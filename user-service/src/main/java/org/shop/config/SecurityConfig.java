@@ -1,13 +1,15 @@
 package org.shop.config;
 
-import org.shop.filter.JwtAuthenticationFilter;
+import org.shop.handler.CustomAccessDeniedHandler;
 import org.shop.security.JWTAuthenticationProvider;
+import org.shop.security.JwtAuthFilter;
 import org.shop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -24,11 +26,12 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity()
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	JwtAuthenticationFilter jwtAuthenticationFilter;
+	JwtAuthFilter jwtAuthFilter;
 
 	@Autowired
 	JWTAuthenticationProvider jwtAuthenticationProvider;
@@ -48,6 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+
 		http.
 				csrf().disable().
 				cors().configurationSource(corsConfigurationSource()).
@@ -56,15 +60,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				new Header("Access-control-Allow-Origin", "*"),
 				new Header("Access-Control-Expose-Headers", "Authorization")))).
 				and().
-				authorizeRequests().antMatchers("/user/signup", "/user/authenticate").permitAll().anyRequest().authenticated().
+				authorizeRequests().antMatchers("/user/signup", "/user/authenticate").
+				permitAll().anyRequest().hasAnyAuthority("CUSTOMER","ADMIN").//accessDecisionManager(accessDecisionManager()).
 				and().
 				/**
-				 * bug, GLOBAL exception handler will catch the authentication exception before this security exception handling does.
+				 * warning, GLOBAL exception handler will catch the authentication exception before this security exception handling does.
 				 */
-//				exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler()).authenticationEntryPoint(new RestAuthenticationEntryPoint()).
-//				and().
+				exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler()).//.authenticationEntryPoint(new RestAuthenticationEntryPoint()).
+				and().
 				sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().
-				addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class).
+				addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class).
 				formLogin().disable();
 	}
 
@@ -89,5 +94,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}
+
+//
+//	@Bean
+//	public AccessDecisionManager accessDecisionManager() {
+//		List<AccessDecisionVoter<? extends Object>> decisionVoters
+//				= Arrays.asList(
+//				new WebExpressionVoter(),
+//				new RoleVoter(),
+//				new AuthenticatedVoter(),
+//				new MinuteBasedVoter());
+//		return new UnanimousBased(decisionVoters);
+//	}
 }
 
