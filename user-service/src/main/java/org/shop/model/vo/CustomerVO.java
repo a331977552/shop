@@ -29,17 +29,17 @@ import java.util.Collections;
 public class CustomerVO implements UserDetails {
 
 	private String id;
-	@NotEmpty(message = "用户名不能为空",groups ={RegistryGroup.class,LoginGroup.class})
+	@NotEmpty(message = "用户名不能为空",groups ={UpdateGroup.class,RegistryGroup.class,LoginGroup.class})
 	@Length(min = 6,max = 20,message = "用户名长度必须在6到20个字符之间")
 	private String username;
-	@NotEmpty(message = "电子邮件不能为空",groups = RegistryGroup.class)
+	@NotEmpty(message = "电子邮件不能为空",groups = {UpdateGroup.class,RegistryGroup.class})
 	@Length(min = 6,max = 30,message = "电子邮件长度必须在6到30个字符之间")
 	@Email(regexp = "[a-zA-Z0-9_-]{2,15}@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)",message = "电子邮件格式不正确")
 	private String email;
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	@NotNull(message = "生日不能为空",groups = RegistryGroup.class)
+	@NotNull(message = "生日不能为空",groups = {UpdateGroup.class,RegistryGroup.class})
 	private LocalDateTime dateOfBirth;
 	@NotBlank(message = "密码不能为空",groups = {RegistryGroup.class,LoginGroup.class})
 	@Length(min = 6,max = 64,message = "密码长度须大于6",groups = {RegistryGroup.class,LoginGroup.class})
@@ -47,7 +47,7 @@ public class CustomerVO implements UserDetails {
 	private String alias;
 	private Integer avatar;
 
-	@NotBlank(message = "电话号码不能为空",groups = {RegistryGroup.class})
+	@NotBlank(message = "电话号码不能为空",groups = {UpdateGroup.class,RegistryGroup.class})
 	@Length(min = 11,max = 20,message = "手机长度不正确",groups = {RegistryGroup.class})
 	private String phone;
 	@JsonIgnore
@@ -99,6 +99,9 @@ public class CustomerVO implements UserDetails {
 
 	}
 	public interface LoginGroup{
+
+	}
+	public interface UpdateGroup{
 
 	}
 }

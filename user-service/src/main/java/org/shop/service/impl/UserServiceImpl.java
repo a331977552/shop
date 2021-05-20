@@ -7,15 +7,20 @@ import org.mybatis.dynamic.sql.select.QueryExpressionDSL;
 import org.mybatis.dynamic.sql.select.SelectModel;
 import org.mybatis.dynamic.sql.select.aggregate.Count;
 import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
-import org.shop.*;
-import org.shop.exception.InvalidUserIDException;
+import org.shop.common.RedisService;
+import org.shop.common.UserRole;
+import org.shop.common.util.BeanConvertor;
+import org.shop.common.util.JwtTokenUtil;
+import org.shop.common.util.TextUtil;
+import org.shop.common.util.UUIDUtils;
+import org.shop.common.validator.PhoneValidator;
+import org.shop.exception.InvalidUsernameException;
 import org.shop.exception.RegistrationException;
+import org.shop.exception.UserUpdateException;
 import org.shop.mapper.CustomerDAOMapper;
 import org.shop.model.dao.CustomerDAO;
 import org.shop.model.vo.CustomerVO;
 import org.shop.service.UserService;
-import org.shop.utils.JwtTokenUtil;
-import org.shop.validator.PhoneValidator;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -111,7 +116,7 @@ public class UserServiceImpl implements UserService {
 		BeanUtils.copyProperties(customerVO, customerDAO);
 		customerDAO.setUpdatedTime(LocalDateTime.now());
 		customerDAO.setCreatedTime(LocalDateTime.now());
-		customerDAO.setRole(Constants.ROLE_CUSTOMER);
+		customerDAO.setRole(UserRole.CUSTOMER.name());
 		customerDAO.setPassword(passwordEncoder.encode(customerVO.getPassword()));
 		mapper.insert(customerDAO);
 		return BeanConvertor.convert(Optional.of(customerVO), CustomerVO.class);
@@ -131,11 +136,21 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	@Override
 	public void updateInfo(CustomerVO customerVO) {
+		boolean validate = phoneValidator.validate(customerVO.getPhone());
+		if (!validate)
+		{
+			log.debug("invalid phone number {}",phone);
+			throw new UserUpdateException("电话号码不确证");
+		}
+
 		CustomerDAO dao =new CustomerDAO();
 		BeanUtils.copyProperties(customerVO,dao);
 		if(TextUtil.hasText(dao.getPassword())){
 			dao.setPassword(passwordEncoder.encode(dao.getPassword()));
+		}else {
+			dao.setPassword(null);// "" will still overwrite in updateByPrimaryKeySelective
 		}
+
 		int result = mapper.updateByPrimaryKeySelective(dao);
 	}
 
@@ -159,10 +174,9 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public CustomerVO findByToken(String token) {
-		CustomerVO vo = jwtTokenUtil.parseToken(token);
-		String id = vo.getId();
-		Optional<CustomerVO> byUserName = this.findUserById(id);
-		return byUserName.orElseThrow(()->new InvalidUserIDException(""));
+		String vo = jwtTokenUtil.parseToken(token);
+		Optional<CustomerVO> byUserName = this.findByUserName(vo);
+		return byUserName.orElseThrow(()->new InvalidUsernameException(""));
 	}
 
 	@Override
@@ -229,7 +243,6 @@ public class UserServiceImpl implements UserService {
 		}
 		if (TextUtil.hasText(orderBy)){
 			where.orderBy(customerDAO.column(orderBy));
-
 		}
 		paginate(limit, offset, where);
 		SelectStatementProvider render = where.build().

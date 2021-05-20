@@ -1,8 +1,8 @@
 package org.shop;
 
 import org.junit.jupiter.api.Test;
-import org.shop.model.vo.CustomerVO;
-import org.shop.utils.JwtTokenUtil;
+import org.shop.common.RedisService;
+import org.shop.common.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -23,11 +23,12 @@ public class GeneralTests {
 		System.out.println(validate);
 		boolean tokenExpired = jwtTokenUtil.isTokenExpired(token);
 		System.out.println(tokenExpired);
-		CustomerVO customerVO = jwtTokenUtil.parseToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjMiLCJpYXQiOjE2MjA4ODQ0NTQsImV4cCI6MTYyMDg4NDQ2MH0.IkhWq5FeRL6kx_DJSBKYBf4iV1wsVbqNDSC6Pv-ZuoNUFWRdIThAekqdL9IIfha44-rgNHaBIcUA1YYM0WmTwg");
+		String customerVO = jwtTokenUtil.parseToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjMiLCJpYXQiOjE2MjA4ODQ0NTQsImV4cCI6MTYyMDg4NDQ2MH0.IkhWq5FeRL6kx_DJSBKYBf4iV1wsVbqNDSC6Pv-ZuoNUFWRdIThAekqdL9IIfha44-rgNHaBIcUA1YYM0WmTwg");
 		System.out.println(customerVO);
 	}
 	@Test
 	void testRedis(){
+
 		Object o = redisService.get("15803012301");
 
 		System.out.println(o);

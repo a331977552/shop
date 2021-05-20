@@ -2,6 +2,7 @@ package org.shop;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.shop.common.util.UUIDUtils;
 
 public class IDTests {
 

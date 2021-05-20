@@ -2,9 +2,10 @@
         "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
-    <context id="dsql" targetRuntime="MyBatis3DynamicSql">
-        <commentGenerator>
+    <context id="dsql" targetRuntime="MyBatis3">
+        <commentGenerator >
             <property name="dateFormat" value="yyyy-mm-dd HH:mm:ss"/>
+            <property name="suppressAllComments" value="true"/>
         </commentGenerator>
         <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
                         userId="root"
@@ -16,19 +17,25 @@
             and TIMESTAMP fields, rather than using java.util.Date -->
             <property name="useJSR310Types" value="true"/>
         </javaTypeResolver>
-
         <javaModelGenerator targetPackage="org.shop.model.dao" targetProject="mybatis-generator/src/main/java"/>
-        <javaClientGenerator targetPackage="org.shop.mapper" targetProject="mybatis-generator/src/main/java"/>
-        <table tableName="cart_item" domainObjectName="CartItemDAO" ></table>
-        <table tableName="customer" domainObjectName="CustomerDAO" ></table>
-        <table tableName="customer_address" domainObjectName="CustomerAddressDAO"></table>
-        <table tableName="image" domainObjectName="ImageDAO"></table>
-        <table tableName="image_product" domainObjectName="ImageProductDAO"></table>
-        <table tableName="order_item" domainObjectName="OrderItemDAO" ></table>
+        <sqlMapGenerator targetPackage="org.shop.mapper" targetProject="mybatis-generator/src/main/java"/>
+
+        <javaClientGenerator type="XMLMAPPER" targetPackage="org.shop.mapper" targetProject="mybatis-generator/src/main/java"/>
+<!--        <table tableName="cart_item" domainObjectName="CartItemDAO" ></table>-->
+<!--        <table tableName="customer" domainObjectName="CustomerDAO" ></table>-->
+<!--        <table tableName="customer_address" domainObjectName="CustomerAddressDAO"></table>-->
+<!--        <table tableName="image" domainObjectName="ImageDAO"></table>-->
+<!--        <table tableName="image_product" domainObjectName="ImageProductDAO"></table>-->
+<!--        <table tableName="order_item" domainObjectName="OrderItemDAO" ></table>-->
         <table tableName="product" domainObjectName="ProductDAO"></table>
-        <table tableName="product_detail" domainObjectName="ProductDetailDAO"></table>
-        <table tableName="shop_order" domainObjectName="ShopOrderDAO"></table>
-        <table tableName="shopping_cart" domainObjectName="ShoppingCartDAO"></table>
-        <table tableName="snapshot_product" domainObjectName="SnapshotProductDAO"></table>
+<!--        <table tableName="product_detail" domainObjectName="ProductDetailDAO"></table>-->
+<!--        <table tableName="shop_order" domainObjectName="ShopOrderDAO"></table>-->
+<!--        <table tableName="shopping_cart" domainObjectName="ShoppingCartDAO"></table>-->
+<!--        <table tableName="snapshot_product" domainObjectName="SnapshotProductDAO"></table>-->
+<!--        <table tableName="brand" domainObjectName="BrandDAO"></table>-->
+<!--        <table tableName="sku" domainObjectName="SkuDAO"></table>-->
+<!--        <table tableName="attr_key" domainObjectName="AttrKeyDAO"></table>-->
+<!--        <table tableName="attr_value" domainObjectName="AttrValueDAO"></table>-->
+<!--        <table tableName="category" domainObjectName="CategoryDAO"></table>-->
     </context>
 </generatorConfiguration>

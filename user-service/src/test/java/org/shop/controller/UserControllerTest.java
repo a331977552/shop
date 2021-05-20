@@ -3,13 +3,13 @@ package org.shop.controller;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.shop.Constants;
-import org.shop.RedisService;
-import org.shop.Result;
-import org.shop.UserApplication;
+import org.shop.*;
+import org.shop.common.RedisService;
+import org.shop.common.Result;
 import org.shop.mapper.CustomerDAOMapper;
 import org.shop.model.vo.CustomerVO;
-import org.shop.utils.RestTestHelper;
+import org.shop.test.utils.RestTestHelper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Log4j2
-@SpringBootTest(classes = UserApplication.class,webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserControllerTest {
 	@Autowired
 	private RestTestHelper helper;
@@ -176,5 +176,48 @@ public class UserControllerTest {
 		System.out.println(i);
 	}
 
+
+	@Test
+	void update(){
+		ResponseEntity<Result<String>> post =login("15803012301","a123451");
+		CustomerVO userInfo = getUserInfo(post.getBody().getResult()).getBody().getResult();
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.add( HttpHeaders.AUTHORIZATION, "Bearer "+post.getBody().getResult());
+		CustomerVO vo =new CustomerVO();
+		BeanUtils.copyProperties(userInfo, vo);
+		try {
+			userInfo.setAlias("ROCKer2");
+			userInfo.setPhone("");
+			userInfo.setDateOfBirth(LocalDateTime.of(2020, 02, 02, 02, 02));
+			ResponseEntity<Result<String>> put = helper.builder().setUipath("/user").build().put(httpHeaders, userInfo, resStringRef);
+			System.out.println(put);
+			assertEquals(400,put.getStatusCodeValue() );
+			assertEquals("电话号码不能为空",put.getBody().getMsgDetail() );
+
+			userInfo.setPhone("12231232");
+			ResponseEntity<Result<String>> put2 = helper.builder().setUipath("/user").build().put(httpHeaders, userInfo, resStringRef);
+			System.out.println(put2);
+			assertEquals(400,put2.getStatusCodeValue() );
+			assertEquals("电话号码不确证",put2.getBody().getMsgDetail() );
+
+
+			userInfo.setPhone("15803098124");
+			ResponseEntity<Result<String>> correct = helper.builder().setUipath("/user").build().put(httpHeaders, userInfo, resStringRef);
+			System.out.println("correct:"+userInfo+"  :"+correct);
+			assertEquals(200,correct.getStatusCodeValue() );
+
+			ResponseEntity<Result<CustomerVO>> userInfo1 = getUserInfo(post.getBody().getResult());
+			System.out.println(userInfo1);
+			assertEquals("15803098124",userInfo1.getBody().getResult().getPhone());
+		}finally {
+			ResponseEntity<Result<String>> restore = helper.builder().setUipath("/user").build().put(httpHeaders, vo, resStringRef);
+			System.out.println(restore);
+			assertEquals(200,restore.getStatusCodeValue() );
+		}
+
+
+//		assertEquals("请求异常", post.getBody().getMsg());
+
+	}
 
 }

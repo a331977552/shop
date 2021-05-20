@@ -3,13 +3,14 @@ package org.shop.controller;
 
 import lombok.extern.log4j.Log4j2;
 import org.shop.Constants;
-import org.shop.RedisService;
-import org.shop.Result;
+import org.shop.common.RedisService;
+import org.shop.common.Result;
 import org.shop.model.vo.CustomerVO;
+import org.shop.common.security.AuthenticationEntity;
 import org.shop.service.UserService;
-import org.shop.utils.JwtTokenUtil;
+import org.shop.common.util.BeanConvertor;
+import org.shop.common.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -33,8 +34,6 @@ public class AuthController {
 	RedisService redisService;
 	@Autowired
 	JwtTokenUtil jwtTokenUtil;
-	@Value( "${jwt.expiration.time}" )
-	private  int JWT_EXPIRATION_TIME ;
 	private final int MAXIMUM_ATTEMPT = 10;
 
 	@RequestMapping(value = "/authenticate")
@@ -60,8 +59,11 @@ public class AuthController {
 		} else {
 			redisService.delete(Constants.REDIS_USER_LOGIN_ATTEMPT + "_" + ip);
 		}
-		redisService.set(login.get().getUsername(), login.get(),JWT_EXPIRATION_TIME);
-		return new ResponseEntity(Result.of(jwtTokenUtil.generateToken(login.get().getUsername())), HttpStatus.OK);
+		final String token = jwtTokenUtil.generateToken(login.get().getUsername());
+		final long expiration = jwtTokenUtil.getExpirationLength();
+		final AuthenticationEntity convert = BeanConvertor.convert(login.get(), AuthenticationEntity.class);
+		redisService.set(login.get().getUsername(),convert,expiration);
+		return new ResponseEntity(Result.of(token), HttpStatus.OK);
 	}
 
 	private String getClientIP(HttpServletRequest request) {

@@ -10,12 +10,17 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class MybatisGenerator {
 
 	public static void main(String[] args) {
+
+
+		deleteAllLastGeneratedFiles();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
 		System.out.println(simpleDateFormat.format(new Date()));
 		List<String> warnings = new ArrayList<String>();
@@ -41,5 +46,20 @@ public class MybatisGenerator {
 		} catch (SQLException throwables) {
 			throwables.printStackTrace();
 		}
+	}
+
+	private static void deleteAllLastGeneratedFiles() {
+		File file = new File(System.getProperty("user.dir") + "/mybatis-generator/src/main/java/org/shop");
+		File[] files = file.listFiles();
+		Stream<File> fileStream = Arrays.stream(files).flatMap(file2 -> Arrays.stream(file2.listFiles()));
+		fileStream.forEach((f) -> {
+			if (f.isDirectory()) {
+				for (File listFile : f.listFiles()) {
+					listFile.delete();
+				}
+			} else {
+				f.delete();
+			}
+		});
 	}
 }

@@ -16,6 +16,7 @@
         <module>mybatis-generator</module>
         <module>common</module>
         <module>sso</module>
+        <module>test-utility</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
