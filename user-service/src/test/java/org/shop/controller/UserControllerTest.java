@@ -8,6 +8,7 @@ import org.shop.common.RedisService;
 import org.shop.common.Result;
 import org.shop.mapper.CustomerDAOMapper;
 import org.shop.model.vo.CustomerVO;
+import org.shop.test.model.TestCustomerVO;
 import org.shop.test.utils.RestTestHelper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,20 +67,15 @@ public class UserControllerTest {
 		assertEquals("用户名或密码错误", responseEntity.getBody().getMsgDetail());
 	}
 	@Test
-	Result<String> successfulLogin(){
-		ResponseEntity<Result<String>> success = this.login("15803012301", "a123451");
+	void successfulLogin(){
+		final ResponseEntity<Result<String>> success = helper.login("15803012301", "a123451");
 		System.out.println(success);
 		assertEquals(200,
 				success.getStatusCodeValue());
 		assertEquals("成功", success.getBody().getMsg());
-		return success.getBody();
 	}
 
-	ResponseEntity<Result<String>> login(String username, String password){
-		ResponseEntity<Result<String>> post = helper.builder().setUipath("/user/authenticate").build().post(new CustomerVO(username, password), resStringRef);
-		System.out.println(post);
-		return post;
-	}
+
 
 	@Test
 	void testBlockLogin(){
@@ -103,12 +99,12 @@ public class UserControllerTest {
 
 	@Test
 	void getUserInfo(){
-		ResponseEntity<Result<String>> stringResult = login("15803012301","a123451");
+		ResponseEntity<Result<String>> stringResult =helper.login("15803012301","a123451");
 		String token = stringResult.getBody().getResult();
-		ResponseEntity<Result<CustomerVO>> post = getUserInfo(token);
+		ResponseEntity<Result<TestCustomerVO>> post = helper.getUserInfo(token);
 		log.debug(post);
 		assertEquals(200, post.getBody().getCode());
-		CustomerVO result1 = post.getBody().getResult();
+		TestCustomerVO result1 = post.getBody().getResult();
 		System.out.println(result1);
 		assertEquals("15803012301", result1.getUsername());
 	}
@@ -156,7 +152,7 @@ public class UserControllerTest {
 				helper.builder().setUipath("/user/signup").build().post(customerVO,cusRef);
 		System.out.println(success);
 		if(success.getStatusCodeValue() == 400 && success.getBody().getMsgDetail().equals("用户已存在")){
-			ResponseEntity<Result<String>> login = this.login("AAAAAD", "a123321");
+			ResponseEntity<Result<String>> login = helper.login("AAAAAD", "a123321");
 			ResponseEntity<Result<CustomerVO>> userInfo = getUserInfo(login.getBody().getResult());
 			String id = userInfo.getBody().getResult().getId();
 			customerDAOMapper.deleteByPrimaryKey(id);
@@ -179,7 +175,7 @@ public class UserControllerTest {
 
 	@Test
 	void update(){
-		ResponseEntity<Result<String>> post =login("15803012301","a123451");
+		ResponseEntity<Result<String>> post =helper.login("15803012301","a123451");
 		CustomerVO userInfo = getUserInfo(post.getBody().getResult()).getBody().getResult();
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.add( HttpHeaders.AUTHORIZATION, "Bearer "+post.getBody().getResult());

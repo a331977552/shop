@@ -4,11 +4,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.shop.common.Result;
-import org.shop.common.security.AuthenticationEntity;
 import org.shop.common.util.Page;
 import org.shop.model.vo.ProductAddVO;
 import org.shop.model.vo.ProductReturnVO;
-import org.shop.tests.util.RestTestHelper;
+import org.shop.test.utils.RestTestHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -26,31 +25,53 @@ class ProductControllerTest {
 
 	@Autowired
 	private RestTestHelper helper;
-	ParameterizedTypeReference resProReturnRef = new ParameterizedTypeReference<Result<ProductReturnVO>>() {};
-	ParameterizedTypeReference strRef = new ParameterizedTypeReference<String>() {};
-	ParameterizedTypeReference strResultRef = new ParameterizedTypeReference<Result<String>>() {};
-	ParameterizedTypeReference resPageProReturnRef = new ParameterizedTypeReference<Result<Page<ProductReturnVO>>>() {};
+	ParameterizedTypeReference<Result<ProductReturnVO>> resProReturnRef = new ParameterizedTypeReference<Result<ProductReturnVO>>() {};
+	ParameterizedTypeReference<String> strRef = new ParameterizedTypeReference<String>() {};
+	ParameterizedTypeReference<Result<String>> strResultRef = new ParameterizedTypeReference<Result<String>>() {};
+	ParameterizedTypeReference<Result<Page<ProductReturnVO>>> resPageProReturnRef = new ParameterizedTypeReference<Result<Page<ProductReturnVO>>>() {};
 
 
 	@BeforeEach
 	void setUp() {
+		helper.setPort(port);
+		helper.setUIPath(getUiPath());
 	}
 
 	@AfterEach
 	void tearDown() {
 	}
 
+	private String getUiPath(){
+		return "api/product";
+	}
 	@Test
 	void addProduct() {
 
-		final ResponseEntity<Result<String>> post = helper.builder().setPort(81).setUipath("/user/authenticate").build().post(new AuthenticationEntity("a123456","123456"), strResultRef);
+		final ResponseEntity<Result<String>> post = helper.setPort(81).login("a123456","123456");
 		assertEquals(200, post.getBody().getCode());
 		assertEquals(true, post.getBody().getResult()!=null);
+		final String token = post.getBody().getResult();
+
+		ResponseEntity<Result<String>> emptyRes = helper.setUIPath(getUiPath()).setPort(port).
+				builder().withToken(token).build().post(new ProductAddVO(),strResultRef);
+		System.out.println(emptyRes);
+		assertEquals(400,emptyRes.getStatusCodeValue());
+		assertEquals("请求异常",emptyRes.getBody().getMsg());
 
 		final ProductAddVO productAddVO = new ProductAddVO();
-		ResponseEntity<Result<ProductReturnVO>> emptyRes = helper.builder().build().post(productAddVO,resProReturnRef);
-		ResponseEntity<Result<ProductReturnVO>> invalidRes = helper.builder().build().post(productAddVO,resProReturnRef);
-		ResponseEntity<Result<ProductReturnVO>> successRes = helper.builder().build().post(productAddVO,resProReturnRef);
+		productAddVO.setName("测试产品");
+
+
+		ResponseEntity<Result<ProductReturnVO>> invalidRes = helper.builder().withToken(token).build().post(productAddVO,resProReturnRef);
+		assertEquals(400,invalidRes.getStatusCodeValue());
+		assertEquals("必须指定产品目录",invalidRes.getBody().getMsgDetail());
+
+		final ProductAddVO successVO = new ProductAddVO();
+		successVO.setName("测试产品");
+		successVO.setCategory(1);
+		ResponseEntity<Result<ProductReturnVO>> successRes = helper.builder().withToken(token).build().post(successVO,resProReturnRef);
+		System.out.println(successRes);
+
 
 	}
 

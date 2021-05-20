@@ -1,7 +1,10 @@
 package org.shop.model.dao;
 
+import lombok.ToString;
+
 import java.time.LocalDateTime;
 
+@ToString
 public class ProductDAO {
     private String id;
 

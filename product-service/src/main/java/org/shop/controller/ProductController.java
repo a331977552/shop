@@ -1,6 +1,7 @@
 package org.shop.controller;
 
 import org.apache.ibatis.annotations.Delete;
+import org.shop.common.util.ErrorResultConvertor;
 import org.shop.common.util.Page;
 import org.shop.common.Result;
 import org.shop.model.vo.ProductAddVO;
@@ -10,6 +11,8 @@ import org.shop.model.vo.ProductUpdateVO;
 import org.shop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,10 +28,10 @@ public class ProductController {
 	ProductService service;
 
 	@PostMapping()
-	public Result<ProductReturnVO> addProduct(@Valid @RequestBody ProductAddVO product) {
-
-
-		return Result.of(service.addProduct(product));
+	public ResponseEntity<Result<ProductReturnVO>> addProduct(@Valid @RequestBody ProductAddVO product, BindingResult result) {
+		if (result.hasErrors())
+			return ResponseEntity.badRequest().body(Result.badRequest(ErrorResultConvertor.getErrorMsg(result)));
+		return ResponseEntity.ok(Result.of(service.addProduct(product)));
 	}
 
 	@PutMapping()
@@ -43,27 +46,27 @@ public class ProductController {
 	}
 
 	@GetMapping("/{id}")
-	public Result<ProductReturnVO> getProduct(@PathVariable("id") String id) {
-		return Result.of(service.getProductById(id));
+	public ResponseEntity<Result<ProductReturnVO>> getProduct(@PathVariable("id") String id) {
+		return ResponseEntity.ok(Result.of(service.getProductById(id)));
 	}
 
 
 	@GetMapping("/{page}/{pageSize}")
-	public Result<Page<ProductReturnVO>> getAllProductByPage(@PathVariable(name = "page") Integer page,
-	                                                 @PathVariable(name = "pageSize") int pageSize,
-	                                                 @RequestParam(name = "orderBy", required = false) String order,@RequestBody(required = false) ProductQueryVO example) {
+	public ResponseEntity<Result<Page<ProductReturnVO>>> getAllProductByPage(@PathVariable(name = "page") Integer page,
+	                                                                         @PathVariable(name = "pageSize") int pageSize,
+	                                                                         @RequestParam(name = "orderBy", required = false) String order, @RequestBody(required = false) ProductQueryVO example) {
 		Page<ProductQueryVO> of = Page.of(page, Math.max(5, Math.min(pageSize, this.pageSize)), order);
-		return Result.of(service.getAll(Optional.ofNullable(example).orElse(new ProductQueryVO()), of));
+		return ResponseEntity.ok(Result.of(service.getAll(Optional.ofNullable(example).orElse(new ProductQueryVO()), of)));
 	}
 
 	@GetMapping("/findByCategoryId/{id}/{page}/{pageSize}")
-	public Result<Page<ProductReturnVO>> getAllProduct(
+	public ResponseEntity<Result<Page<ProductReturnVO>>> getAllProduct(
 			@PathVariable(name = "id") Integer cateId,
 			@PathVariable(name = "page") Integer page,
 			@PathVariable(name = "pageSize") int pageSize,
 			@RequestParam(name = "orderBy", required = false) String order) {
 		Page<ProductQueryVO> of = Page.of(page, Math.max(5, Math.min(pageSize, this.pageSize)), order);
-		return Result.of(service.getProductsByCategoryId(cateId,of));
+		return ResponseEntity.ok(Result.of(service.getProductsByCategoryId(cateId, of)));
 	}
 
 }

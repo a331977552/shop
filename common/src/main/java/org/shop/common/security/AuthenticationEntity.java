@@ -31,10 +31,9 @@ public class AuthenticationEntity implements UserDetails {
 		return Collections.singleton(new SimpleGrantedAuthority(role));
 	}
 
-	@JsonIgnore
 	@Override
 	public String getPassword() {
-		return null;
+		return password;
 	}
 
 	@JsonIgnore

@@ -48,6 +48,7 @@ public class AuthController {
 		if (result.hasErrors()) {
 			redisService.increment(Constants.REDIS_USER_LOGIN_ATTEMPT + "_" + ip, 1);
 			redisService.expire(Constants.REDIS_USER_LOGIN_ATTEMPT + "_" + ip, 60);
+			log.debug("error vo: {}",vo);
 			return new ResponseEntity(Result.validationError(result), HttpStatus.BAD_REQUEST);
 		}
 

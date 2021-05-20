@@ -25,7 +25,7 @@ public class AuthenticationFailureHandler {    //implements AuthenticationEntryP
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<Result> customHandler(AuthenticationException authException, WebRequest webRequest) throws IOException {
-        log.debug("{}",authException.getMessage());
+        log.debug("AuthenticationFailureHandler {}",authException.getMessage());
         return new ResponseEntity(Result.badRequest(authException.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 }

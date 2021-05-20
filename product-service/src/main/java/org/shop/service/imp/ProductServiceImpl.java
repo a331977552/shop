@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -46,8 +47,9 @@ public class ProductServiceImpl implements ProductService {
 		product.setStatus(product.getSales()==null? "ON_SALE":product.getStatus());
 		mapper.insert(product);
 		//map product into  categories
-		List<ProductAddVO.SkuAddVO> skuList = productVO.getSkuList();
+		List<ProductAddVO.SkuAddVO> skuList = Optional.ofNullable(productVO.getSkuList()).orElse(new ArrayList<>());
 		skuList.forEach(sku-> sku.setProductId(product.getId()));
+		System.out.println(product);
 		List<SkuDAO> convert = BeanConvertor.convert(skuList, SkuDAO.class);
 		for (SkuDAO skuDAO : convert) {
 			skuDAO.setSales(0);
