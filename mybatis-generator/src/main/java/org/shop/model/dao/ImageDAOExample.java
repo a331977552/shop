@@ -4,14 +4,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductDetailDAOExample {
+public class ImageDAOExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public ProductDetailDAOExample() {
+    public ImageDAOExample() {
         oredCriteria = new ArrayList<>();
     }
 
@@ -175,73 +175,143 @@ public class ProductDetailDAOExample {
             return (Criteria) this;
         }
 
-        public Criteria andProductIdIsNull() {
-            addCriterion("product_id is null");
+        public Criteria andPathIsNull() {
+            addCriterion("path is null");
             return (Criteria) this;
         }
 
-        public Criteria andProductIdIsNotNull() {
-            addCriterion("product_id is not null");
+        public Criteria andPathIsNotNull() {
+            addCriterion("path is not null");
             return (Criteria) this;
         }
 
-        public Criteria andProductIdEqualTo(String value) {
-            addCriterion("product_id =", value, "productId");
+        public Criteria andPathEqualTo(String value) {
+            addCriterion("path =", value, "path");
             return (Criteria) this;
         }
 
-        public Criteria andProductIdNotEqualTo(String value) {
-            addCriterion("product_id <>", value, "productId");
+        public Criteria andPathNotEqualTo(String value) {
+            addCriterion("path <>", value, "path");
             return (Criteria) this;
         }
 
-        public Criteria andProductIdGreaterThan(String value) {
-            addCriterion("product_id >", value, "productId");
+        public Criteria andPathGreaterThan(String value) {
+            addCriterion("path >", value, "path");
             return (Criteria) this;
         }
 
-        public Criteria andProductIdGreaterThanOrEqualTo(String value) {
-            addCriterion("product_id >=", value, "productId");
+        public Criteria andPathGreaterThanOrEqualTo(String value) {
+            addCriterion("path >=", value, "path");
             return (Criteria) this;
         }
 
-        public Criteria andProductIdLessThan(String value) {
-            addCriterion("product_id <", value, "productId");
+        public Criteria andPathLessThan(String value) {
+            addCriterion("path <", value, "path");
             return (Criteria) this;
         }
 
-        public Criteria andProductIdLessThanOrEqualTo(String value) {
-            addCriterion("product_id <=", value, "productId");
+        public Criteria andPathLessThanOrEqualTo(String value) {
+            addCriterion("path <=", value, "path");
             return (Criteria) this;
         }
 
-        public Criteria andProductIdLike(String value) {
-            addCriterion("product_id like", value, "productId");
+        public Criteria andPathLike(String value) {
+            addCriterion("path like", value, "path");
             return (Criteria) this;
         }
 
-        public Criteria andProductIdNotLike(String value) {
-            addCriterion("product_id not like", value, "productId");
+        public Criteria andPathNotLike(String value) {
+            addCriterion("path not like", value, "path");
             return (Criteria) this;
         }
 
-        public Criteria andProductIdIn(List<String> values) {
-            addCriterion("product_id in", values, "productId");
+        public Criteria andPathIn(List<String> values) {
+            addCriterion("path in", values, "path");
             return (Criteria) this;
         }
 
-        public Criteria andProductIdNotIn(List<String> values) {
-            addCriterion("product_id not in", values, "productId");
+        public Criteria andPathNotIn(List<String> values) {
+            addCriterion("path not in", values, "path");
             return (Criteria) this;
         }
 
-        public Criteria andProductIdBetween(String value1, String value2) {
-            addCriterion("product_id between", value1, value2, "productId");
+        public Criteria andPathBetween(String value1, String value2) {
+            addCriterion("path between", value1, value2, "path");
             return (Criteria) this;
         }
 
-        public Criteria andProductIdNotBetween(String value1, String value2) {
-            addCriterion("product_id not between", value1, value2, "productId");
+        public Criteria andPathNotBetween(String value1, String value2) {
+            addCriterion("path not between", value1, value2, "path");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionIsNull() {
+            addCriterion("description is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionIsNotNull() {
+            addCriterion("description is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionEqualTo(String value) {
+            addCriterion("description =", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionNotEqualTo(String value) {
+            addCriterion("description <>", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionGreaterThan(String value) {
+            addCriterion("description >", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionGreaterThanOrEqualTo(String value) {
+            addCriterion("description >=", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionLessThan(String value) {
+            addCriterion("description <", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionLessThanOrEqualTo(String value) {
+            addCriterion("description <=", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionLike(String value) {
+            addCriterion("description like", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionNotLike(String value) {
+            addCriterion("description not like", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionIn(List<String> values) {
+            addCriterion("description in", values, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionNotIn(List<String> values) {
+            addCriterion("description not in", values, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionBetween(String value1, String value2) {
+            addCriterion("description between", value1, value2, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionNotBetween(String value1, String value2) {
+            addCriterion("description not between", value1, value2, "description");
             return (Criteria) this;
         }
 

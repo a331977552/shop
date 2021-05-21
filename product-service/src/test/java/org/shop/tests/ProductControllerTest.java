@@ -15,6 +15,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.shop.test.utils.TestHttpClient.strResRef;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ProductControllerTest {
@@ -51,7 +52,6 @@ class ProductControllerTest {
 		assertEquals(200, post.getBody().getCode());
 		assertEquals(true, post.getBody().getResult()!=null);
 		final String token = post.getBody().getResult();
-
 		ResponseEntity<Result<String>> emptyRes = helper.setUIPath(getUiPath()).setPort(port).
 				builder().withToken(token).build().post(new ProductAddVO(),strResultRef);
 		System.out.println(emptyRes);
@@ -61,18 +61,23 @@ class ProductControllerTest {
 		final ProductAddVO productAddVO = new ProductAddVO();
 		productAddVO.setName("测试产品");
 
-
 		ResponseEntity<Result<ProductReturnVO>> invalidRes = helper.builder().withToken(token).build().post(productAddVO,resProReturnRef);
 		assertEquals(400,invalidRes.getStatusCodeValue());
 		assertEquals("必须指定产品目录",invalidRes.getBody().getMsgDetail());
 
 		final ProductAddVO successVO = new ProductAddVO();
-		successVO.setName("测试产品");
+		successVO.setName("测试产品 new");
 		successVO.setCategory(1);
 		ResponseEntity<Result<ProductReturnVO>> successRes = helper.builder().withToken(token).build().post(successVO,resProReturnRef);
 		System.out.println(successRes);
 
+		assertEquals(200,successRes.getStatusCodeValue());
+		assertEquals(true,successRes.getBody().getResult().getId().length() == 32);
 
+		final ResponseEntity<Result<String>> delete = helper.builder().withToken(token).setUipath("api/product/" + successRes.getBody().getResult().getId()).build()
+				.delete(strResRef, null);
+		System.out.println(delete);
+		assertEquals(200,delete.getStatusCodeValue());
 	}
 
 	@Test

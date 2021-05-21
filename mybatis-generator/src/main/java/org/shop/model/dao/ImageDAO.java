@@ -2,16 +2,16 @@ package org.shop.model.dao;
 
 import java.time.LocalDateTime;
 
-public class ProductDetailDAO {
+public class ImageDAO {
     private String id;
 
-    private String productId;
+    private String path;
+
+    private String description;
 
     private LocalDateTime createdTime;
 
     private LocalDateTime updatedTime;
-
-    private String description;
 
     public String getId() {
         return id;
@@ -21,12 +21,20 @@ public class ProductDetailDAO {
         this.id = id;
     }
 
-    public String getProductId() {
-        return productId;
+    public String getPath() {
+        return path;
     }
 
-    public void setProductId(String productId) {
-        this.productId = productId;
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public LocalDateTime getCreatedTime() {
@@ -43,13 +51,5 @@ public class ProductDetailDAO {
 
     public void setUpdatedTime(LocalDateTime updatedTime) {
         this.updatedTime = updatedTime;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 }

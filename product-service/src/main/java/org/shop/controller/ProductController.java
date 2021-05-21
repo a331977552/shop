@@ -1,9 +1,8 @@
 package org.shop.controller;
 
-import org.apache.ibatis.annotations.Delete;
+import org.shop.common.Result;
 import org.shop.common.util.ErrorResultConvertor;
 import org.shop.common.util.Page;
-import org.shop.common.Result;
 import org.shop.model.vo.ProductAddVO;
 import org.shop.model.vo.ProductQueryVO;
 import org.shop.model.vo.ProductReturnVO;
@@ -40,7 +39,7 @@ public class ProductController {
 	}
 
 
-	@Delete("/{id}")
+	@DeleteMapping("/{id}")
 	public void deleteProduct(@PathVariable("id") String id) {
 		service.deleteProductById(id);
 	}
