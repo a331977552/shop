@@ -66,6 +66,8 @@ public class ImageServiceImpl implements ImageService, ModelConvertor<ImageDAO,I
 	@Override
 	public InputStream findImgById(String imgId) throws IOException {
 		final GridFSFile id = client2.findOne(new Query(where("_id").is(imgId)));
+		if(id==null)
+			throw new ImgException("invalid id: "+ imgId);
 		final GridFsResource resource = client2.getResource(id);
 		return resource.getInputStream();
 	}

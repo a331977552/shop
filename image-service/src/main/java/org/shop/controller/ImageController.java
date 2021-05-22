@@ -4,9 +4,12 @@ import org.shop.common.Result;
 import org.shop.exception.ImgException;
 import org.shop.model.vo.ImageReturnVO;
 import org.shop.service.ImageService;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -22,22 +25,22 @@ public class ImageController {
 
 	@PostMapping
 	public Result<ImageReturnVO> addImg(@RequestParam("img") MultipartFile file){
-
 		final ImageReturnVO imageReturnVO = service.addImg(file);
 		return Result.of(imageReturnVO);
 	}
 
-	@GetMapping("/{id}")
-	public InputStream getImgByID(@PathVariable("id") String id){
+	@GetMapping(value = "/{id}")
+	public void getImgByID(@PathVariable("id") String id, HttpServletResponse httpResponse){
 		final InputStream inputStream;
 		try {
 			inputStream = service.findImgById(id);
-			return inputStream;
+			final ServletOutputStream outputStream = httpResponse.getOutputStream();
+			httpResponse.setContentType(MediaType.IMAGE_PNG_VALUE);
+			inputStream.transferTo(outputStream);
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new ImgException("获取图片失败",e);
 		}
 	}
-
 
 }
