@@ -38,6 +38,12 @@ public final class RestTestHelper {
 		return post;
 	}
 
+	public ResponseEntity<Result<String>> loginWithDefault() {
+		ResponseEntity<Result<String>> post = builder().setUipath("/user/authenticate").setPort(81).build().post(new AuthenticationEntity("a123456","123456"), new ParameterizedTypeReference<Result<String>>() {
+		});
+		return post;
+	}
+
 	public ResponseEntity<Result<TestCustomerVO>> getUserInfo(String token)  {
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.add( HttpHeaders.AUTHORIZATION, "Bearer "+token);

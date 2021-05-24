@@ -48,6 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				antMatchers(HttpMethod.POST, "/api/product").hasAuthority("ADMIN").
 				antMatchers(HttpMethod.PUT, "/api/product").hasAuthority("ADMIN").
 				antMatchers(HttpMethod.PUT, "/api/product").hasAuthority("ADMIN").
+				antMatchers( "/api/product/sku/*").hasAuthority("ADMIN").
 				antMatchers(HttpMethod.DELETE, "/api/product/*").hasAuthority("ADMIN").
 				anyRequest().hasAnyAuthority("ADMIN").
 				and().

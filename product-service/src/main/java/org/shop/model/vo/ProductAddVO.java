@@ -35,7 +35,6 @@ public class ProductAddVO {
 	@Data
 	@ToString
 	public static class SkuAddVO {
-		private String productId;
 		private Integer stock;
 		private BigDecimal price;
 		private String attribute;

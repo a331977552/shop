@@ -84,6 +84,10 @@ public final class Result<T>{
 		Result<T> objectResult = new Result(403, message);
 		return objectResult;
 	}
+	public static<T> Result unauthorized(String message) {
+		Result<T> objectResult = new Result(401, message);
+		return objectResult;
+	}
 
 
 	public enum ResultCode {
@@ -93,6 +97,7 @@ public final class Result<T>{
 		EMPTY(204, "empty"),
 		NOT_FOUND(404, "请求内容未找到"),
 		ACCESS_DENIED(403, "没有权限"),
+		UNAUTHORIZED(401, "未登录"),
 		AUTHENTICATION_FAILED(401, "账户验证失败"),
 		SERVER_ERROR(599,"unknown error");
 

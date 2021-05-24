@@ -1,5 +1,6 @@
 package org.shop.config;
 
+import org.shop.common.handler.AuthenticationFailureHandler;
 import org.shop.common.handler.CustomAccessDeniedHandler;
 import org.shop.common.security.JWTAuthenticationProvider;
 import org.shop.common.security.JwtAuthFilter;
@@ -50,6 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				anyRequest().hasAnyAuthority("ADMIN").
 				and().
 				exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler()).
+				authenticationEntryPoint(new AuthenticationFailureHandler()).
 				and().
 				sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().
 				addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class).

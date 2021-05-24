@@ -55,6 +55,19 @@ example:
 3.  config a new redisTemplate, it needs to be renamed: `@Bean(name = "redisTemplate")` and new serializers need to be configured. 
         
 ---
+
+#img server
+###nearly all the following dfs are based on Google File System paper.
+
+1.  `minIO` seems to be a good choice but mac m1 not supported
+2.  `fastDFS` outdated.
+3.  `mongodb GridFS `cannot retrive img directly from mongodb. have to you use spring as a server to process.
+4.  `aliyun OSS`, too expensive, and takes time to learn.
+5.  `yupoo.com` '又拍云图片管家' seems a good idea.
+6.  `amazon s3` bucket cannot get access from mainland china.
+7.  `TFS(taobao filesystem)` the community is basically dead. nobody maintain it.
+
+---
 #Shiro
     
 * `permission`:
