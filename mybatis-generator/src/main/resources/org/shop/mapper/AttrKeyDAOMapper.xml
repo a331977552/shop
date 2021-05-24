@@ -99,13 +99,13 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="org.shop.model.dao.AttrKeyDAO" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+  <insert id="insert" parameterType="org.shop.model.dao.AttrKeyDAO">
     insert into attr_key (id, name, categoryID, 
       created_time, updated_time)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{categoryid,jdbcType=INTEGER}, 
       #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="org.shop.model.dao.AttrKeyDAO"  useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+  <insert id="insertSelective" parameterType="org.shop.model.dao.AttrKeyDAO">
     insert into attr_key
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

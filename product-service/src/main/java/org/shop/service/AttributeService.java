@@ -18,6 +18,6 @@ public interface AttributeService {
 
 	void deleteValue(Integer id);
 
-	List<AttributeReturnVO> getAttributeByCategoryID(String categoryID);
+	List<AttributeReturnVO> getAttributeByCategoryID(Integer categoryID);
 
 }

@@ -131,7 +131,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="org.shop.model.dao.ProductDAO" useGeneratedKeys="true">
+  <insert id="insert" parameterType="org.shop.model.dao.ProductDAO">
     insert into product (id, name, category, 
       weight, sales, status, 
       priority, thumbnail_img, standard_img, 
@@ -143,7 +143,7 @@
       #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, #{brand,jdbcType=CHAR}, 
       #{description,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="org.shop.model.dao.ProductDAO"  useGeneratedKeys="true">
+  <insert id="insertSelective" parameterType="org.shop.model.dao.ProductDAO">
     insert into product
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

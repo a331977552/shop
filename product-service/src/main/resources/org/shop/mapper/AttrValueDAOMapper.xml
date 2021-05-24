@@ -101,7 +101,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="org.shop.model.dao.AttrValueDAO">
+  <insert id="insert" parameterType="org.shop.model.dao.AttrValueDAO" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
     insert into attr_value (id, attr_key, value, 
       img, sort, created_time, 
       updated_time)
@@ -109,7 +109,7 @@
       #{img,jdbcType=CHAR}, #{sort,jdbcType=INTEGER}, #{createdTime,jdbcType=TIMESTAMP}, 
       #{updatedTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="org.shop.model.dao.AttrValueDAO">
+  <insert id="insertSelective" parameterType="org.shop.model.dao.AttrValueDAO" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
     insert into attr_value
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

@@ -236,72 +236,62 @@ public class AttrKeyDAOExample {
         }
 
         public Criteria andCategoryidIsNull() {
-            addCriterion("categoryId is null");
+            addCriterion("categoryID is null");
             return (Criteria) this;
         }
 
         public Criteria andCategoryidIsNotNull() {
-            addCriterion("categoryId is not null");
+            addCriterion("categoryID is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryidEqualTo(String value) {
-            addCriterion("categoryId =", value, "categoryid");
+        public Criteria andCategoryidEqualTo(Integer value) {
+            addCriterion("categoryID =", value, "categoryid");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryidNotEqualTo(String value) {
-            addCriterion("categoryId <>", value, "categoryid");
+        public Criteria andCategoryidNotEqualTo(Integer value) {
+            addCriterion("categoryID <>", value, "categoryid");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryidGreaterThan(String value) {
-            addCriterion("categoryId >", value, "categoryid");
+        public Criteria andCategoryidGreaterThan(Integer value) {
+            addCriterion("categoryID >", value, "categoryid");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryidGreaterThanOrEqualTo(String value) {
-            addCriterion("categoryId >=", value, "categoryid");
+        public Criteria andCategoryidGreaterThanOrEqualTo(Integer value) {
+            addCriterion("categoryID >=", value, "categoryid");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryidLessThan(String value) {
-            addCriterion("categoryId <", value, "categoryid");
+        public Criteria andCategoryidLessThan(Integer value) {
+            addCriterion("categoryID <", value, "categoryid");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryidLessThanOrEqualTo(String value) {
-            addCriterion("categoryId <=", value, "categoryid");
+        public Criteria andCategoryidLessThanOrEqualTo(Integer value) {
+            addCriterion("categoryID <=", value, "categoryid");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryidLike(String value) {
-            addCriterion("categoryId like", value, "categoryid");
+        public Criteria andCategoryidIn(List<Integer> values) {
+            addCriterion("categoryID in", values, "categoryid");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryidNotLike(String value) {
-            addCriterion("categoryId not like", value, "categoryid");
+        public Criteria andCategoryidNotIn(List<Integer> values) {
+            addCriterion("categoryID not in", values, "categoryid");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryidIn(List<String> values) {
-            addCriterion("categoryId in", values, "categoryid");
+        public Criteria andCategoryidBetween(Integer value1, Integer value2) {
+            addCriterion("categoryID between", value1, value2, "categoryid");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryidNotIn(List<String> values) {
-            addCriterion("categoryId not in", values, "categoryid");
-            return (Criteria) this;
-        }
-
-        public Criteria andCategoryidBetween(String value1, String value2) {
-            addCriterion("categoryId between", value1, value2, "categoryid");
-            return (Criteria) this;
-        }
-
-        public Criteria andCategoryidNotBetween(String value1, String value2) {
-            addCriterion("categoryId not between", value1, value2, "categoryid");
+        public Criteria andCategoryidNotBetween(Integer value1, Integer value2) {
+            addCriterion("categoryID not between", value1, value2, "categoryid");
             return (Criteria) this;
         }
 

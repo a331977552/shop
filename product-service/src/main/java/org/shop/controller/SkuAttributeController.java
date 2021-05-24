@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@RestController("/api/product/sku")
+@RestController()
+@RequestMapping("/api/product/sku")
 public class SkuAttributeController {
 
 
@@ -37,7 +38,7 @@ public class SkuAttributeController {
 
 
 	@DeleteMapping("/value/{id}")
-	public ResponseEntity deleteValue(@PathVariable(value = "{id}",required = true) Integer id) {
+	public ResponseEntity deleteValue(@PathVariable(value = "id") Integer id) {
 		attributeService.deleteValue(id);
 		return ResponseEntity.ok().build();
 	}
@@ -45,7 +46,7 @@ public class SkuAttributeController {
 
 
 	@DeleteMapping("/attr/{id}")
-	public ResponseEntity deleteAttr(@PathVariable(value = "{id}",required = true) Integer id) {
+	public ResponseEntity deleteAttr(@PathVariable(value = "id") Integer id) {
 		attributeService.deleteAttribute(id);
 		return ResponseEntity.ok().build();
 	}

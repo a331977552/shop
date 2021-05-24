@@ -6,6 +6,7 @@ import org.shop.model.dao.AttrKeyDAO;
 import org.shop.model.dao.AttrKeyDAOExample;
 
 import java.util.List;
+
 @Mapper
 public interface AttrKeyDAOMapper {
     long countByExample(AttrKeyDAOExample example);

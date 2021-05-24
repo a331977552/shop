@@ -1,4 +1,4 @@
-package org.shop.tests.model;
+package org.shop.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

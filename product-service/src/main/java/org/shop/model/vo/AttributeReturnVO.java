@@ -13,7 +13,7 @@ public class AttributeReturnVO {
 
 	private String name;
 
-	private String categoryid;
+	private Integer categoryid;
 
 	private List<AttributeValueReturnVO> values;
 

@@ -7,7 +7,7 @@ public class AttrKeyDAO {
 
     private String name;
 
-    private String categoryid;
+    private Integer categoryid;
 
     private LocalDateTime createdTime;
 
@@ -29,11 +29,11 @@ public class AttrKeyDAO {
         this.name = name;
     }
 
-    public String getCategoryid() {
+    public Integer getCategoryid() {
         return categoryid;
     }
 
-    public void setCategoryid(String categoryid) {
+    public void setCategoryid(Integer categoryid) {
         this.categoryid = categoryid;
     }
 
