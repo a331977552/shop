@@ -33,7 +33,7 @@ public class ProductReturnVO {
 	@Data
 	@ToString
 	public static class SkuReturnVO {
-		private String id;
+		private Integer id;
 
 		private String productId;
 

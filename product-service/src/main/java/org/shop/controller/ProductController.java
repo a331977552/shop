@@ -1,7 +1,6 @@
 package org.shop.controller;
 
 import org.shop.common.Result;
-import org.shop.common.util.ErrorResultConvertor;
 import org.shop.common.util.Page;
 import org.shop.model.vo.ProductAddVO;
 import org.shop.model.vo.ProductQueryVO;
@@ -11,7 +10,6 @@ import org.shop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -27,9 +25,7 @@ public class ProductController {
 	ProductService service;
 
 	@PostMapping()
-	public ResponseEntity<Result<ProductReturnVO>> addProduct(@Valid @RequestBody ProductAddVO product, BindingResult result) {
-		if (result.hasErrors())
-			return ResponseEntity.badRequest().body(Result.badRequest(ErrorResultConvertor.getErrorMsg(result)));
+	public ResponseEntity<Result<ProductReturnVO>> addProduct(@Valid @RequestBody ProductAddVO product) {
 		return ResponseEntity.ok(Result.of(service.addProduct(product)));
 	}
 
@@ -59,7 +55,7 @@ public class ProductController {
 	}
 
 	@GetMapping("/findByCategoryId/{id}/{page}/{pageSize}")
-	public ResponseEntity<Result<Page<ProductReturnVO>>> getAllProduct(
+	public ResponseEntity<Result<Page<ProductReturnVO>>> findByCategoryIdWithPage(
 			@PathVariable(name = "id") Integer cateId,
 			@PathVariable(name = "page") Integer page,
 			@PathVariable(name = "pageSize") int pageSize,

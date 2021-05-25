@@ -2,6 +2,7 @@ package org.shop.model.vo;
 
 import lombok.Data;
 import lombok.ToString;
+import org.shop.common.validator.EnumNamePattern;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -22,6 +23,7 @@ public class ProductUpdateVO {
 
 	private Integer weight;
 
+	@EnumNamePattern(regexp = "ON_SALE|OUT_OF_ORDER")
 	private String status;
 
 	private Integer priority;
@@ -31,22 +33,25 @@ public class ProductUpdateVO {
 	private String standardImg;
 
 	private String brand;
-	@NotNull
+	@NotNull(message = "sku不能为空")
 	private List<SkuUpdateVO> skuList;
 
 	@Data
 	@ToString
 	public static class SkuUpdateVO {
+
+		@NotNull(message = "skuID不能为空")
+		@NotBlank(message = "skuID不能为空白")
 		private String id;
 
-		private String productId;
-
+		@NotNull(message = "stock cannot be null")
 		private Integer stock;
 
 		private Integer sales;
-
+		@NotNull(message = "price cannot be null")
 		private BigDecimal price;
 
+		@NotBlank(message = "product attribute cannot be empty")
 		private String attribute;
 
 		private String img;

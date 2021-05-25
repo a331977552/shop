@@ -39,8 +39,9 @@ class SkuAttributeControllerTest extends BaseControllerTest {
 		addVO.setValueVOList(list);
 
 		final String token = getToken();
-		final ResponseEntity<Result<AttributeReturnVO>> post = helper.setUIPath("/api/product/sku/attr").setPort(port).builder().withToken(token).build()
-				.post(addVO, resProReturnRef);
+		final ResponseEntity<Result<AttributeReturnVO>> post = helper.
+				setUIPath("/api/product/sku/attr").setPort(port).
+				builder().withToken(token).build().post(addVO, resProReturnRef);
 		System.out.println(post);
 		final AttributeReturnVO result = post.getBody().getResult();
 		Assertions.assertEquals(200,post.getStatusCodeValue());
@@ -51,16 +52,35 @@ class SkuAttributeControllerTest extends BaseControllerTest {
 			Assertions.assertEquals(true,value.getId() !=null);
 		}
 
-		this.deleteValue(id,token);
+		this.deleteAttr(id,token);
 
 	}
 
 	@Test
 	void addValue() {
+		final String token = this.getToken();
+		AttributeValueAddVO valueAddVO =new AttributeValueAddVO();
 
+		valueAddVO.setAttrKey(1);
+		valueAddVO.setValue("彩色");
+		final ResponseEntity<Result<AttributeValueReturnVO>> post = helper.
+				setUIPath("/api/product/sku/value").setPort(port).
+				builder().withToken(token).build().post(valueAddVO, getValueParameterTypeRef());
+		System.out.println(post);
+		final AttributeValueReturnVO result = post.getBody().getResult();
+		Assertions.assertEquals(200,post.getStatusCodeValue());
+		final Integer id = result.getId();
+		Assertions.assertEquals(true,id !=null);
+		this.deleteValue(id,token);
 	}
 
 	void deleteValue(Integer id,String token) {
+		final ResponseEntity<Result<String>> post = helper.
+				setUIPath("/api/product/sku/value/"+id).setPort(port).
+				builder().withToken(token).build().delete(strResultRef);
+		System.out.println(post);
+		Assertions.assertEquals(200,post.getStatusCodeValue());
+
 	}
 
 	@Test
@@ -73,6 +93,11 @@ class SkuAttributeControllerTest extends BaseControllerTest {
 	@Override
 	protected ParameterizedTypeReference<Result<AttributeReturnVO>> getParameterTypeRef() {
 		return new ParameterizedTypeReference<Result<AttributeReturnVO>>() {
+		};
+	}
+
+	protected ParameterizedTypeReference<Result<AttributeValueReturnVO>> getValueParameterTypeRef() {
+		return new ParameterizedTypeReference<Result<AttributeValueReturnVO>>() {
 		};
 	}
 }

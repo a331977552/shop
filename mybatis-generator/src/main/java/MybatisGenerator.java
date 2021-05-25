@@ -21,8 +21,6 @@ public class MybatisGenerator {
 
 
 		deleteAllLastGeneratedFiles();
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
-		System.out.println(simpleDateFormat.format(new Date()));
 		List<String> warnings = new ArrayList<String>();
 		boolean overwrite = true;
 		File configFile = new File(MybatisGenerator.class.getClassLoader().getResource("generatorConfig.xml").getFile());

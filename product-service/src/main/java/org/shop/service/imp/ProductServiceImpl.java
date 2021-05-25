@@ -1,16 +1,15 @@
 package org.shop.service.imp;
 
+import lombok.extern.log4j.Log4j2;
 import org.shop.common.util.BeanConvertor;
 import org.shop.common.util.Page;
 import org.shop.common.util.TextUtil;
 import org.shop.common.util.UUIDUtils;
 import org.shop.exception.ProductUpdateException;
+import org.shop.mapper.BrandDAOMapper;
 import org.shop.mapper.ProductDAOMapper;
 import org.shop.mapper.SkuDAOMapper;
-import org.shop.model.dao.ProductDAO;
-import org.shop.model.dao.ProductDAOExample;
-import org.shop.model.dao.SkuDAO;
-import org.shop.model.dao.SkuDAOExample;
+import org.shop.model.dao.*;
 import org.shop.model.vo.ProductAddVO;
 import org.shop.model.vo.ProductQueryVO;
 import org.shop.model.vo.ProductReturnVO;
@@ -27,16 +26,18 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Log4j2
 public class ProductServiceImpl implements ProductService {
 
 
 	private final ProductDAOMapper mapper;
 	private final SkuDAOMapper skuMapper;
+	private final BrandDAOMapper brandDAOMapper;
 
-
-	public ProductServiceImpl(ProductDAOMapper mapper, SkuDAOMapper skuMapper) {
+	public ProductServiceImpl(ProductDAOMapper mapper, SkuDAOMapper skuMapper, BrandDAOMapper brandDAOMapper) {
 		this.mapper = mapper;
 		this.skuMapper = skuMapper;
+		this.brandDAOMapper = brandDAOMapper;
 	}
 
 	@Transactional
@@ -45,7 +46,8 @@ public class ProductServiceImpl implements ProductService {
 		ProductDAO product = convertToDAO(productVO);
 		product.setId(UUIDUtils.generateID());
 		product.setStatus(product.getSales()==null? "ON_SALE":product.getStatus());
-		mapper.insert(product);
+		product.setSales(0);
+		mapper.insertSelective(product);
 		//map product into  categories
 		List<ProductAddVO.SkuAddVO> skuList = Optional.ofNullable(productVO.getSkuList()).orElse(new ArrayList<>());
 		System.out.println(product);
@@ -53,7 +55,7 @@ public class ProductServiceImpl implements ProductService {
 		for (SkuDAO skuDAO : convert) {
 			skuDAO.setSales(0);
 			skuDAO.setProductId(product.getId());
-			skuMapper.insert(skuDAO);
+			skuMapper.insertSelective(skuDAO);
 		}
 		ProductReturnVO productReturnVO = convertToReturnVO(product, convert);
 		return productReturnVO;
@@ -91,14 +93,23 @@ public class ProductServiceImpl implements ProductService {
 	public void updateProduct(ProductUpdateVO example) {
 		ProductDAO productDAO = convertToDAO(example);
 		productDAO.setUpdatedTime(LocalDateTime.now());
-		int i = mapper.updateByPrimaryKey(productDAO);
-		if(i == 0){
-			throw new ProductUpdateException("产品更新失败");
+		productDAO.setUpdatedTime(LocalDateTime.now());
+		mapper.updateByPrimaryKeySelective(productDAO);
+		if(TextUtil.hasText(example.getBrand())){
+			BrandDAOExample brexample = new BrandDAOExample();
+			brexample.createCriteria().andIdEqualTo(example.getBrand());
+			final long l = brandDAOMapper.countByExample(brexample);
+			if (l <= 0 ){
+				log.error("产品更新失败， brand ID: {} 错误 ",example.getBrand());
+				throw new ProductUpdateException("产品更新失败， brand ID 错误");
+			}
 		}
 	   List<ProductUpdateVO.SkuUpdateVO> skuList = example.getSkuList();
 		for (ProductUpdateVO.SkuUpdateVO vo : skuList) {
 			SkuDAO convert = BeanConvertor.convert(vo, SkuDAO.class);
-			skuMapper.updateByPrimaryKey(convert);
+			convert.setProductId(productDAO.getId());
+			convert.setUpdatedTime(LocalDateTime.now());
+			skuMapper.updateByPrimaryKeySelective(convert);
 		}
 	}
 
@@ -148,14 +159,18 @@ public class ProductServiceImpl implements ProductService {
 		ProductDAOExample productDAOExample = createExample();
 		ProductDAOExample.Criteria criteria = productDAOExample.createCriteria();
 		criteria.andCategoryEqualTo(id);
-		SkuDAOExample example = new SkuDAOExample();
+
+		String orderBy = Optional.ofNullable(page.getOrderBy()).orElse("updated_time desc ");
+		productDAOExample.setOrderByClause(orderBy+ " limit "+ page.getPageSize() +" offset "+ page.getOffset());
 		final long count = mapper.countByExample(productDAOExample);
-		final List<ProductReturnVO> collect = mapper.selectByExample(productDAOExample).stream().map(dao -> {
-			example.clear();
-			example.createCriteria().andProductIdEqualTo(dao.getId());
-			return convertToReturnVO(dao, skuMapper.selectByExample(example));
+		final List<ProductDAO> products = mapper.selectByExample(productDAOExample);
+
+		final List<ProductReturnVO> results = products.stream().map(product -> {
+			SkuDAOExample example = new SkuDAOExample();
+			example.createCriteria().andProductIdEqualTo(product.getId());
+			return convertToReturnVO(product, skuMapper.selectByExample(example));
 		}).collect(Collectors.toList());
-		return Page.createFrom(page,count,collect);
+		return Page.createFrom(page,count,results);
 	}
 
 
@@ -192,7 +207,7 @@ public class ProductServiceImpl implements ProductService {
 		}
 		long count = mapper.countByExample(example);
 
-		String orderBy = Optional.ofNullable(page.getOrderBy()).orElse("");
+		String orderBy = Optional.ofNullable(page.getOrderBy()).orElse("updated_time desc ");
 		example.setOrderByClause(orderBy+ " limit "+ page.getPageSize() +" offset "+ page.getOffset());
 
 		final List<ProductDAO> productDAOS = mapper.selectByExample(example);
