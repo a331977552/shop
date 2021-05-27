@@ -26,7 +26,6 @@ class AddressControllerTest extends BaseControllerTest<CustomerResultVO> {
 	void setup(){
 		final ResponseEntity<Result<String>> login = helper.login("junit_test", "a123456");
 		token = login.getBody().getResult();
-
 		helper.setPort(port);
 		helper.setUIPath(getUipath());
 	}

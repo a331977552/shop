@@ -576,6 +576,76 @@ public class OrderItemDAOExample {
             return (Criteria) this;
         }
 
+        public Criteria andThumbImgIsNull() {
+            addCriterion("thumb_img is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andThumbImgIsNotNull() {
+            addCriterion("thumb_img is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andThumbImgEqualTo(String value) {
+            addCriterion("thumb_img =", value, "thumbImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andThumbImgNotEqualTo(String value) {
+            addCriterion("thumb_img <>", value, "thumbImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andThumbImgGreaterThan(String value) {
+            addCriterion("thumb_img >", value, "thumbImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andThumbImgGreaterThanOrEqualTo(String value) {
+            addCriterion("thumb_img >=", value, "thumbImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andThumbImgLessThan(String value) {
+            addCriterion("thumb_img <", value, "thumbImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andThumbImgLessThanOrEqualTo(String value) {
+            addCriterion("thumb_img <=", value, "thumbImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andThumbImgLike(String value) {
+            addCriterion("thumb_img like", value, "thumbImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andThumbImgNotLike(String value) {
+            addCriterion("thumb_img not like", value, "thumbImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andThumbImgIn(List<String> values) {
+            addCriterion("thumb_img in", values, "thumbImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andThumbImgNotIn(List<String> values) {
+            addCriterion("thumb_img not in", values, "thumbImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andThumbImgBetween(String value1, String value2) {
+            addCriterion("thumb_img between", value1, value2, "thumbImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andThumbImgNotBetween(String value1, String value2) {
+            addCriterion("thumb_img not between", value1, value2, "thumbImg");
+            return (Criteria) this;
+        }
+
         public Criteria andCreatedTimeIsNull() {
             addCriterion("created_time is null");
             return (Criteria) this;

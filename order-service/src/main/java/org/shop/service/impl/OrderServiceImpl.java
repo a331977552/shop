@@ -2,20 +2,21 @@ package org.shop.service.impl;
 
 import lombok.extern.log4j.Log4j2;
 import org.shop.common.util.Page;
+import org.shop.common.util.SecurityUtil;
+import org.shop.common.util.UUIDUtils;
 import org.shop.mapper.OrderItemDAOMapper;
 import org.shop.mapper.ShopOrderDAOMapper;
 import org.shop.model.dao.OrderItemDAO;
 import org.shop.model.dao.OrderItemDAOExample;
 import org.shop.model.dao.ShopOrderDAO;
-import org.shop.model.vo.OrderCreateVO;
-import org.shop.model.vo.OrderItemReturnVO;
-import org.shop.model.vo.OrderQueryVO;
-import org.shop.model.vo.OrderReturnVO;
+import org.shop.model.dao.ShopOrderDAOExample;
+import org.shop.model.vo.*;
 import org.shop.service.OrderService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,46 +31,17 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public OrderReturnVO createOrder(OrderCreateVO vo) {
-//			if(vo.getOrderItems().size() == 0){
-//				throw new UnexpectedException("订单商品列表为空！");
-//			}
-//
-//			if(!PAYMENT_METHODS.contains(vo.getPaymentMethod()))
-//			{
-//				throw new UnexpectedException("无法识别的支付方式！");
-//			}
-//			if(!DINING_METHOD.contains(vo.getDiningMethod()))
-//			{
-//				throw new UnexpectedException("无法识别的订餐方式！");
-//			}
-//
-//			MerchantVO merchant = merchantService.findMerchantById(vo.getMerchant_id());
-//			CustomerVO existingCustomer = customerService.findUserByPhoneOrId(vo.getCustomer());
-//			if(existingCustomer == null){
-//				vo.getCustomer().setId(null);
-//				vo.getCustomer().setAuto_generated(true);
-//				existingCustomer = customerService.addUser(vo.getCustomer());
-//			}
-//			Integer customerId = existingCustomer.getId();
-//			DeliveryAddress address =new DeliveryAddress();
-//			address.setAddress(vo.getAddress());
-//			address.setName(vo.getCustomer().getName());
-//			address.setPhone(vo.getCustomer().getPhone());
-//			address.setUser_id(customerId);
-//			address.setPostcode(null);
-//			deliveryAddressMapper.insert(address);
-//			List<OrderItemVO> orderItems = vo.getOrderItems();
-//			OrderForm order = new OrderForm();
-//			order.setBuyer(vo.getCustomer().getName());
-//			order.setComment(vo.getComment());
-//			//TODO 加 expire time， 有用户功能的时候
-//			//        order.setExpired_time(Instant.now().);
-//
-//			long orderCode = orderFormMapper.selectOrderCode();
-//
-//			BigDecimal totalPrice =new BigDecimal(0);
-//			int quantity=0;
-//			for (OrderItemVO item : orderItems) {
+
+		final Integer customerId = vo.getCustomerId();
+		String orderNumber = UUIDUtils.generateID();
+
+		ShopOrderDAO shopOrderDAO =new ShopOrderDAO();
+		BeanUtils.copyProperties(vo, shopOrderDAO);
+		final List<OrderItemCreateVO> items = vo.getItems();
+		BigDecimal totalPrice = new BigDecimal(0);
+		shopOrderDAO.setTotalPrice(totalPrice);
+		shopOrderDAO.setCustomerId(orderNumber);
+		for (OrderItemCreateVO item : items) {
 //				ProductVO product = productService.getProductById(item.getProduct_id());
 //				BigDecimal subTotal = product.getPrice().multiply(BigDecimal.valueOf(item.getQuantity()));
 //				item.setSub_total(subTotal);
@@ -80,9 +52,8 @@ public class OrderServiceImpl implements OrderService {
 //				item.setProduct_name(product.getName());
 //				quantity += item.getQuantity();
 //				totalPrice = totalPrice.add(subTotal);
-//			}
+		}
 //
-//			String orderNumber = IDUtils.getOrderId(orderCode);
 //			order.setPayment_method(vo.getPaymentMethod());
 //			order.setDining_method(vo.getDiningMethod());
 //			order.setDelivery_address_id(address.getId());
@@ -110,61 +81,58 @@ public class OrderServiceImpl implements OrderService {
 //					throw new UnexpectedException("订单创建异常! 10002");
 //				}
 //			}
-//
-//
-//			//
-//
-//			DeliveryAddressVO addressVO =new DeliveryAddressVO();
-//			BeanUtils.copyProperties(address,addressVO);
-//
-//			OrderResultVO orderResultVO = new OrderResultVO();
-//			BeanUtils.copyProperties(order,orderResultVO);
-//			orderResultVO.setOrderItems(orderItems);
-//			orderResultVO.setCustomer(existingCustomer);
-//			orderResultVO.setAddress(addressVO);
-//			orderResultVO.setMerchant(merchant);
-			return null;
+
+		return null;
 	}
 
 
-	OrderItemReturnVO convertToItemVO(OrderItemDAO item){
-		OrderItemReturnVO vo=new OrderItemReturnVO();
-		BeanUtils.copyProperties(item,vo);
+	OrderItemReturnVO convertToItemVO(OrderItemDAO item) {
+		OrderItemReturnVO vo = new OrderItemReturnVO();
+		BeanUtils.copyProperties(item, vo);
+
+		return vo;
+	}
+
+	OrderReturnVO convertToOrderVO(ShopOrderDAO order) {
+		OrderReturnVO vo = new OrderReturnVO();
+		BeanUtils.copyProperties(order, vo);
 
 		return vo;
 	}
 
 	@Override
 	public OrderReturnVO findOrderById(String id) {
-		final ShopOrderDAO shopOrderDAO = orderMapper.selectByPrimaryKey(id);
 
-		OrderReturnVO orderResultVO =new OrderReturnVO();
-		BeanUtils.copyProperties(shopOrderDAO,orderResultVO);
+		final ShopOrderDAO shopOrderDAO = orderMapper.selectByPrimaryKey(id);
+		SecurityUtil.checkIfIllegalUser(shopOrderDAO.getCustomerId());
+		OrderReturnVO orderResultVO = new OrderReturnVO();
+		BeanUtils.copyProperties(shopOrderDAO, orderResultVO);
+
+
+		orderResultVO.setItems(findItemsByOrderID(id));
+		return orderResultVO;
+	}
+
+	private List<OrderItemReturnVO> findItemsByOrderID(String id) {
+
 		//find all corresponding items.
-		OrderItemDAOExample oie =new OrderItemDAOExample();
+		OrderItemDAOExample oie = new OrderItemDAOExample();
 		oie.createCriteria().andOrderIdEqualTo(id);
-		List<OrderItemReturnVO> orderItemVOS = itemMapper.selectByExample(oie).stream().map(this::convertToItemVO).collect(Collectors.toList());
-		orderResultVO.setItems(orderItemVOS);
-//		//find the address
-//		DeliveryAddress address = deliveryAddressMapper.selectByPrimaryKey(form.getDelivery_address_id());
-//		DeliveryAddressVO addressVO =new DeliveryAddressVO();
-//		BeanUtils.copyProperties(address,addressVO);
-//		orderResultVO.setAddress(addressVO);
-//		//find customer
-//		if(form.getUser_id() != null){
-//			CustomerVO customerVO = customerService.getUserById(form.getUser_id());
-//			orderResultVO.setCustomer(customerVO);
-//		}
-		return null;
+		return itemMapper.selectByExample(oie).stream().map(this::convertToItemVO).collect(Collectors.toList());
 	}
 
 	@Override
 	public List<OrderReturnVO> findAllOrdersByUserId(String userId) {
-		return null;
+		ShopOrderDAOExample exam = new ShopOrderDAOExample();
+		exam.createCriteria().andCustomerIdEqualTo(userId);
+		final List<ShopOrderDAO> shopOrderDAOS = orderMapper.selectByExample(exam);
+		return shopOrderDAOS.stream().map(this::convertToOrderVO).
+				peek(vo -> vo.setItems(this.findItemsByOrderID(vo.getId()))).collect(Collectors.toList());
 	}
 
 	@Override
 	public Page<OrderReturnVO> findAllOrders(OrderQueryVO example, Page<OrderQueryVO> page) {
+
 		return null;
 	}
 }

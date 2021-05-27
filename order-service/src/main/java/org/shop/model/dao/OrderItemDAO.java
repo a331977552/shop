@@ -18,6 +18,8 @@ public class OrderItemDAO {
 
     private BigDecimal price;
 
+    private String thumbImg;
+
     private LocalDateTime createdTime;
 
     private LocalDateTime updatedTime;
@@ -78,6 +80,14 @@ public class OrderItemDAO {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public String getThumbImg() {
+        return thumbImg;
+    }
+
+    public void setThumbImg(String thumbImg) {
+        this.thumbImg = thumbImg;
     }
 
     public LocalDateTime getCreatedTime() {

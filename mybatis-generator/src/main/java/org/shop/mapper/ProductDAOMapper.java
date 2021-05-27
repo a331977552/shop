@@ -1,13 +1,11 @@
 package org.shop.mapper;
 
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.shop.model.dao.ProductDAO;
 import org.shop.model.dao.ProductDAOExample;
 
 import java.util.List;
 
-@Mapper
 public interface ProductDAOMapper {
     long countByExample(ProductDAOExample example);
 

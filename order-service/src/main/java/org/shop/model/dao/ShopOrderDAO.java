@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 public class ShopOrderDAO {
     private String id;
 
-    private Integer customerId;
+    private String customerId;
 
     private BigDecimal totalPrice;
 
@@ -30,11 +30,11 @@ public class ShopOrderDAO {
         this.id = id;
     }
 
-    public Integer getCustomerId() {
+    public String getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(Integer customerId) {
+    public void setCustomerId(String customerId) {
         this.customerId = customerId;
     }
 

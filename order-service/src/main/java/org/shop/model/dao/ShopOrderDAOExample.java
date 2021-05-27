@@ -186,52 +186,62 @@ public class ShopOrderDAOExample {
             return (Criteria) this;
         }
 
-        public Criteria andCustomerIdEqualTo(Integer value) {
+        public Criteria andCustomerIdEqualTo(String value) {
             addCriterion("customer_id =", value, "customerId");
             return (Criteria) this;
         }
 
-        public Criteria andCustomerIdNotEqualTo(Integer value) {
+        public Criteria andCustomerIdNotEqualTo(String value) {
             addCriterion("customer_id <>", value, "customerId");
             return (Criteria) this;
         }
 
-        public Criteria andCustomerIdGreaterThan(Integer value) {
+        public Criteria andCustomerIdGreaterThan(String value) {
             addCriterion("customer_id >", value, "customerId");
             return (Criteria) this;
         }
 
-        public Criteria andCustomerIdGreaterThanOrEqualTo(Integer value) {
+        public Criteria andCustomerIdGreaterThanOrEqualTo(String value) {
             addCriterion("customer_id >=", value, "customerId");
             return (Criteria) this;
         }
 
-        public Criteria andCustomerIdLessThan(Integer value) {
+        public Criteria andCustomerIdLessThan(String value) {
             addCriterion("customer_id <", value, "customerId");
             return (Criteria) this;
         }
 
-        public Criteria andCustomerIdLessThanOrEqualTo(Integer value) {
+        public Criteria andCustomerIdLessThanOrEqualTo(String value) {
             addCriterion("customer_id <=", value, "customerId");
             return (Criteria) this;
         }
 
-        public Criteria andCustomerIdIn(List<Integer> values) {
+        public Criteria andCustomerIdLike(String value) {
+            addCriterion("customer_id like", value, "customerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCustomerIdNotLike(String value) {
+            addCriterion("customer_id not like", value, "customerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCustomerIdIn(List<String> values) {
             addCriterion("customer_id in", values, "customerId");
             return (Criteria) this;
         }
 
-        public Criteria andCustomerIdNotIn(List<Integer> values) {
+        public Criteria andCustomerIdNotIn(List<String> values) {
             addCriterion("customer_id not in", values, "customerId");
             return (Criteria) this;
         }
 
-        public Criteria andCustomerIdBetween(Integer value1, Integer value2) {
+        public Criteria andCustomerIdBetween(String value1, String value2) {
             addCriterion("customer_id between", value1, value2, "customerId");
             return (Criteria) this;
         }
 
-        public Criteria andCustomerIdNotBetween(Integer value1, Integer value2) {
+        public Criteria andCustomerIdNotBetween(String value1, String value2) {
             addCriterion("customer_id not between", value1, value2, "customerId");
             return (Criteria) this;
         }

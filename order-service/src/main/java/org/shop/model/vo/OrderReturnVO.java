@@ -13,9 +13,17 @@ public class OrderReturnVO {
 
 	private String id;
 
-	private Integer customerId;
+	private String customerId;
 
 	private BigDecimal totalPrice;
+
+	private String status;
+
+	private String postCode;
+
+	private String homeAddress;
+
+	private String phoneNumber;
 
 	private LocalDateTime createdTime;
 
