@@ -51,6 +51,10 @@ public class TestHttpClient {
 		return this.exchange(headers, HttpMethod.GET, null, reference, urlVariables);
 	}
 
+
+	public <T> ResponseEntity<T> get(ParameterizedTypeReference<T> reference) {
+		return this.exchange(null, HttpMethod.GET, null, reference, null);
+	}
 	private <T> ResponseEntity<T> exchange(HttpHeaders headers, HttpMethod method, @Nullable Object body, ParameterizedTypeReference<T> reference, @Nullable Map<String, Object> urlVariables) {
 		if (urlVariables == null)
 			urlVariables = new HashMap<>();

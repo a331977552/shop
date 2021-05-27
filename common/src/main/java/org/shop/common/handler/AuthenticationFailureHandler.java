@@ -3,6 +3,7 @@ package org.shop.common.handler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 import org.shop.common.Result;
+import org.shop.common.exception.IllegalUserAccessException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -32,20 +33,32 @@ public class AuthenticationFailureHandler implements AuthenticationEntryPoint
     private ObjectMapper mapper = new ObjectMapper();
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<Result> customHandler(AuthenticationException authException, WebRequest webRequest) throws IOException {
-        log.debug("{}",authException.getMessage());
-        return new ResponseEntity(Result.unauthorized(authException.getMessage()), HttpStatus.UNAUTHORIZED);
+        log.debug("1 {}",authException.getMessage());
+        final Result result = processInternalException(authException);
+
+        return new ResponseEntity(result, HttpStatus.UNAUTHORIZED);
     }
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 
         log.debug("2: {}",authException.getMessage());
-
-        final Result result = Result.unauthorized(authException.getMessage());
+        final Result result = processInternalException(authException);
         final String value = mapper.writeValueAsString(result);
         response.setCharacterEncoding("utf-8");
         response.getWriter().write(value);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    }
+
+
+    private Result processInternalException(AuthenticationException exception){
+        if(exception   instanceof IllegalUserAccessException){
+            final Result unauthorized = Result.unauthorized(exception.getMessage());
+            unauthorized.setMsg("警告 错误用户");
+            return unauthorized;
+        }
+
+        return Result.unauthorized(exception.getMessage());
     }
 }

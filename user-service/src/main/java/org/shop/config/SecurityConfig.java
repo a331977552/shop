@@ -1,5 +1,6 @@
 package org.shop.config;
 
+import org.shop.common.handler.AuthenticationFailureHandler;
 import org.shop.common.handler.CustomAccessDeniedHandler;
 import org.shop.common.security.JWTAuthenticationProvider;
 import org.shop.common.security.JwtAuthFilter;
@@ -47,13 +48,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				csrf().disable().
 				cors().configurationSource(corsConfigurationSource).
 				and().
-				authorizeRequests().antMatchers("/user/signup", "/user/authenticate").
-				permitAll().anyRequest().hasAnyAuthority("CUSTOMER","ADMIN").//accessDecisionManager(accessDecisionManager()).
+				authorizeRequests().antMatchers("/user/signup", "/user/authenticate").permitAll().
+				antMatchers("/api/address/*" ).hasAnyAuthority("CUSTOMER","ADMIN").
+				anyRequest().hasAnyAuthority("CUSTOMER","ADMIN").//accessDecisionManager(accessDecisionManager()).
 				and().
 				/**
 				 * warning, GLOBAL exception handler will catch the authentication exception before this security exception handling does.
 				 */
-				exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler()).//.authenticationEntryPoint(new RestAuthenticationEntryPoint()).
+				exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler()).authenticationEntryPoint(new AuthenticationFailureHandler()).
 				and().
 				sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().
 				addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class).

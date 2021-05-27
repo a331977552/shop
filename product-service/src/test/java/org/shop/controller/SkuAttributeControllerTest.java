@@ -41,7 +41,7 @@ class SkuAttributeControllerTest extends BaseControllerTest {
 		final String token = getToken();
 		final ResponseEntity<Result<AttributeReturnVO>> post = helper.
 				setUIPath("/api/product/sku/attr").setPort(port).
-				builder().withToken(token).build().post(addVO, resProReturnRef);
+				builder().withToken(token).build().post(addVO, resVOReturnRef);
 		System.out.println(post);
 		final AttributeReturnVO result = post.getBody().getResult();
 		Assertions.assertEquals(200,post.getStatusCodeValue());

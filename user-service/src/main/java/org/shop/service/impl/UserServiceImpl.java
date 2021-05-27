@@ -13,7 +13,7 @@ import org.shop.common.util.BeanConvertor;
 import org.shop.common.util.JwtTokenUtil;
 import org.shop.common.util.TextUtil;
 import org.shop.common.util.UUIDUtils;
-import org.shop.common.validator.PhoneValidator;
+import org.shop.common.validator.IPhoneValidator;
 import org.shop.exception.InvalidUsernameException;
 import org.shop.exception.RegistrationException;
 import org.shop.exception.UserUpdateException;
@@ -51,13 +51,13 @@ public class UserServiceImpl implements UserService {
 	JwtTokenUtil jwtTokenUtil;
 	final Validator validator;
 	private final PasswordEncoder passwordEncoder;
-	private PhoneValidator phoneValidator;
+	private IPhoneValidator IPhoneValidator;
 
-	public UserServiceImpl(CustomerDAOMapper mapper, Validator validator, PasswordEncoder passwordEncoder, PhoneValidator phoneValidator, RedisService redisService) {
+	public UserServiceImpl(CustomerDAOMapper mapper, Validator validator, PasswordEncoder passwordEncoder, IPhoneValidator IPhoneValidator, RedisService redisService) {
 		this.mapper = mapper;
 		this.validator = validator;
 		this.passwordEncoder = passwordEncoder;
-		this.phoneValidator = phoneValidator;
+		this.IPhoneValidator = IPhoneValidator;
 		this.redisService = redisService;
 	}
 
@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
 			log.info("multiple user {}",customerVO.getUsername());
 			throw new RegistrationException("用户已存在");
 		}
-		boolean validate = phoneValidator.validate(customerVO.getPhone());
+		boolean validate = IPhoneValidator.validate(customerVO.getPhone());
 		if (!validate)
 		{
 			log.info("invalid phone number {}",phone);
@@ -136,7 +136,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	@Override
 	public void updateInfo(CustomerVO customerVO) {
-		boolean validate = phoneValidator.validate(customerVO.getPhone());
+		boolean validate = IPhoneValidator.validate(customerVO.getPhone());
 		if (!validate)
 		{
 			log.debug("invalid phone number {}",phone);

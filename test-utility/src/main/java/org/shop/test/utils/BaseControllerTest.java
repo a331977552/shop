@@ -6,18 +6,26 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public abstract class BaseControllerTest<T> {
+public abstract class BaseControllerTest<returnVO> {
 
 	@LocalServerPort
 	protected int port;
 
 	@Autowired
 	protected RestTestHelper helper;
-	protected ParameterizedTypeReference<Result<T>> resProReturnRef = getParameterTypeRef();
+	protected ParameterizedTypeReference<Result<returnVO>> resVOReturnRef = getParameterTypeRef();
+	protected ParameterizedTypeReference<Result<List<returnVO>>> resListVOReturnRef = getParameterListTypeRef();
 
-	protected abstract ParameterizedTypeReference<Result<T>> getParameterTypeRef();
+	protected ParameterizedTypeReference<Result<List<returnVO>>> getParameterListTypeRef() {
+		return new ParameterizedTypeReference<Result<List<returnVO>>>() {
+		};
+	}
+
+	protected abstract ParameterizedTypeReference<Result<returnVO>> getParameterTypeRef();
 
 	protected ParameterizedTypeReference<String> strRef = new ParameterizedTypeReference<String>() {};
 	protected ParameterizedTypeReference<Result<String>> strResultRef = new ParameterizedTypeReference<Result<String>>() {};

@@ -3,10 +3,7 @@ package org.shop.handler;
 
 import lombok.extern.log4j.Log4j2;
 import org.shop.common.Result;
-import org.shop.exception.InvalidUsernameException;
-import org.shop.exception.RegistrationException;
 import org.shop.exception.UserOperationException;
-import org.shop.exception.UserUpdateException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
@@ -24,7 +21,7 @@ public class UserOperationExceptionHandler
 	@ExceptionHandler(UserOperationException.class)
 	protected ResponseEntity<Object> handleMyExceptionInternal(Exception ex, WebRequest request) {
 		Result result;
-		if (ex instanceof RegistrationException || ex instanceof UserUpdateException || ex instanceof InvalidUsernameException) {
+		if (ex instanceof UserOperationException) {
 			result = Result.badRequest(ex.getMessage());
 		}else {
 			result = Result.unknownError(ex.getLocalizedMessage());

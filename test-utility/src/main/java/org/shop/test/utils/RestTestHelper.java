@@ -33,7 +33,7 @@ public final class RestTestHelper {
 	}
 
 	public ResponseEntity<Result<String>> login(String username, String password) {
-		ResponseEntity<Result<String>> post = builder().setUipath("/user/authenticate").build().post(new AuthenticationEntity(username, password), new ParameterizedTypeReference<Result<String>>() {
+		ResponseEntity<Result<String>> post = builder().setUipath("/user/authenticate").setPort(81).build().post(new AuthenticationEntity(username, password), new ParameterizedTypeReference<Result<String>>() {
 		});
 		return post;
 	}

@@ -52,18 +52,19 @@ public class AuthController {
 			return new ResponseEntity(Result.validationError(result), HttpStatus.BAD_REQUEST);
 		}
 
-		Optional<CustomerVO> login = userService.login(vo);
-		if (login.isEmpty()) {
+		Optional<CustomerVO> customerOpt = userService.login(vo);
+		if (customerOpt.isEmpty()) {
 			redisService.increment(Constants.REDIS_USER_LOGIN_ATTEMPT + "_" + ip, 1);
 			redisService.expire(Constants.REDIS_USER_LOGIN_ATTEMPT + "_" + ip, 60);
 			throw new BadCredentialsException("用户名或密码错误");
 		} else {
 			redisService.delete(Constants.REDIS_USER_LOGIN_ATTEMPT + "_" + ip);
 		}
-		final String token = jwtTokenUtil.generateToken(login.get().getUsername());
+		final CustomerVO customerVO = customerOpt.get();
+		final String token = jwtTokenUtil.generateToken(customerVO.getUsername());
 		final long expiration = jwtTokenUtil.getExpirationLength();
-		final AuthenticationEntity convert = BeanConvertor.convert(login.get(), AuthenticationEntity.class);
-		redisService.set(login.get().getUsername(),convert,expiration);
+		final AuthenticationEntity authenticationEntity = BeanConvertor.convert(customerVO, AuthenticationEntity.class);
+		redisService.set(customerVO.getUsername(),authenticationEntity,expiration);
 		return new ResponseEntity(Result.of(token), HttpStatus.OK);
 	}
 

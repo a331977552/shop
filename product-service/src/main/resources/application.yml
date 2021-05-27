@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: productService
+  datasource:
+    url: jdbc:mysql://localhost/shop
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: Aa123456.
+logging:
+  level:
+    org.shop.* : debug
+server:
+  port: 82
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761

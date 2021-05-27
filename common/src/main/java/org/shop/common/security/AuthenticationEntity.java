@@ -15,6 +15,7 @@ import java.util.Collections;
 public class AuthenticationEntity implements UserDetails {
 	private String username;
 	private String password;
+	private String id;
 	private String role;
 
 	public AuthenticationEntity(String username, String password) {

@@ -18,4 +18,5 @@ public @interface EnumNamePattern {
     String message() default "must match {regexp}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
+
 }

@@ -8,43 +8,43 @@ import java.sql.JDBCType;
 import java.time.LocalDateTime;
 
 public final class CustomerDAODynamicSqlSupport {
-    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-05-06T13:49:21.842894+08:00", comments="Source Table: customer")
+    @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public static final CustomerDAO customerDAO = new CustomerDAO();
 
-    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-05-06T13:49:21.845811+08:00", comments="Source field: customer.id")
+    @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public static final SqlColumn<String> id = customerDAO.id;
 
-    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-05-06T13:49:21.846099+08:00", comments="Source field: customer.username")
+    @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public static final SqlColumn<String> username = customerDAO.username;
 
-    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-05-06T13:49:21.846209+08:00", comments="Source field: customer.password")
+    @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public static final SqlColumn<String> password = customerDAO.password;
 
-    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-05-06T13:49:21.846315+08:00", comments="Source field: customer.email")
+    @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public static final SqlColumn<String> email = customerDAO.email;
 
-    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-05-06T13:49:21.846412+08:00", comments="Source field: customer.phone")
+    @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public static final SqlColumn<String> phone = customerDAO.phone;
 
-    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-05-06T13:49:21.846514+08:00", comments="Source field: customer.alias")
+    @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public static final SqlColumn<String> alias = customerDAO.alias;
 
-    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-05-06T13:49:21.846796+08:00", comments="Source field: customer.avatar")
+    @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public static final SqlColumn<String> avatar = customerDAO.avatar;
 
-    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-05-06T13:49:21.846924+08:00", comments="Source field: customer.date_of_birth")
+    @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public static final SqlColumn<LocalDateTime> dateOfBirth = customerDAO.dateOfBirth;
 
-    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-05-06T13:49:21.847013+08:00", comments="Source field: customer.role")
+    @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public static final SqlColumn<String> role = customerDAO.role;
 
-    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-05-06T13:49:21.847554+08:00", comments="Source field: customer.created_time")
+    @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public static final SqlColumn<LocalDateTime> createdTime = customerDAO.createdTime;
 
-    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-05-06T13:49:21.848596+08:00", comments="Source field: customer.updated_time")
+    @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public static final SqlColumn<LocalDateTime> updatedTime = customerDAO.updatedTime;
 
-    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", date="2021-05-06T13:49:21.843409+08:00", comments="Source Table: customer")
+    @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public static final class CustomerDAO extends SqlTable {
         public final SqlColumn<String> id = column("id", JDBCType.CHAR);
 
