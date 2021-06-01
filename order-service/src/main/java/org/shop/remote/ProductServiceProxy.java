@@ -10,4 +10,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface ProductRemoteService {
 	@GetMapping("/api/product/{id}")
 	Result<ProductReturnDTO> getProduct(@PathVariable("id") String id);
+
 }
