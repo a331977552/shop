@@ -33,4 +33,5 @@ public interface ProductService {
 
 	Page<ProductReturnVO> getAll(ProductQueryVO example, Page<ProductQueryVO> page);
 
+	ProductReturnVO.SkuReturnVO getProductSKUById(Integer id);
 }

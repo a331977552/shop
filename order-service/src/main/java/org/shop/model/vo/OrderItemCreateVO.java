@@ -15,11 +15,18 @@ public class OrderItemCreateVO {
 	@NotNull
 	@Min(1)
 	private Integer quantity;
+
 	@IDValid(message = "产品ID 不能为空")
 	private String productId;
 
+	@NotNull(message = "unit price not null")
+	private BigDecimal unitPrice;
+
+	@IDValid(message = "sku ID 不能为空")
+	private Integer skuId;
+
 	@NotNull
 	@Min(value = 0,message = "商品价格不能为负数")
-	private BigDecimal price;
+	private BigDecimal subtotal;
 
 }

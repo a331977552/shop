@@ -316,6 +316,66 @@ public class OrderItemDAOExample {
             return (Criteria) this;
         }
 
+        public Criteria andSkuIdIsNull() {
+            addCriterion("sku_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuIdIsNotNull() {
+            addCriterion("sku_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuIdEqualTo(Integer value) {
+            addCriterion("sku_id =", value, "skuId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuIdNotEqualTo(Integer value) {
+            addCriterion("sku_id <>", value, "skuId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuIdGreaterThan(Integer value) {
+            addCriterion("sku_id >", value, "skuId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("sku_id >=", value, "skuId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuIdLessThan(Integer value) {
+            addCriterion("sku_id <", value, "skuId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuIdLessThanOrEqualTo(Integer value) {
+            addCriterion("sku_id <=", value, "skuId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuIdIn(List<Integer> values) {
+            addCriterion("sku_id in", values, "skuId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuIdNotIn(List<Integer> values) {
+            addCriterion("sku_id not in", values, "skuId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuIdBetween(Integer value1, Integer value2) {
+            addCriterion("sku_id between", value1, value2, "skuId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSkuIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("sku_id not between", value1, value2, "skuId");
+            return (Criteria) this;
+        }
+
         public Criteria andQuantityIsNull() {
             addCriterion("quantity is null");
             return (Criteria) this;
@@ -516,63 +576,123 @@ public class OrderItemDAOExample {
             return (Criteria) this;
         }
 
-        public Criteria andPriceIsNull() {
-            addCriterion("price is null");
+        public Criteria andUnitPriceIsNull() {
+            addCriterion("unit_price is null");
             return (Criteria) this;
         }
 
-        public Criteria andPriceIsNotNull() {
-            addCriterion("price is not null");
+        public Criteria andUnitPriceIsNotNull() {
+            addCriterion("unit_price is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPriceEqualTo(BigDecimal value) {
-            addCriterion("price =", value, "price");
+        public Criteria andUnitPriceEqualTo(BigDecimal value) {
+            addCriterion("unit_price =", value, "unitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andPriceNotEqualTo(BigDecimal value) {
-            addCriterion("price <>", value, "price");
+        public Criteria andUnitPriceNotEqualTo(BigDecimal value) {
+            addCriterion("unit_price <>", value, "unitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andPriceGreaterThan(BigDecimal value) {
-            addCriterion("price >", value, "price");
+        public Criteria andUnitPriceGreaterThan(BigDecimal value) {
+            addCriterion("unit_price >", value, "unitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andPriceGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("price >=", value, "price");
+        public Criteria andUnitPriceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("unit_price >=", value, "unitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andPriceLessThan(BigDecimal value) {
-            addCriterion("price <", value, "price");
+        public Criteria andUnitPriceLessThan(BigDecimal value) {
+            addCriterion("unit_price <", value, "unitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andPriceLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("price <=", value, "price");
+        public Criteria andUnitPriceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("unit_price <=", value, "unitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andPriceIn(List<BigDecimal> values) {
-            addCriterion("price in", values, "price");
+        public Criteria andUnitPriceIn(List<BigDecimal> values) {
+            addCriterion("unit_price in", values, "unitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andPriceNotIn(List<BigDecimal> values) {
-            addCriterion("price not in", values, "price");
+        public Criteria andUnitPriceNotIn(List<BigDecimal> values) {
+            addCriterion("unit_price not in", values, "unitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andPriceBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("price between", value1, value2, "price");
+        public Criteria andUnitPriceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("unit_price between", value1, value2, "unitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andPriceNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("price not between", value1, value2, "price");
+        public Criteria andUnitPriceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("unit_price not between", value1, value2, "unitPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubtotalIsNull() {
+            addCriterion("subTotal is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubtotalIsNotNull() {
+            addCriterion("subTotal is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubtotalEqualTo(BigDecimal value) {
+            addCriterion("subTotal =", value, "subtotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubtotalNotEqualTo(BigDecimal value) {
+            addCriterion("subTotal <>", value, "subtotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubtotalGreaterThan(BigDecimal value) {
+            addCriterion("subTotal >", value, "subtotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubtotalGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("subTotal >=", value, "subtotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubtotalLessThan(BigDecimal value) {
+            addCriterion("subTotal <", value, "subtotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubtotalLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("subTotal <=", value, "subtotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubtotalIn(List<BigDecimal> values) {
+            addCriterion("subTotal in", values, "subtotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubtotalNotIn(List<BigDecimal> values) {
+            addCriterion("subTotal not in", values, "subtotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubtotalBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("subTotal between", value1, value2, "subtotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubtotalNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("subTotal not between", value1, value2, "subtotal");
             return (Criteria) this;
         }
 
@@ -763,66 +883,6 @@ public class OrderItemDAOExample {
 
         public Criteria andUpdatedTimeNotBetween(LocalDateTime value1, LocalDateTime value2) {
             addCriterion("updated_time not between", value1, value2, "updatedTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitPriceIsNull() {
-            addCriterion("unit_price is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitPriceIsNotNull() {
-            addCriterion("unit_price is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitPriceEqualTo(BigDecimal value) {
-            addCriterion("unit_price =", value, "unitPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitPriceNotEqualTo(BigDecimal value) {
-            addCriterion("unit_price <>", value, "unitPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitPriceGreaterThan(BigDecimal value) {
-            addCriterion("unit_price >", value, "unitPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitPriceGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("unit_price >=", value, "unitPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitPriceLessThan(BigDecimal value) {
-            addCriterion("unit_price <", value, "unitPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitPriceLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("unit_price <=", value, "unitPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitPriceIn(List<BigDecimal> values) {
-            addCriterion("unit_price in", values, "unitPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitPriceNotIn(List<BigDecimal> values) {
-            addCriterion("unit_price not in", values, "unitPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitPriceBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("unit_price between", value1, value2, "unitPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitPriceNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("unit_price not between", value1, value2, "unitPrice");
             return (Criteria) this;
         }
     }

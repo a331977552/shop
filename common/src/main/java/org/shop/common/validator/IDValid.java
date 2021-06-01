@@ -12,7 +12,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = IDValidator.class)
+@Constraint(validatedBy = {IDValidator.class,IntegerIDValidator.class})
 public @interface IDValid {
 	String message() default "id's length must be 32";
 	Class<?>[] groups() default {};

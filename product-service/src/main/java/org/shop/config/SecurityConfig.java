@@ -1,15 +1,18 @@
 package org.shop.config;
 
+import org.shop.common.handler.AuthenticationFailureHandler;
 import org.shop.common.handler.CustomAccessDeniedHandler;
 import org.shop.common.security.JWTAuthenticationProvider;
 import org.shop.common.security.JwtAuthFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -36,15 +39,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		}
 	}
 
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		web
+				.ignoring()
+				.antMatchers("/resources/**","/static/**","**/favicon.ico");
 
+	}
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-
 		http.
 				csrf().disable().
 				cors().configurationSource(corsConfigurationSource()).
 				and().
-				authorizeRequests().antMatchers(HttpMethod.GET,"/api/product/**").permitAll().
+				authorizeRequests().
+				requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll().
+				antMatchers(HttpMethod.GET,"/api/product/**","api/product/test/**").permitAll().
 				antMatchers(HttpMethod.POST, "/api/product").hasAuthority("ADMIN").
 				antMatchers(HttpMethod.PUT, "/api/product").hasAuthority("ADMIN").
 				antMatchers(HttpMethod.PUT, "/api/product").hasAuthority("ADMIN").
@@ -52,7 +62,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				antMatchers(HttpMethod.DELETE, "/api/product/*").hasAuthority("ADMIN").
 				anyRequest().hasAnyAuthority("ADMIN").
 				and().
-				exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler()).
+				exceptionHandling().authenticationEntryPoint(new AuthenticationFailureHandler()).
+				accessDeniedHandler(new CustomAccessDeniedHandler()).
 				and().
 				sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().
 				addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class).

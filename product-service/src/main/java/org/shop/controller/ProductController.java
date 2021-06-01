@@ -1,5 +1,6 @@
 package org.shop.controller;
 
+import lombok.extern.log4j.Log4j2;
 import org.shop.common.Result;
 import org.shop.common.util.Page;
 import org.shop.model.vo.ProductAddVO;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Optional;
-
+@Log4j2
 @RestController
 @RequestMapping("/api/product")
 public class ProductController {
@@ -35,6 +36,8 @@ public class ProductController {
 	}
 
 
+
+
 	@DeleteMapping("/{id}")
 	public void deleteProduct(@PathVariable("id") String id) {
 		service.deleteProductById(id);
@@ -44,6 +47,14 @@ public class ProductController {
 	public ResponseEntity<Result<ProductReturnVO>> getProduct(@PathVariable("id") String id) {
 		return ResponseEntity.ok(Result.of(service.getProductById(id)));
 	}
+
+
+	@GetMapping("sku/{id}")
+	public ResponseEntity<Result<ProductReturnVO.SkuReturnVO>> getProductSKU(@PathVariable("id") Integer id) {
+		return ResponseEntity.ok(Result.of(service.getProductSKUById(id)));
+	}
+
+
 
 
 	@GetMapping("/{page}/{pageSize}")

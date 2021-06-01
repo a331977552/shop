@@ -1,23 +1,32 @@
 package org.shop.service.impl;
 
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.log4j.Log4j2;
+import org.shop.common.Result;
+import org.shop.common.util.BeanConvertor;
 import org.shop.common.util.Page;
 import org.shop.common.util.SecurityUtil;
 import org.shop.common.util.UUIDUtils;
+import org.shop.exception.OrderCreationException;
 import org.shop.mapper.OrderItemDAOMapper;
 import org.shop.mapper.ShopOrderDAOMapper;
 import org.shop.model.dao.OrderItemDAO;
 import org.shop.model.dao.OrderItemDAOExample;
 import org.shop.model.dao.ShopOrderDAO;
 import org.shop.model.dao.ShopOrderDAOExample;
+import org.shop.model.dto.SkuDTO;
 import org.shop.model.vo.*;
+import org.shop.remote.ProductServiceProxy;
 import org.shop.service.OrderService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,68 +37,65 @@ public class OrderServiceImpl implements OrderService {
 	ShopOrderDAOMapper orderMapper;
 	@Autowired
 	OrderItemDAOMapper itemMapper;
+	@Autowired
+	ProductServiceProxy productService;
 
+	@Transactional
 	@Override
 	public OrderReturnVO createOrder(OrderCreateVO vo) {
 
-		final Integer customerId = vo.getCustomerId();
 		String orderNumber = UUIDUtils.generateID();
-
-		ShopOrderDAO shopOrderDAO =new ShopOrderDAO();
+		String customerId = SecurityUtil.getAuthenticatedUser().getId();
+		ShopOrderDAO shopOrderDAO = new ShopOrderDAO();
 		BeanUtils.copyProperties(vo, shopOrderDAO);
 		final List<OrderItemCreateVO> items = vo.getItems();
 		BigDecimal totalPrice = new BigDecimal(0);
-		shopOrderDAO.setTotalPrice(totalPrice);
-		shopOrderDAO.setCustomerId(orderNumber);
+		shopOrderDAO.setId(orderNumber);
+		shopOrderDAO.setCustomerId(customerId);
+		shopOrderDAO.setStatus("UNPAID");//'UNPAID','PAID','FINISHED','CLOSED
 		for (OrderItemCreateVO item : items) {
-//				ProductVO product = productService.getProductById(item.getProduct_id());
-//				BigDecimal subTotal = product.getPrice().multiply(BigDecimal.valueOf(item.getQuantity()));
-//				item.setSub_total(subTotal);
-//				item.setUniprice(product.getPrice());
-//				item.setImg(product.getImgs().get(0).getUrl());
-//				item.setImg(product.getImgs().get(0).getThumbnail_url());
-//				item.setProduct_desc(product.getDescription());
-//				item.setProduct_name(product.getName());
-//				quantity += item.getQuantity();
-//				totalPrice = totalPrice.add(subTotal);
-		}
-//
-//			order.setPayment_method(vo.getPaymentMethod());
-//			order.setDining_method(vo.getDiningMethod());
-//			order.setDelivery_address_id(address.getId());
-//			order.setOrder_code(orderCode+"");
-//			order.setOrder_number(orderNumber);
-//			order.setCreate_time(new Date());
-//			order.setUpdate_time(order.getCreate_time());
-//			order.setPhone(vo.getCustomer().getPhone());
-//			order.setStatus(OrderConstants.STATUS_UNPAID);
-//			order.setUser_id(customerId);
-//			order.setMerchant_id(merchant.getId());
-//			order.setTotal_price(totalPrice);
-//			order.setTotal_count(quantity);
-//			int result = orderFormMapper.insert(order);
-//			if(result != 1)
-//				throw new UnexpectedException("订单创建异常! 10001");
-//			Integer orderId = order.getId();
-//			for (OrderItemVO item : orderItems) {
-//				item.setOrder_id(orderId);
-//				OrderItem orderItem = new OrderItem();
-//				BeanUtils.copyProperties(item,orderItem);
-//				int insert = orderItemMapper.insert(orderItem);
-//				item.setId(orderItem.getId());
-//				if(insert != 1){
-//					throw new UnexpectedException("订单创建异常! 10002");
-//				}
-//			}
+			final SkuDTO result = getProductSKUByID(item.getSkuId()).getResult();
 
-		return null;
+			if (!result.getPrice().equals(item.getUnitPrice()))
+				throw new OrderCreationException("商品提交价格与实际价格不符，可能已被更新");
+			BigDecimal subTotal = result.getPrice().multiply(BigDecimal.valueOf(item.getQuantity()));
+			item.setSubtotal(subTotal);
+			item.setUnitPrice(result.getPrice());
+			totalPrice = totalPrice.add(subTotal);
+		}
+		if (!totalPrice.equals(vo.getTotalPrice()))
+			throw new OrderCreationException("订单总价与提交总价不等");
+		shopOrderDAO.setUpdatedTime(LocalDateTime.now());
+		shopOrderDAO.setCreatedTime(LocalDateTime.now());
+		shopOrderDAO.setTotalPrice(totalPrice);
+		orderMapper.insert(shopOrderDAO);
+		for (OrderItemCreateVO item : items) {
+			final OrderItemDAO orderItemDAO = BeanConvertor.convert(item, OrderItemDAO.class);
+			orderItemDAO.setOrderId(shopOrderDAO.getId());
+			orderItemDAO.setId(UUIDUtils.generateID());
+			orderItemDAO.setCustomerId(customerId);
+			orderItemDAO.setUpdatedTime(LocalDateTime.now());
+			orderItemDAO.setCreatedTime(LocalDateTime.now());
+			orderItemDAO.setSnapshotProductId("test");
+			orderItemDAO.setThumbImg("");
+			itemMapper.insert(orderItemDAO);
+		}
+		final List<OrderItemReturnVO> orderItemDAOS = findItemsByOrderID(shopOrderDAO.getId());
+		final OrderReturnVO convert = BeanConvertor.convert(shopOrderDAO, OrderReturnVO.class);
+		final List<OrderItemReturnVO> convert1 = BeanConvertor.convert(orderItemDAOS, OrderItemReturnVO.class);
+		convert.setItems(convert1);
+		return convert;
+	}
+
+	@Retry(name = "default")
+	private Result<SkuDTO> getProductSKUByID(Integer id) {
+		return productService.getSkuByID(id);
 	}
 
 
 	OrderItemReturnVO convertToItemVO(OrderItemDAO item) {
 		OrderItemReturnVO vo = new OrderItemReturnVO();
 		BeanUtils.copyProperties(item, vo);
-
 		return vo;
 	}
 
@@ -107,8 +113,6 @@ public class OrderServiceImpl implements OrderService {
 		SecurityUtil.checkIfIllegalUser(shopOrderDAO.getCustomerId());
 		OrderReturnVO orderResultVO = new OrderReturnVO();
 		BeanUtils.copyProperties(shopOrderDAO, orderResultVO);
-
-
 		orderResultVO.setItems(findItemsByOrderID(id));
 		return orderResultVO;
 	}
@@ -133,6 +137,13 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public Page<OrderReturnVO> findAllOrders(OrderQueryVO example, Page<OrderQueryVO> page) {
 
-		return null;
+		ShopOrderDAOExample exam=new ShopOrderDAOExample();
+		String orderBy = Optional.ofNullable(page.getOrderBy()).orElse("updated_time desc ");
+		exam.setOrderByClause(orderBy+ " limit "+ page.getPageSize() +" offset "+ page.getOffset());
+		final List<ShopOrderDAO> shopOrderDAOS = orderMapper.selectByExample(exam);
+		final long count = orderMapper.countByExample(exam);
+		final List<OrderReturnVO> collect = shopOrderDAOS.stream().map(this::convertToOrderVO).
+				peek(vo -> vo.setItems(this.findItemsByOrderID(vo.getId()))).collect(Collectors.toList());
+		return Page.createFrom(page, count,collect);
 	}
 }

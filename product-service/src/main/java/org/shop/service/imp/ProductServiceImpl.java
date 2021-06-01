@@ -5,6 +5,7 @@ import org.shop.common.util.BeanConvertor;
 import org.shop.common.util.Page;
 import org.shop.common.util.TextUtil;
 import org.shop.common.util.UUIDUtils;
+import org.shop.exception.ProductException;
 import org.shop.exception.ProductUpdateException;
 import org.shop.mapper.BrandDAOMapper;
 import org.shop.mapper.ProductDAOMapper;
@@ -122,6 +123,8 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public ProductReturnVO getProductById(String id) {
 		ProductDAO product = mapper.selectByPrimaryKey(id);
+		if(product==null)
+			throw new ProductException("cannot get product by id "+ id);
 		SkuDAOExample example = new SkuDAOExample();
 		example.createCriteria().andProductIdEqualTo(id);
 		List<SkuDAO> skuDAOS = skuMapper.selectByExample(example);
@@ -221,6 +224,10 @@ public class ProductServiceImpl implements ProductService {
 		return Page.createFrom(page, count, collect);
 	}
 
+	@Override
+	public ProductReturnVO.SkuReturnVO getProductSKUById(Integer id) {
+		return BeanConvertor.convert(skuMapper.selectByPrimaryKey(id), ProductReturnVO.SkuReturnVO.class);
+	}
 
 
 }

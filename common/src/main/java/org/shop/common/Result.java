@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.shop.common.util.ErrorResultConvertor;
+import org.springframework.boot.ApplicationContextFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 
 import java.time.Instant;
@@ -16,6 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 public final class Result<T>{
+
 	private Date timestamp;
 	private int code;
 	private String msg;

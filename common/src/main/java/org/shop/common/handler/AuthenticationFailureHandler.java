@@ -41,8 +41,7 @@ public class AuthenticationFailureHandler implements AuthenticationEntryPoint
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-
-        log.debug("2: {}",authException.getMessage());
+        log.debug("request path:{},{}",request.getServletPath(),authException.getMessage());
         final Result result = processInternalException(authException);
         final String value = mapper.writeValueAsString(result);
         response.setCharacterEncoding("utf-8");

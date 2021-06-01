@@ -16,16 +16,22 @@ public class OrderItemReturnVO {
 
 	private String orderId;
 
+	private Integer skuId;
+
 	private Integer quantity;
 
 	private String productId;
 
+	private BigDecimal unitPrice;
+
 
 	private String snapshotProductId;
 
-	private BigDecimal price;
+	private BigDecimal subtotal;
 
 	private LocalDateTime createdTime;
 
 	private LocalDateTime updatedTime;
+
+
 }

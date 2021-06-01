@@ -6,6 +6,7 @@ import org.shop.common.security.JWTAuthenticationProvider;
 import org.shop.common.security.JwtAuthFilter;
 import org.shop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,7 +18,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
-
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -48,7 +48,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				csrf().disable().
 				cors().configurationSource(corsConfigurationSource).
 				and().
-				authorizeRequests().antMatchers("/user/signup", "/user/authenticate").permitAll().
+				authorizeRequests().
+				requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+				.antMatchers("/user/signup", "/user/authenticate").permitAll().
 				antMatchers("/api/address/*" ).hasAnyAuthority("CUSTOMER","ADMIN").
 				anyRequest().hasAnyAuthority("CUSTOMER","ADMIN").//accessDecisionManager(accessDecisionManager()).
 				and().

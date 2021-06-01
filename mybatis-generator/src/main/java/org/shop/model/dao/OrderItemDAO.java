@@ -10,21 +10,23 @@ public class OrderItemDAO {
 
     private String orderId;
 
+    private Integer skuId;
+
     private Integer quantity;
 
     private String productId;
 
     private String snapshotProductId;
 
-    private BigDecimal price;
+    private BigDecimal unitPrice;
+
+    private BigDecimal subtotal;
 
     private String thumbImg;
 
     private LocalDateTime createdTime;
 
     private LocalDateTime updatedTime;
-
-    private BigDecimal unitPrice;
 
     public String getId() {
         return id;
@@ -48,6 +50,14 @@ public class OrderItemDAO {
 
     public void setOrderId(String orderId) {
         this.orderId = orderId;
+    }
+
+    public Integer getSkuId() {
+        return skuId;
+    }
+
+    public void setSkuId(Integer skuId) {
+        this.skuId = skuId;
     }
 
     public Integer getQuantity() {
@@ -74,12 +84,20 @@ public class OrderItemDAO {
         this.snapshotProductId = snapshotProductId;
     }
 
-    public BigDecimal getPrice() {
-        return price;
+    public BigDecimal getUnitPrice() {
+        return unitPrice;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+    public void setUnitPrice(BigDecimal unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public BigDecimal getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(BigDecimal subtotal) {
+        this.subtotal = subtotal;
     }
 
     public String getThumbImg() {
@@ -104,13 +122,5 @@ public class OrderItemDAO {
 
     public void setUpdatedTime(LocalDateTime updatedTime) {
         this.updatedTime = updatedTime;
-    }
-
-    public BigDecimal getUnitPrice() {
-        return unitPrice;
-    }
-
-    public void setUnitPrice(BigDecimal unitPrice) {
-        this.unitPrice = unitPrice;
     }
 }

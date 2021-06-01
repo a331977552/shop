@@ -20,5 +20,20 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
+  instance:
+    hostname: localhost
+resilience4j:
+  circuitbreaker:
+    instances:
+      default:
+        failureRateThreshold: 50
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 10
+        waitDurationInOpenState: 30000
 
-
+  retry:
+    instances:
+      default:
+        waitDuration: 500
+        maxAttempts: 3
+        maxRetryAttempts: 3

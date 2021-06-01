@@ -5,6 +5,7 @@ import org.shop.common.handler.CustomAccessDeniedHandler;
 import org.shop.common.security.JWTAuthenticationProvider;
 import org.shop.common.security.JwtAuthFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -45,7 +46,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				csrf().disable().
 				cors().configurationSource(corsConfigurationSource()).
 				and().
-				authorizeRequests().antMatchers(HttpMethod.GET,"/api/img/**").permitAll().
+				authorizeRequests().
+				requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll().
+				antMatchers(HttpMethod.GET,"/api/img/**").permitAll().
 				antMatchers(HttpMethod.POST, "/api/img").hasAuthority("ADMIN").
 				antMatchers(HttpMethod.DELETE, "/api/img/*").hasAuthority("ADMIN").
 				anyRequest().hasAnyAuthority("ADMIN").
