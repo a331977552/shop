@@ -3,14 +3,16 @@ import RestResult from "../model/RestResult";
 import axios from "axios";
 
 export function loginAPI(user: { username: string, password: string }) {
-    return new Promise<RestResult<UserModel>>((resolve, reject) => {
-        axios.post<RestResult<UserModel>>("/api-gateway/user-service/user/authenticate", user).then(response => {
-            resolve(response.data);
-            console.log(response, response.data);
+
+    return new Promise<RestResult<string>>((resolve,reject)=>{
+
+        axios.post<RestResult<string>>("/api-gateway/user-service/user/authenticate", user).then(response =>{
+            const result = response.data;
+            resolve(result);
         }).catch(reason => {
-            reject(reason.response);
             console.log(reason.response.data);
-        });
+            reject(reason.response.data)
+        })
     });
     // return {
     //     timestamp: new Date(),

@@ -52,10 +52,12 @@ export const counterSlice = createSlice({
     builder
       .addCase(incrementAsync.pending, (state) => {
         state.status = 'loading';
+        console.log(state)
       })
       .addCase(incrementAsync.fulfilled, (state, action) => {
         state.status = 'idle';
         state.value += action.payload;
+        console.log(state)
       });
   },
 });
