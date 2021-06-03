@@ -1,9 +1,12 @@
 import React, {useState} from 'react';
 import {Form, Input, Button, Checkbox} from 'antd';
-import { useAppSelector, useAppDispatch } from '../store/hooks';
+import {useAppSelector, useAppDispatch} from '../store/hooks';
 import {RootState} from "../store/store";
 import {login} from "../store/user/UserSlice";
-import {Counter} from "../features/counter/Counter";
+import {Spin} from 'antd';
+import {setTokenToCommonHeader} from "../http/HttpConfig";
+import {setToken} from "../http/TokenConfig";
+import { useHistory } from 'react-router-dom';
 
 // import {selectCount} from "../features/counter/counterSlice";
 
@@ -15,58 +18,64 @@ const tailLayout = {
     wrapperCol: {offset: 8, span: 16},
 };
 
-function LoginPage(props:any) {
+function LoginPage() {
 
-    const count = useAppSelector((state: RootState) => state.user.user);
+    const user = useAppSelector((state: RootState) => state.userReducer.token);
+    const {token,status,errorMsg}=  user;
+    const history = useHistory();
     const dispatch = useAppDispatch();
-    const [incrementAmount, setIncrementAmount] = useState('2');
 
-    const onFinish = (values: any) => {
-        console.log('Success:', values);
-        dispatch(login(values));
-    };
+    if (token){
+        setToken(token);
+        setTokenToCommonHeader();
+        history.push("/");
+        return <></>
+    }
 
-    const  onFinishFailed = (errorInfo: any) => {
-        console.log('Failed:', errorInfo);
-    };
-
-        return (
-            <div style={{display:"flex",height:'100vh',justifyContent:"center", alignItems:'center'}}>
-            <Form
-                {...layout}
-                name="basic"
-                initialValues={{remember: true}}
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
-            >
-                <Form.Item
-                    label="Username"
-                    name="username"
-                    rules={[{required: true, message: 'Please input your username!'}]}
+    const onFinish = (values: any) => dispatch(login(values));
+    return (
+        <Spin spinning={status === 'loading'}>
+            <div style={{display: "flex", height: '100vh', justifyContent: "center", alignItems: 'center'}}>
+                <Form
+                    {...layout}
+                    name="basic"
+                    initialValues={{remember: true}}
+                    onFinish={onFinish}
                 >
-                    <Input/>
-                </Form.Item>
+                    <Form.Item
+                        label="Username"
+                        name="username"
+                        rules={[{required: true, message: '用户名不能为空'}]}
+                    >
+                        <Input/>
+                    </Form.Item>
 
-                <Form.Item
-                    label="Password"
-                    name="password"
-                    rules={[{required: true, message: 'Please input your password!'}]}
-                >
-                    <Input.Password/>
-                </Form.Item>
+                    <Form.Item
+                        label="Password"
+                        name="password"
+                        rules={[{required:true,min:6,max:50, message:'密码长度不正确'}]}
+                    >
+                        <Input.Password/>
+                    </Form.Item>
 
-                <Form.Item {...tailLayout} name="remember" valuePropName="checked">
-                    <Checkbox>Remember me</Checkbox>
-                </Form.Item>
+                    <div style={{color:'#ff4d4f'}} >
+                        {errorMsg}
+                    </div>
 
-                <Form.Item {...tailLayout}>
-                    <Button type="primary" htmlType="submit">
-                        Submit
-                    </Button>
-                </Form.Item>
-            </Form>
+                    <Form.Item {...tailLayout} name="remember" valuePropName="checked">
+                        <Checkbox>Remember me</Checkbox>
+                    </Form.Item>
+
+                    <Form.Item {...tailLayout}>
+                        <Button type="primary" htmlType="submit">
+                            Submit
+                        </Button>
+                    </Form.Item>
+
+                </Form>
             </div>
-        );
+        </Spin>
+    );
 }
 
 export default LoginPage;

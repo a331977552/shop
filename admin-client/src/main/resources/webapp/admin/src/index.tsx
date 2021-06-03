@@ -1,30 +1,33 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import AppMain from './pages/AppMain';
 import reportWebVitals from './reportWebVitals';
 import 'antd/dist/antd.css';
+import {addResponseTransformInterceptor, setTokenToCommonHeader} from "./http/HttpConfig";
 import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Link
 } from "react-router-dom";
 
 import {Provider} from "react-redux";
 import {store} from "./store/store";
 import LoginPage from "./pages/LoginPage";
 
+setTokenToCommonHeader();
+addResponseTransformInterceptor();
+
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>
             <Router>
                 <Switch>
-                    <Route path={"/login"}>
+                    <Route  path={"/login"}>
                         <LoginPage/>
                     </Route>
-                    <Route>
-                        <App/>
+                    <Route path={"*"}>
+                        <AppMain/>
                     </Route>
                 </Switch>
             </Router>

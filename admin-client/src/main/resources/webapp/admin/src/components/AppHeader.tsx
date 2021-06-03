@@ -4,6 +4,8 @@ import {Layout} from "antd";
 
 import {RootState} from "../store/store";
 import {connect, ConnectedProps} from "react-redux";
+import {useAppSelector} from "../store/hooks";
+import {selectUser} from "../store/user/UserSlice";
 const {Header} = Layout;
 
 const StyledSpan = styled.span`
@@ -16,13 +18,13 @@ const StyledSpan = styled.span`
 `
 
 const AppHeader = (props:any) => {
-
+    const user = useAppSelector(selectUser);
     return (
         <Header style={{display: 'flex',height:'50px', padding: '0 30px'}}>
             <div style={{backgroundColor: 'white', width: 200, height: 34, alignSelf: "center"}}/>
             <div style={{flex: '1 0 0px'}}/>
             <div style={{display: 'flex'}}>
-                <StyledSpan >welcome </StyledSpan>
+                <StyledSpan >welcome {user?.alias}</StyledSpan>
             </div>
         </Header>
     );

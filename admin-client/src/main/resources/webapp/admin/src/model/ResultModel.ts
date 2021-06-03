@@ -1,4 +1,4 @@
-export default interface RestResult<T> {
+export default interface ResultModel<T> {
     timestamp: Date;
     code: number;
     msg: string;
