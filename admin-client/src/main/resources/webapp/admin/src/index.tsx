@@ -1,38 +1,44 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import AppMain from './pages/AppMain';
+import AppMain from './view/pages/AppMain';
 import reportWebVitals from './reportWebVitals';
 import 'antd/dist/antd.css';
-import {addResponseTransformInterceptor, setTokenToCommonHeader} from "./http/HttpConfig";
+import {addRequestInterceptor, addResponseTransformInterceptor} from "./store/HttpConfig";
 import {
     BrowserRouter as Router,
     Switch,
     Route,
 } from "react-router-dom";
-
 import {Provider} from "react-redux";
 import {store} from "./store/store";
-import LoginPage from "./pages/LoginPage";
+import LoginPage from "./view/pages/LoginPage";
+import {log} from "./services/loggerService";
+log();
 
-setTokenToCommonHeader();
+addRequestInterceptor();
 addResponseTransformInterceptor();
 
+
+function Index() {
+
+    return <Switch>
+        <Route path={"/login"}>
+            <LoginPage/>
+        </Route>
+        <Route path={"*"}>
+            <AppMain/>
+        </Route>
+    </Switch>
+
+}
+
 ReactDOM.render(
-    <React.StrictMode>
         <Provider store={store}>
             <Router>
-                <Switch>
-                    <Route  path={"/login"}>
-                        <LoginPage/>
-                    </Route>
-                    <Route path={"*"}>
-                        <AppMain/>
-                    </Route>
-                </Switch>
+                <Index/>
             </Router>
-        </Provider>
-    </React.StrictMode>,
+        </Provider>,
     document.getElementById('root')
 );
 

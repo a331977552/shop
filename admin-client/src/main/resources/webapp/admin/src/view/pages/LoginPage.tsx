@@ -1,14 +1,10 @@
-import React, {useState} from 'react';
+import React, { useState} from 'react';
 import {Form, Input, Button, Checkbox} from 'antd';
-import {useAppSelector, useAppDispatch} from '../store/hooks';
-import {RootState} from "../store/store";
-import {login} from "../store/user/UserSlice";
 import {Spin} from 'antd';
-import {setTokenToCommonHeader} from "../http/HttpConfig";
-import {setToken} from "../http/TokenConfig";
-import { useHistory } from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
+import loginAPI from "../../store/api/UserAPI";
+import {setTokenToStorage} from "../../store/TokenConfig";
 
-// import {selectCount} from "../features/counter/counterSlice";
 
 const layout = {
     labelCol: {span: 8},
@@ -19,23 +15,26 @@ const tailLayout = {
 };
 
 function LoginPage() {
+    const [status,setStatus] = useState("");
+    const [errorMsg,setErrorMsg] = useState(null);
+    let history = useHistory();
 
-    const user = useAppSelector((state: RootState) => state.userReducer.token);
-    const {token,status,errorMsg}=  user;
-    const history = useHistory();
-    const dispatch = useAppDispatch();
-
-    if (token){
-        setToken(token);
-        setTokenToCommonHeader();
-        history.push("/");
-        return <></>
+    const onFinish = (values: any) => {
+        setStatus("loading")
+        loginAPI(values).then(response=>{
+            let result = response.result as string;
+            setTokenToStorage(result);
+            history.push("/")
+        }).catch(reason => {
+            setStatus("error")
+            setErrorMsg(reason.msgDetail);
+        });
     }
 
-    const onFinish = (values: any) => dispatch(login(values));
     return (
         <Spin spinning={status === 'loading'}>
-            <div style={{display: "flex", height: '100vh', justifyContent: "center", alignItems: 'center'}}>
+            <div style={{display: "flex", height: '100vh', flexDirection:'column', justifyContent: "center", alignItems: 'center'}}>
+                <div style={{marginBottom:'2vh'}}><h1>商城管理系统</h1></div>
                 <Form
                     {...layout}
                     name="basic"
@@ -53,13 +52,13 @@ function LoginPage() {
                     <Form.Item
                         label="Password"
                         name="password"
-                        rules={[{required:true,min:6,max:50, message:'密码长度不正确'}]}
+                        rules={[{required: true, min: 6, max: 50, message: '密码长度不正确'}]}
                     >
                         <Input.Password/>
                     </Form.Item>
 
-                    <div style={{color:'#ff4d4f'}} >
-                        {errorMsg}
+                    <div style={{color: '#ff4d4f'}}>
+                        {status === 'error' && errorMsg}
                     </div>
 
                     <Form.Item {...tailLayout} name="remember" valuePropName="checked">
@@ -73,6 +72,9 @@ function LoginPage() {
                     </Form.Item>
 
                 </Form>
+                <div style={{position:'fixed',bottom:'2vh'}}>Developed by Cody, Email:
+                    &nbsp;<a href="mailto:a13521874221@gmail.com">a13521874221@gmail.com</a>
+                    </div>
             </div>
         </Spin>
     );

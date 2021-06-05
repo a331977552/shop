@@ -1,5 +1,5 @@
 export declare interface BaseModel{
 
-    status: 'finished' | 'loading'|'failed';
+    status: 'success'|'loading'|'error';
     errorMsg?:string
 }

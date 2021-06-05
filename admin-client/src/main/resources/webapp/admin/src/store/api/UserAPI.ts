@@ -1,5 +1,5 @@
-import UserModel from "../model/UserModel";
-import {post,get} from "./HttpClient";
+import UserModel from "../../model/UserModel";
+import {post,get} from "../HttpClient";
 
 export function loginAPI(user: { username: string, password: string }) {
     return  post<string>("/api-gateway/user-service/user/authenticate",user);
