@@ -1,20 +1,21 @@
 import React, {useEffect} from 'react';
 import {Button, Layout, Spin} from "antd";
-import AppHeader from "../components/AppHeader";
-import DrawerLeft from "../components/DrawerLeft";
-import ContentMain from "../components/ContentMain";
-import AppFooter from "../components/AppFooter";
+import AppHeader from "./view/components/AppHeader";
+import DrawerLeft from "./view/components/DrawerLeft";
+import ContentMain from "./view/components/ContentMain";
+import AppFooter from "./view/components/AppFooter";
 import {useHistory} from "react-router-dom";
-import {getUserInfo} from "../../store/slices/UserSlice";
-import {getTokenFromStorage} from "../../store/TokenConfig";
-import {useAppDispatch, useAppSelector} from "../../store/hooks";
+import {getUserInfo, selectUserReducer} from "./store/slices/userSlice";
+import {getTokenFromStorage} from "./store/TokenConfig";
+import {useAppDispatch, useAppSelector} from "./store/hooks";
+import './index.css'
 
-
-function AppMain() {
+function App() {
 
     let history = useHistory();
     const dispatch = useAppDispatch();
-    const user = useAppSelector((state) => state.userReducer);
+
+    const user = useAppSelector(selectUserReducer);
     const token = getTokenFromStorage();
 
     useEffect(() => {
@@ -39,7 +40,7 @@ function AppMain() {
         <Spin tip={"loading..."} style={{height: '100vh', width: '100%'}}
               spinning={(status === 'loading')}>
             <Layout style={{height: '100vh', display: 'flex'}}>
-                {status ===  'success' && (<>
+                {status ===  'finished' && (<>
                     <DrawerLeft/>
                     <Layout>
                         <AppHeader id={123}/>
@@ -63,4 +64,4 @@ function AppMain() {
 }
 
 
-export default AppMain;
+export default App;

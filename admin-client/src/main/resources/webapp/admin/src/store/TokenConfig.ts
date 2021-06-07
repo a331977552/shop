@@ -1,13 +1,13 @@
-
+import {loadItem, removeItem, saveItem} from "../services";
 
 
 export function getTokenFromStorage():string|null{
-    return window.localStorage.getItem("token");
+    return loadItem('token');
 }
 export function setTokenToStorage(token: string):void {
-    window.localStorage.setItem("token", token);
+    saveItem('token',token);
 }
 export function removeTokenFromStorage(){
-    window.localStorage.removeItem("token")
+    removeItem('token');
 }
 

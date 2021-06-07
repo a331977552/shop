@@ -1,13 +1,17 @@
-import {post, get} from "../HttpClient";
+// import {post, get} from "../HttpClient";
 import HomeModel from "../../model/HomeModel";
 import ResultModel from "../../model/ResultModel";
 
 
 export function getHomeInfoAPI() {
 
-    return new Promise<HomeModel>((resolve, reject) => {
+    return new Promise<ResultModel<HomeModel>>((resolve, reject) => {
         setTimeout(() => {
-            resolve({test: 'HAHAH12663'});
+            resolve({
+                timestamp: '2020-12-12',
+                code: 200,
+                msg: 'success',
+                result:{test: 'loading success from HomeAPI'}});
 
         }, 2000);
     });

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import AppMain from './view/pages/AppMain';
+import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'antd/dist/antd.css';
 import {addRequestInterceptor, addResponseTransformInterceptor} from "./store/HttpConfig";
@@ -27,7 +27,7 @@ function Index() {
             <LoginPage/>
         </Route>
         <Route path={"*"}>
-            <AppMain/>
+            <App/>
         </Route>
     </Switch>
 

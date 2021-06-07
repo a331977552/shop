@@ -1,32 +1,31 @@
 const version = process.env.APP_VERSION;
-const STORAGE_KEY = `__SERIALIZED_STATE_TREE_v${version}__`;
+const STORAGE_KEY = `__SERIALIZED_v${version}__`;
 
-export function saveState<T = object>(storeState: T): boolean {
+export function saveItem(key: string, value: string): boolean {
     if (!localStorage) {
         return false;
     }
-
     try {
-        const serializedState = JSON.stringify(storeState);
-        localStorage.setItem(STORAGE_KEY, serializedState);
+        localStorage.setItem(STORAGE_KEY + key, value);
         return true;
     } catch (error) {
         throw new Error('store serialization failed');
     }
 }
 
-export function loadState<T = object>(): T | undefined {
+export function loadItem(key: string): string | null {
+    if (!localStorage) {
+        return null;
+    }
+    const value = localStorage.getItem(STORAGE_KEY + key);
+    return value;
+}
+
+
+export function removeItem(key: string) {
     if (!localStorage) {
         return;
     }
+    localStorage.removeItem(STORAGE_KEY + key);
 
-    try {
-        const serializedState = localStorage.getItem(STORAGE_KEY);
-        if (serializedState == null) {
-            return;
-        }
-        return JSON.parse(serializedState);
-    } catch (error) {
-        throw new Error('store deserialization failed');
-    }
 }

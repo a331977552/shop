@@ -1,5 +1,5 @@
 export default interface ResultModel<T> {
-    timestamp: Date;
+    timestamp: string;
     code: number;
     msg: string;
     msgDetail?: string;

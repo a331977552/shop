@@ -1,6 +1,13 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import {AppDispatch, RootState} from "./store";
-import {createSlice, PayloadAction, SliceCaseReducers, ValidateSliceCaseReducers} from "@reduxjs/toolkit";
+import {
+    ActionReducerMapBuilder,
+    CaseReducers,
+    createSlice,
+    PayloadAction,
+    SliceCaseReducers,
+    ValidateSliceCaseReducers
+} from "@reduxjs/toolkit";
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 export const useAppDispatch = () => useDispatch<AppDispatch>(); //force conversion to AppDispatch -> store.dispatch
@@ -8,18 +15,22 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;//for
 
 
 
-interface GenericState<T> {
-    data?: T
+export interface GenericState<T> {
+    data?: T,
+    errorMsg?:string,
     status: 'loading' | 'finished' | 'error'
 }
 
-const createGenericSlice = <T, Reducers extends SliceCaseReducers<GenericState<T>>>({
+declare type NoInfer<T> = [T][T extends any ? 0 : never];
+
+export const createGenericSlice = <T, Reducers extends SliceCaseReducers<GenericState<T>>>({
           name = '',
           initialState,
-          reducers,}: {
+          reducers,extraReducers= {}}: {
     name: string
     initialState: GenericState<T>
     reducers: ValidateSliceCaseReducers<GenericState<T>, Reducers>
+    extraReducers?: CaseReducers<NoInfer<GenericState<T>>, any> | ((builder: ActionReducerMapBuilder<NoInfer<GenericState<T>>>) => void);
 }) => {
 
     return createSlice({
@@ -42,16 +53,7 @@ const createGenericSlice = <T, Reducers extends SliceCaseReducers<GenericState<T
             },
             ...reducers,
         },
+        extraReducers:extraReducers
     })
 }
 
-const wrappedSlice = createGenericSlice({
-    name: 'test',
-    initialState: { status: 'loading' } as GenericState<string>,
-    reducers: {
-        magic(state) {
-            state.status = 'finished'
-            state.data = 'hocus pocus'
-        },
-    },
-})

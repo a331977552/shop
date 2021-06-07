@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import {Layout} from "antd";
 
 import {useAppSelector} from "../../store/hooks";
-import {selectUser} from "../../store/slices/UserSlice";
+import {selectUser} from "../../store/slices/userSlice";
 import UserModel from '../../model/UserModel';
 const {Header} = Layout;
 
