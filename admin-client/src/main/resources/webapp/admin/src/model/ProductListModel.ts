@@ -1,8 +1,8 @@
-interface Product {
+export interface ProductModel {
     id:string,
     name:string
 }
 
-export default  interface ProductListModel{
-    products:Array<Product>
+export  interface ProductListModel{
+    products:Array<ProductModel>
 };

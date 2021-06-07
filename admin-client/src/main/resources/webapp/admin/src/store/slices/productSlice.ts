@@ -1,11 +1,9 @@
 import {
     createAsyncThunk
 } from '@reduxjs/toolkit';
-import ResultModel from "../../model/ResultModel";
-import {ErrorModel} from "../../model/ErrorModel";
+import {ErrorModel,ResultModel,ProductListModel} from "../../model";
 import {RootState} from "../store";
 import { createGenericSlice, GenericState} from "../hooks";
-import ProductListModel from "../../model/ProductListModel";
 import {getProductListAPI} from "../api";
 
 const initialState: GenericState<ProductListModel> = {

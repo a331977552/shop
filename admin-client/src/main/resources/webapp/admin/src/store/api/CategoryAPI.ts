@@ -1,34 +1,13 @@
-// import {post, get} from "../HttpClient";
-import HomeModel from "../../model/HomeModel";
-import ResultModel from "../../model/ResultModel";
-import {CategoryModel} from "../../model/CategoryModel";
+import {post, get} from "../HttpClient";
+import {ResultModel} from "../../model";
+import {CategoryModel} from "../../model";
+import {PageModel, PageQueryModel} from "../../model";
 
 
-export function getCategoryListAPI() {
+export function getCategoryListAPI(pageQueryModel:PageQueryModel<any>) {
 
-    return new Promise<ResultModel<Array<CategoryModel>>>((resolve, reject) => {
-        setTimeout(() => {
-            resolve({
-                timestamp: '2020-12-12',
-                code: 200,
-                msg: 'success',
-                result:[
-                    {id:1,
-                    name:'服装',
-                    parent:0},
-                    {id:2,
-                        name:'服装',
-                        parent:0},
-                    {id:3,
-                        name:'服装',
-                        parent:0},
-                    {id:4,
-                        name:'服装',
-                        parent:0}
-                ]});
+    return get<PageModel<CategoryModel>>("/api-gateway/product-service/api/category/all/"+pageQueryModel.currentPage+"/"+pageQueryModel.pageSize);
 
-        }, 500);
-    });
 
     // return  get<HomeModel>("/api-gateway/home-service");
 }

@@ -1,5 +1,5 @@
-import ResultModel from "./ResultModel";
+import {ResultModel} from "./ResultModel";
 
-export declare interface ErrorModel {
+export interface ErrorModel {
     rejectValue: ResultModel<string>
 }

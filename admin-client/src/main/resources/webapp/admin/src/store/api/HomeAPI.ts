@@ -1,6 +1,5 @@
 // import {post, get} from "../HttpClient";
-import HomeModel from "../../model/HomeModel";
-import ResultModel from "../../model/ResultModel";
+import { HomeModel,ResultModel } from "../../model";
 
 
 export function getHomeInfoAPI() {

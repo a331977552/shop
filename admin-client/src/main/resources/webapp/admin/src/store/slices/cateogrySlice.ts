@@ -1,25 +1,21 @@
 import {
     createAsyncThunk
 } from '@reduxjs/toolkit';
-import ResultModel from "../../model/ResultModel";
-import {ErrorModel} from "../../model/ErrorModel";
-import {getHomeInfoAPI} from "../api/HomeAPI";
 import {RootState} from "../store";
 import { createGenericSlice, GenericState} from "../hooks";
-import {CategoryModel} from "../../model/CategoryModel";
 import {getCategoryListAPI} from "../api/CategoryAPI";
+import {CategoryModel, PageQueryModel, ErrorModel, ResultModel, PageModel} from "../../model";
 
-const initialState: GenericState<Array<CategoryModel>> = {
+const initialState: GenericState<PageModel<CategoryModel>> = {
     status: 'loading'
 };
 
 
-export const getCategoryList = createAsyncThunk<ResultModel<Array<CategoryModel>>, {}, ErrorModel>
-(
+export const getCategoryList = createAsyncThunk<ResultModel<PageModel<CategoryModel>>, PageQueryModel<any>, ErrorModel>(
     'category/list',
-    async ({}, {rejectWithValue}) => {
+    async (pageQueryModel: PageQueryModel<any>, {rejectWithValue}) => {
         try {
-            return await getCategoryListAPI();
+            return await getCategoryListAPI(pageQueryModel);
         } catch (errorResult) {
             return rejectWithValue(errorResult);
         }
@@ -45,7 +41,7 @@ export const categorySlice = createGenericSlice({
                 state.errorMsg = action.payload?.msgDetail;
             })
             .addCase(getCategoryList.fulfilled, (state, action) => {
-
+                console.log(action.payload)
                 return {status: "finished", data: action.payload.result};
             })
     }

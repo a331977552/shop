@@ -1,4 +1,4 @@
-export default interface ResultModel<T> {
+export interface ResultModel<T> {
     timestamp: string;
     code: number;
     msg: string;

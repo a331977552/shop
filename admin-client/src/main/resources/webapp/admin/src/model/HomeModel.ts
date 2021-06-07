@@ -1,4 +1,4 @@
 
-export default  interface HomeModel{
+export  interface HomeModel{
    test?:string
 };

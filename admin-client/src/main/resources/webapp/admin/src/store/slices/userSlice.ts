@@ -1,13 +1,10 @@
 import {
     createAsyncThunk,
 } from '@reduxjs/toolkit';
-import ResultModel from "../../model/ResultModel";
-import AuthenticationModel from "../../model/AuthenticationModel";
-import {ErrorModel} from "../../model/ErrorModel";
 import {RootState} from "../store";
-import UserModel from '../../model/UserModel';
 import {getUserInfoAPI, loginAPI} from "../api";
 import {createGenericSlice, GenericState} from "../hooks";
+import {AuthenticationModel, ResultModel, UserModel,ErrorModel} from "../../model";
 
 const initialState: GenericState<UserModel> = {
     status: "loading"

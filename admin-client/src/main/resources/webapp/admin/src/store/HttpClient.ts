@@ -1,5 +1,5 @@
 import axios from "axios";
-import ResultModel from "../model/ResultModel";
+import {ResultModel} from "../model";
 
 export function post<T>(url: string, data: any): Promise<ResultModel<T>> {
     return axios.post<ResultModel<T>, ResultModel<T>>(url, data).then

@@ -1,6 +1,5 @@
 // import {post, get} from "../HttpClient";
-import ProductListModel from "../../model/ProductListModel";
-import ResultModel from "../../model/ResultModel";
+import {ResultModel,ProductListModel} from "../../model";
 
 
 export function getProductListAPI() {

@@ -1,4 +1,4 @@
-import UserModel from "../../model/UserModel";
+import {UserModel} from "../../model";
 import {post,get} from "../HttpClient";
 
 export function loginAPI(user: { username: string, password: string }) {

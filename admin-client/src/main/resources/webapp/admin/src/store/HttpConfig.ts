@@ -39,7 +39,7 @@ export function addResponseTransformInterceptor() {
             return Promise.reject({msgDetail: 'unstable network'})
         } else {
             console.warn(reason.toJSON())
-            return Promise.reject({msgDetail: 'network error'})
+            return Promise.reject({msgDetail: '网络连接异常'})
         }
     });
 }

@@ -1,10 +1,8 @@
 import {
     createAsyncThunk
 } from '@reduxjs/toolkit';
-import ResultModel from "../../model/ResultModel";
-import {ErrorModel} from "../../model/ErrorModel";
-import HomeModel from "../../model/HomeModel";
-import {getHomeInfoAPI} from "../api/HomeAPI";
+import {ResultModel,ErrorModel,HomeModel} from "../../model";
+import {getHomeInfoAPI} from "../api";
 import {RootState} from "../store";
 import { createGenericSlice, GenericState} from "../hooks";
 
