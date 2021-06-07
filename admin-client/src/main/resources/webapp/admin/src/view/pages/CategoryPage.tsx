@@ -53,7 +53,7 @@ class CategoryPage extends Component<PropsFromRedux> {
         return (
             status === 'error' ? <div> error: {errorMsg}</div> :
                 <div style={{display: 'flex', height: '100%', flexDirection: 'column'}}>
-                    <div><Button style={{float:'right'}}>ADD</Button></div>
+                    <div><Button style={{float: 'right'}}>ADD</Button></div>
                     <div style={{width: '100%', flex: '1 0 0px', overflow: 'auto', marginTop: '10px'}}>
                         <Table loading={status === 'loading'} dataSource={this.props.data} columns={columns}/>;
                     </div>
