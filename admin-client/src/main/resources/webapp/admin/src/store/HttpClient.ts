@@ -12,8 +12,8 @@ export function post<T>(url: string, data: any): Promise<ResultModel<T>> {
 
 
 
-export function get<T>(url: string): Promise<ResultModel<T>> {
-    return axios.get<ResultModel<T>, ResultModel<T>>(url).then
+export function get<T>(url: string,data?:unknown): Promise<ResultModel<T>> {
+    return axios.get<ResultModel<T>, ResultModel<T>>(url,{params:data}).then
     (responseResult => {
         return Promise.resolve(responseResult);
     }).catch(reasonResult => {

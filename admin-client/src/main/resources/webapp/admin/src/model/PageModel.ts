@@ -16,5 +16,5 @@ export interface PageQueryModel<Example>{
     currentPage:number;
     pageSize: number;
     orderBy?:string;
-    example?:Example
+    example?:Example|undefined
 }

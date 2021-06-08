@@ -14,3 +14,6 @@ export interface CategoryModel {
     keyword: string;
 }
 
+export interface CategoryQueryVO {
+    parent?: number
+};

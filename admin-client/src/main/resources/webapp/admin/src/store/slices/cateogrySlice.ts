@@ -2,18 +2,18 @@ import {
     createAsyncThunk
 } from '@reduxjs/toolkit';
 import {RootState} from "../store";
-import { createGenericSlice, GenericState} from "../hooks";
+import {createGenericSlice, GenericState} from "../hooks";
 import {getCategoryListAPI} from "../api/CategoryAPI";
-import {CategoryModel, PageQueryModel, ErrorModel, ResultModel, PageModel} from "../../model";
+import {CategoryModel, PageQueryModel, ErrorModel, ResultModel, PageModel, CategoryQueryVO} from "../../model";
 
 const initialState: GenericState<PageModel<CategoryModel>> = {
-    status: 'loading'
+    status: 'loading',
 };
 
 
-export const getCategoryList = createAsyncThunk<ResultModel<PageModel<CategoryModel>>, PageQueryModel<any>, ErrorModel>(
+export const getCategoryList = createAsyncThunk<ResultModel<PageModel<CategoryModel>>, PageQueryModel<CategoryQueryVO>, ErrorModel>(
     'category/list',
-    async (pageQueryModel: PageQueryModel<any>, {rejectWithValue}) => {
+    async (pageQueryModel: PageQueryModel<CategoryQueryVO>, {rejectWithValue}) => {
         try {
             return await getCategoryListAPI(pageQueryModel);
         } catch (errorResult) {
@@ -25,17 +25,12 @@ export const getCategoryList = createAsyncThunk<ResultModel<PageModel<CategoryMo
 export const categorySlice = createGenericSlice({
     name: 'category',
     initialState: initialState, reducers: {
-        error: (state) => {
-            state.status = 'error';
-            state.errorMsg = 'testing error';
-        }
     },
     extraReducers: (builder) => {
         builder
             .addCase(getCategoryList.pending, (state, action) => {
                 state.status = 'loading';
             })
-
             .addCase(getCategoryList.rejected, (state, action) => {
                 state.status = 'error';
                 state.errorMsg = action.payload?.msgDetail;
@@ -49,5 +44,5 @@ export const categorySlice = createGenericSlice({
 
 export const selectCategoryReducer = (state: RootState) => state.category;
 
-export const {error} = categorySlice.actions;
+export const {} = categorySlice.actions;
 export default categorySlice.reducer;
