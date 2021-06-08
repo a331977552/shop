@@ -55,7 +55,6 @@ export const userSlice = createGenericSlice(
                 })
                 .addCase(getUserInfo.fulfilled, (state, action) => {
                     state.status = 'finished';
-                    console.log(action.payload)
                     state.data = action.payload.result;
                 })
                 .addCase(getUserInfo.rejected, (state, action) => {

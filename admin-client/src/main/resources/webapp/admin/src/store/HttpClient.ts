@@ -31,4 +31,13 @@ export function put<T>(url: string, data: any): Promise<ResultModel<T>> {
     });
 }
 
+export function httpDelete<T>(url: string): Promise<ResultModel<T>> {
+    return axios.delete<ResultModel<T>, ResultModel<T>>(url).then
+    (responseResult => {
+        return Promise.resolve(responseResult);
+    }).catch(reasonResult => {
+        return Promise.reject(reasonResult)
+    });
+}
+
 

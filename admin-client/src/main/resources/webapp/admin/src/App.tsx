@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react';
 import {Button, Layout, Spin} from "antd";
-import AppHeader from "./view/components/AppHeader";
-import DrawerLeft from "./view/components/DrawerLeft";
-import ContentMain from "./view/components/ContentMain";
-import AppFooter from "./view/components/AppFooter";
+import AppHeader from "./pages/app/AppHeader";
+import DrawerLeft from "./pages/app/DrawerLeft";
+import ContentMain from "./pages/app/ContentMain";
+import AppFooter from "./pages/app/AppFooter";
 import {useHistory} from "react-router-dom";
 import {getUserInfo, selectUserReducer} from "./store/slices/userSlice";
 import {getTokenFromStorage} from "./store/TokenConfig";
@@ -19,10 +19,11 @@ function App() {
     const token = getTokenFromStorage();
 
     useEffect(() => {
+        const token = getTokenFromStorage();
         if (token){
             dispatch(getUserInfo({}));
         }
-    }, [dispatch,token])
+    }, [dispatch])
 
     if (token === null) {
         history.push("/login");
@@ -31,7 +32,6 @@ function App() {
 
 
     function onRetryClick() {
-        console.log("onRetryClick")
         dispatch(getUserInfo({}));
     }
     const status = user.status;

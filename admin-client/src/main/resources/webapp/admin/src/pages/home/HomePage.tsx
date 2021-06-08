@@ -15,7 +15,6 @@ class HomePage extends Component<PropsFromRedux> {
     }
 
     render() {
-        console.log(this.props)
         return (
             <Spin spinning={this.props.status === 'loading'}>
                    <div>

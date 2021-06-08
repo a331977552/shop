@@ -72,9 +72,7 @@ class ProductListPage extends Component<PropsFromRedux> {
     }
 
     render() {
-        console.log(this.props)
-        const {status} = this.props;
-        const {errorMsg} = this.props;
+        const {status, errorMsg} = this.props;
         return (
             status === 'error' ? <div> error: {errorMsg}</div> :
                 <div style={{display: 'flex', height: '100%', flexDirection: 'column'}}>

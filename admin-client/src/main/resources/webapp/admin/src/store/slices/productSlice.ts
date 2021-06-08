@@ -38,7 +38,6 @@ export const productSlice = createGenericSlice({
                 state.errorMsg = action.payload?.msgDetail;
             })
             .addCase(getProductList.fulfilled, (state, action) => {
-                console.log(action)
                 return {status: "finished", data: action.payload.result};
             })
     }

@@ -12,7 +12,7 @@ import {
 } from "react-router-dom";
 import {Provider} from "react-redux";
 import {store} from "./store/store";
-import LoginPage from "./view/pages/LoginPage";
+import LoginPage from "./pages/login/LoginPage";
 import {log} from "./services/loggerService";
 log();
 

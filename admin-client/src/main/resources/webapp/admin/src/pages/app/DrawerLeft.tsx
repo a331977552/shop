@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {Layout, Menu} from "antd";
 import {LaptopOutlined, NotificationOutlined, UserOutlined, HomeOutlined} from "@ant-design/icons";
 import {useHistory} from "react-router-dom";
-import {log} from "../../services";
 
 const {Sider} = Layout;
 const {SubMenu} = Menu;
