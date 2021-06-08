@@ -1,6 +1,7 @@
 package org.shop.test.utils;
 
 import org.shop.common.Result;
+import org.shop.common.util.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
@@ -19,9 +20,15 @@ public abstract class BaseControllerTest<returnVO> {
 	protected RestTestHelper helper;
 	protected ParameterizedTypeReference<Result<returnVO>> resVOReturnRef = getParameterTypeRef();
 	protected ParameterizedTypeReference<Result<List<returnVO>>> resListVOReturnRef = getParameterListTypeRef();
+	protected ParameterizedTypeReference<Result<Page<returnVO>>> resPageVOReturnRef = getParameterPageTypeRef();
 
 	protected ParameterizedTypeReference<Result<List<returnVO>>> getParameterListTypeRef() {
 		return new ParameterizedTypeReference<Result<List<returnVO>>>() {
+		};
+	}
+
+	protected ParameterizedTypeReference<Result<Page<returnVO>>> getParameterPageTypeRef() {
+		return new ParameterizedTypeReference<Result<Page<returnVO>>>() {
 		};
 	}
 

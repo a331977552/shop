@@ -3,28 +3,24 @@ package org.shop.model.vo;
 import lombok.Data;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 
 @Data
 @ToString
-public class CategoryVO {
-	private Integer id;
+public class CategoryAddVO {
 
+	@NotBlank
 	private String name;
 
-	private Integer parent;
+	@Min(0)
+	private Integer parent = 0;
 
-	private LocalDateTime createdTime;
 
-	private LocalDateTime updatedTime;
+	private Boolean visible = true;
 
-	private Integer level;
-
-	private Boolean isleaf;
-
-	private Boolean visible;
-
-	private Integer priority;
+	@Min(0)
+	private Integer priority = 0 ;
 
 	private String suffix;
 

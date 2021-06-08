@@ -28,7 +28,7 @@
 <!--        <table tableName="customer_address" domainObjectName="CustomerAddressDAO"></table>-->
 <!--        <table tableName="image" domainObjectName="ImageDAO"></table>-->
 <!--        <table tableName="image_product" domainObjectName="ImageProductDAO"></table>-->
-        <table tableName="order_item" domainObjectName="OrderItemDAO" />
+<!--        <table tableName="order_item" domainObjectName="OrderItemDAO" />-->
 <!--        <table tableName="product" domainObjectName="ProductDAO"></table>-->
 <!--        <table tableName="shop_order" domainObjectName="ShopOrderDAO"/>-->
 <!--        <table tableName="shopping_cart" domainObjectName="ShoppingCartDAO"></table>-->
@@ -39,6 +39,8 @@
 <!--        </table>-->
 <!--        <table tableName="attr_key" domainObjectName="AttrKeyDAO"></table>-->
 <!--        <table tableName="attr_value" domainObjectName="AttrValueDAO"></table>-->
-<!--        <table tableName="category" domainObjectName="CategoryDAO"></table>-->
+        <table tableName="category"  domainObjectName="CategoryDAO">
+            <generatedKey column="id" sqlStatement="MySql"></generatedKey>
+        </table>
     </context>
 </generatorConfiguration>

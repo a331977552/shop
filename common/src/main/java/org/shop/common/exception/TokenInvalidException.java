@@ -2,12 +2,12 @@ package org.shop.common.exception;
 
 import org.springframework.security.core.AuthenticationException;
 
-public class InvalidTokenException extends AuthenticationException {
-	public InvalidTokenException(String msg, Throwable cause) {
+public class TokenInvalidException extends AuthenticationException {
+	public TokenInvalidException(String msg, Throwable cause) {
 		super(msg, cause);
 	}
 
-	public InvalidTokenException(String msg) {
+	public TokenInvalidException(String msg) {
 		super(msg);
 	}
 }

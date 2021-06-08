@@ -7,6 +7,12 @@
     <result column="parent" jdbcType="INTEGER" property="parent" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="isLeaf" jdbcType="BIT" property="isleaf" />
+    <result column="visible" jdbcType="BIT" property="visible" />
+    <result column="priority" jdbcType="INTEGER" property="priority" />
+    <result column="suffix" jdbcType="VARCHAR" property="suffix" />
+    <result column="keyword" jdbcType="VARCHAR" property="keyword" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,7 +73,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, parent, created_time, updated_time
+    id, name, parent, created_time, updated_time, level, isLeaf, visible, priority, suffix, 
+    keyword
   </sql>
   <select id="selectByExample" parameterType="org.shop.model.dao.CategoryDAOExample" resultMap="BaseResultMap">
     select
@@ -99,11 +106,15 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="org.shop.model.dao.CategoryDAO">
+  <insert id="insert" parameterType="org.shop.model.dao.CategoryDAO" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
     insert into category (id, name, parent, 
-      created_time, updated_time)
+      created_time, updated_time, level, 
+      isLeaf, visible, priority, 
+      suffix, keyword)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{parent,jdbcType=INTEGER}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP})
+      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, #{level,jdbcType=INTEGER}, 
+      #{isleaf,jdbcType=BIT}, #{visible,jdbcType=BIT}, #{priority,jdbcType=INTEGER}, 
+      #{suffix,jdbcType=VARCHAR}, #{keyword,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="org.shop.model.dao.CategoryDAO">
     insert into category
@@ -123,6 +134,24 @@
       <if test="updatedTime != null">
         updated_time,
       </if>
+      <if test="level != null">
+        level,
+      </if>
+      <if test="isleaf != null">
+        isLeaf,
+      </if>
+      <if test="visible != null">
+        visible,
+      </if>
+      <if test="priority != null">
+        priority,
+      </if>
+      <if test="suffix != null">
+        suffix,
+      </if>
+      <if test="keyword != null">
+        keyword,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -139,6 +168,24 @@
       </if>
       <if test="updatedTime != null">
         #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="isleaf != null">
+        #{isleaf,jdbcType=BIT},
+      </if>
+      <if test="visible != null">
+        #{visible,jdbcType=BIT},
+      </if>
+      <if test="priority != null">
+        #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="suffix != null">
+        #{suffix,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword != null">
+        #{keyword,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -166,6 +213,24 @@
       <if test="record.updatedTime != null">
         updated_time = #{record.updatedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.level != null">
+        level = #{record.level,jdbcType=INTEGER},
+      </if>
+      <if test="record.isleaf != null">
+        isLeaf = #{record.isleaf,jdbcType=BIT},
+      </if>
+      <if test="record.visible != null">
+        visible = #{record.visible,jdbcType=BIT},
+      </if>
+      <if test="record.priority != null">
+        priority = #{record.priority,jdbcType=INTEGER},
+      </if>
+      <if test="record.suffix != null">
+        suffix = #{record.suffix,jdbcType=VARCHAR},
+      </if>
+      <if test="record.keyword != null">
+        keyword = #{record.keyword,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -177,7 +242,13 @@
       name = #{record.name,jdbcType=VARCHAR},
       parent = #{record.parent,jdbcType=INTEGER},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
-      updated_time = #{record.updatedTime,jdbcType=TIMESTAMP}
+      updated_time = #{record.updatedTime,jdbcType=TIMESTAMP},
+      level = #{record.level,jdbcType=INTEGER},
+      isLeaf = #{record.isleaf,jdbcType=BIT},
+      visible = #{record.visible,jdbcType=BIT},
+      priority = #{record.priority,jdbcType=INTEGER},
+      suffix = #{record.suffix,jdbcType=VARCHAR},
+      keyword = #{record.keyword,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -197,6 +268,24 @@
       <if test="updatedTime != null">
         updated_time = #{updatedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="level != null">
+        level = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="isleaf != null">
+        isLeaf = #{isleaf,jdbcType=BIT},
+      </if>
+      <if test="visible != null">
+        visible = #{visible,jdbcType=BIT},
+      </if>
+      <if test="priority != null">
+        priority = #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="suffix != null">
+        suffix = #{suffix,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword != null">
+        keyword = #{keyword,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -205,7 +294,13 @@
     set name = #{name,jdbcType=VARCHAR},
       parent = #{parent,jdbcType=INTEGER},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
-      updated_time = #{updatedTime,jdbcType=TIMESTAMP}
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      level = #{level,jdbcType=INTEGER},
+      isLeaf = #{isleaf,jdbcType=BIT},
+      visible = #{visible,jdbcType=BIT},
+      priority = #{priority,jdbcType=INTEGER},
+      suffix = #{suffix,jdbcType=VARCHAR},
+      keyword = #{keyword,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

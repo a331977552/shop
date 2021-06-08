@@ -42,8 +42,7 @@ public final class BeanConvertor {
 				return target;
 			} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
 				e.printStackTrace();
-				return null;
-
+				throw  new RuntimeException("please fix this "+ targetClass);
 		}
 	}
 }

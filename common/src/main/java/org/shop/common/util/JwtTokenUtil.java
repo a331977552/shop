@@ -78,13 +78,7 @@ public class JwtTokenUtil {
 	}
 
 	public String parseToken(String token) {
-		try {
 			Jws<Claims> headerClaimsJwt = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
-			String subject = headerClaimsJwt.getBody().getSubject();
-			return subject;
-		} catch (JwtException | ClassCastException e) {
-			e.printStackTrace();
-			return null;
-		}
+		return headerClaimsJwt.getBody().getSubject();
 	}
 }

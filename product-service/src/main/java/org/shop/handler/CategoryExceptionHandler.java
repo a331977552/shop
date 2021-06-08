@@ -3,7 +3,7 @@ package org.shop.handler;
 
 import lombok.extern.log4j.Log4j2;
 import org.shop.common.Result;
-import org.shop.exception.ProductException;
+import org.shop.exception.CategoryException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
@@ -16,12 +16,12 @@ import org.springframework.web.context.request.WebRequest;
 @ControllerAdvice
 @Log4j2
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class ProductExceptionHandler
+public class CategoryExceptionHandler
 {
-	@ExceptionHandler(ProductException.class)
+	@ExceptionHandler(CategoryException.class)
 	protected ResponseEntity<Object> handleMyExceptionInternal(Exception ex, WebRequest request) {
 		Result result = Result.badRequest(ex.getMessage());
-		log.debug("handle ProductException {}", ex.getLocalizedMessage());
+		log.debug("handle CategoryException {}", ex.getLocalizedMessage());
 		return new ResponseEntity(result, new HttpHeaders(), HttpStatus.BAD_REQUEST);
 	}
 

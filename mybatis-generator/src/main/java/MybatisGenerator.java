@@ -8,10 +8,8 @@ import org.mybatis.generator.internal.DefaultShellCallback;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -47,7 +45,12 @@ public class MybatisGenerator {
 	}
 
 	private static void deleteAllLastGeneratedFiles() {
-		File file = new File(System.getProperty("user.dir") + "/mybatis-generator/src/main/java/org/shop");
+
+		deleteEverythingInDir(System.getProperty("user.dir") + "/mybatis-generator/src/main/java/org/shop");
+		deleteEverythingInDir(System.getProperty("user.dir") + "/mybatis-generator/src/main/resources/org/shop");
+	}
+	private static void deleteEverythingInDir(String dir){
+		File file = new File(dir);
 		File[] files = file.listFiles();
 		Stream<File> fileStream = Arrays.stream(files).flatMap(file2 -> Arrays.stream(file2.listFiles()));
 		fileStream.forEach((f) -> {

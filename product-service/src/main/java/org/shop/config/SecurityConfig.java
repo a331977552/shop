@@ -54,10 +54,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				and().
 				authorizeRequests().
 				requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll().
-				antMatchers(HttpMethod.GET,"/api/product/**","api/product/test/**").permitAll().
+				antMatchers(HttpMethod.GET,"/api/product/**","api/product/test/**",
+						"/api/category/**").permitAll().
+
 				antMatchers(HttpMethod.POST, "/api/product").hasAuthority("ADMIN").
+				antMatchers(HttpMethod.POST, "/api/category").hasAuthority("ADMIN").
 				antMatchers(HttpMethod.PUT, "/api/product").hasAuthority("ADMIN").
 				antMatchers(HttpMethod.PUT, "/api/product").hasAuthority("ADMIN").
+				antMatchers(HttpMethod.PUT, "/api/category").hasAuthority("ADMIN").
 				antMatchers( "/api/product/sku/*").hasAuthority("ADMIN").
 				antMatchers(HttpMethod.DELETE, "/api/product/*").hasAuthority("ADMIN").
 				anyRequest().hasAnyAuthority("ADMIN").

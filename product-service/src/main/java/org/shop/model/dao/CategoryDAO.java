@@ -1,7 +1,10 @@
 package org.shop.model.dao;
 
+import lombok.ToString;
+
 import java.time.LocalDateTime;
 
+@ToString
 public class CategoryDAO {
     private Integer id;
 
@@ -12,6 +15,18 @@ public class CategoryDAO {
     private LocalDateTime createdTime;
 
     private LocalDateTime updatedTime;
+
+    private Integer level;
+
+    private Boolean isleaf;
+
+    private Boolean visible;
+
+    private Integer priority;
+
+    private String suffix;
+
+    private String keyword;
 
     public Integer getId() {
         return id;
@@ -51,5 +66,53 @@ public class CategoryDAO {
 
     public void setUpdatedTime(LocalDateTime updatedTime) {
         this.updatedTime = updatedTime;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
+
+    public Boolean getIsleaf() {
+        return isleaf;
+    }
+
+    public void setIsleaf(Boolean isleaf) {
+        this.isleaf = isleaf;
+    }
+
+    public Boolean getVisible() {
+        return visible;
+    }
+
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
+    }
+
+    public Integer getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority = priority;
+    }
+
+    public String getSuffix() {
+        return suffix;
+    }
+
+    public void setSuffix(String suffix) {
+        this.suffix = suffix;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 }

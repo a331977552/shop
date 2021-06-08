@@ -5,8 +5,7 @@ import lombok.ToString;
 
 @Data
 @ToString
-public class CategoryAddVO {
-	private Integer id;
+public class CategoryQueryVO {
 
 	private String name;
 
@@ -17,10 +16,6 @@ public class CategoryAddVO {
 	private Boolean isleaf;
 
 	private Boolean visible;
-
-	private Integer priority;
-
-	private String suffix;
 
 	private String keyword;
 

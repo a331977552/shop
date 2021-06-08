@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 import org.shop.common.Result;
 import org.shop.common.exception.IllegalUserAccessException;
+import org.shop.common.exception.TokenExpiredException;
+import org.shop.common.exception.TokenInvalidException;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -28,6 +31,7 @@ import java.io.IOException;
 @Log4j2
 @ControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
+@Primary
 public class AuthenticationFailureHandler implements AuthenticationEntryPoint
 {
     private ObjectMapper mapper = new ObjectMapper();
@@ -35,13 +39,12 @@ public class AuthenticationFailureHandler implements AuthenticationEntryPoint
     public ResponseEntity<Result> customHandler(AuthenticationException authException, WebRequest webRequest) throws IOException {
         log.debug("1 {}",authException.getMessage());
         final Result result = processInternalException(authException);
-
         return new ResponseEntity(result, HttpStatus.UNAUTHORIZED);
     }
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        log.debug("request path:{},{}",request.getServletPath(),authException.getMessage());
+        log.debug("request path:{},{},{}",request.getServletPath(),authException,authException.getMessage());
         final Result result = processInternalException(authException);
         final String value = mapper.writeValueAsString(result);
         response.setCharacterEncoding("utf-8");
@@ -56,8 +59,19 @@ public class AuthenticationFailureHandler implements AuthenticationEntryPoint
             final Result unauthorized = Result.unauthorized(exception.getMessage());
             unauthorized.setMsg("警告 错误用户");
             return unauthorized;
-        }
 
+            //todo remove, because it doesn't work
+        }else if (exception instanceof TokenExpiredException){
+            final Result unauthorized = Result.unauthorized(exception.getMessage());
+            unauthorized.setMsg("用户过期,请重新登录");
+            return unauthorized;
+
+            //todo remove, because it doesn't work
+        }else if (exception instanceof TokenInvalidException){
+            final Result unauthorized = Result.unauthorized(exception.getMessage());
+            unauthorized.setMsg("用户token不可用");
+            return unauthorized;
+        }
         return Result.unauthorized(exception.getMessage());
     }
 }

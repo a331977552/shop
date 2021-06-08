@@ -1,6 +1,10 @@
 package org.shop.common.security;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import lombok.extern.log4j.Log4j2;
+import org.shop.common.exception.TokenInvalidException;
+import org.shop.common.exception.TokenExpiredException;
 import org.shop.common.util.JwtTokenUtil;
 import org.shop.common.util.TextUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,11 +44,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 		// Get jwt token and validate
 		final String token = header.split(" ")[1].trim();
 		String username;
-		if ((username = jwtTokenUtil.parseToken(token)) == null) {
-			log.debug("authenticate failed on token : {}", token);
-			filterChain.doFilter(request, response);
-			return;
+		try {
+			username = jwtTokenUtil.parseToken(token);
+		} catch (ExpiredJwtException ex) {
+			//todo remove, because it doesn't work
+			throw new TokenExpiredException("token expired",ex);
+		} catch (JwtException exception) {
+			//todo remove, because it doesn't work
+			throw new TokenInvalidException("invalid token",exception);
 		}
+
 		log.debug("authenticate on token : {}, result: {}", token, username);
 		Authentication authenticate = authenticationManager.authenticate(new JWTAuthenticationToken(username, null));
 		SecurityContextHolder.getContext().setAuthentication(authenticate);

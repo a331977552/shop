@@ -3,9 +3,11 @@ package org.shop.model.vo;
 import lombok.Data;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+
 @Data
 @ToString
-public class CategoryAddVO {
+public class CategoryReturnVO {
 	private Integer id;
 
 	private String name;
@@ -20,6 +22,9 @@ public class CategoryAddVO {
 
 	private Integer priority;
 
+	private LocalDateTime createdTime;
+
+	private LocalDateTime updatedTime;
 	private String suffix;
 
 	private String keyword;

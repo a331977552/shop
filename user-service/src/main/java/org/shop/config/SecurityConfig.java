@@ -60,6 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler()).authenticationEntryPoint(new AuthenticationFailureHandler()).
 				and().
 				sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().
+//				addFilter()
 				addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class).
 				formLogin().disable();
 	}
