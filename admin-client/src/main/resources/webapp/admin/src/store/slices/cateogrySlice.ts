@@ -3,25 +3,26 @@ import {
 } from '@reduxjs/toolkit';
 import {RootState} from "../store";
 import {GenericState} from "../hooks";
-import {getCategoryListAPI,toggleVisibleAPI} from "../api/CategoryAPI";
+import {getCategoryListAPI, toggleCategoryVisibleAPI} from "../api/CategoryAPI";
 import {CategoryModel, PageQueryModel, ErrorModel, ResultModel, PageModel, CategoryQueryVO} from "../../model";
 
 interface CategoryState {
     categoryList: GenericState<PageModel<CategoryModel>>
-    categoryUpdate: GenericState<CategoryModel>
+    categoryUpdate: GenericState<CategoryModel>,
 }
 
 const initialState: CategoryState = {
     categoryUpdate: {status: 'finished'},
     categoryList: {status: 'loading'}
+
 };
 
 
-export const getCategoryList = createAsyncThunk<ResultModel<PageModel<CategoryModel>>, PageQueryModel<CategoryQueryVO>, ErrorModel>(
+export const getCategoryList = createAsyncThunk<ResultModel<PageModel<CategoryModel>>, PageQueryModel<CategoryQueryVO>|null, ErrorModel>(
     'category/list',
-    async (pageQueryModel: PageQueryModel<CategoryQueryVO>, {rejectWithValue}) => {
+    async (pageQueryModel, {rejectWithValue}) => {
         try {
-            return await getCategoryListAPI(pageQueryModel);
+            return await getCategoryListAPI(pageQueryModel?pageQueryModel:undefined);
         } catch (errorResult) {
             return rejectWithValue(errorResult);
         }
@@ -29,12 +30,11 @@ export const getCategoryList = createAsyncThunk<ResultModel<PageModel<CategoryMo
 );
 
 
-
-export const toggleVisible = createAsyncThunk<ResultModel<string>,CategoryModel, ErrorModel>(
+export const toggleVisible = createAsyncThunk<ResultModel<string>, CategoryModel, ErrorModel>(
     'category/toggleVisible',
     async (categoryModel: CategoryModel, {rejectWithValue}) => {
         try {
-            return await toggleVisibleAPI({...categoryModel,visible:!categoryModel.visible});
+            return await toggleCategoryVisibleAPI({...categoryModel, visible: !categoryModel.visible});
         } catch (errorResult) {
             return rejectWithValue(errorResult);
         }
@@ -50,8 +50,8 @@ export const categorySlice = createSlice({
             data.items = state.categoryList.data?.items.filter(item =>
                 item.id !== action.payload.id) as CategoryModel[];
             const elementsWithSameParent = data.items.reduce((acc, curr) =>
-                acc + curr.parent === action.payload.parent ? 1 : 0
-            , 0)
+                    acc + curr.parent === action.payload.parent ? 1 : 0
+                , 0)
             //sync parent leaf status
             if (elementsWithSameParent === 0) {
                 let parent = data.items.find(item => item.id === action.payload.parent) as CategoryModel;
@@ -70,6 +70,19 @@ export const categorySlice = createSlice({
             })
             .addCase(getCategoryList.fulfilled, (state, action) => {
                 state.categoryList = {status: "finished", data: action.payload.result};
+                const findAllChildren = (parent: CategoryModel, dataSource: Array<CategoryModel>) => {
+                    const children = dataSource.filter(item => item.parent === parent.id);
+                    parent.children = children;
+                    children.forEach(parent => {
+                        findAllChildren(parent, dataSource);
+                    })
+                }
+                const items = state.categoryList.data?.items;
+                if (items) {
+                    items.forEach(item=>{
+                        findAllChildren(item,items);
+                    })
+                }
             })
             .addCase(toggleVisible.pending, (state, action) => {
                 state.categoryUpdate.status = 'loading';
@@ -81,13 +94,13 @@ export const categorySlice = createSlice({
             .addCase(toggleVisible.fulfilled, (state, action) => {
                 const categoryModel = action.meta.arg;
                 const items = state.categoryList.data?.items as Array<CategoryModel>;
-                let find = items.find(item=>item.id === categoryModel.id) as  CategoryModel;
+                let find = items.find(item => item.id === categoryModel.id) as CategoryModel;
                 find.visible = !find.visible;
             })
-
     })
 });
 export const selectCategoryReducer = (state: RootState) => state.category;
+export const selectCategoryDataReducer = (state: RootState) => state.category.categoryList.data;
 
 export const {deleteCategoryByID} = categorySlice.actions;
 export default categorySlice.reducer;

@@ -51,6 +51,7 @@ public class CategoryController {
 		return Result.of(service.getCategoryById(id));
 	}
 
+	//disabled pagination
 	@GetMapping("/all/{page}/{pageSize}")
 	public Result<Page<CategoryReturnVO>>
 	getAllCategory(@PathVariable(name = "page") Integer page,

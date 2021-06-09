@@ -43,8 +43,8 @@ public class CategoryServiceImpl implements CategoryService, ModelConvertor<Cate
 			final CategoryReturnVO categoryById = getCategoryById(categoryDAO.getParent());
 			categoryDAO.setLevel(categoryById.getLevel() + 1);
 			categoryById.setIsleaf(false);
-			final CategoryUpdateVO convert = BeanConvertor.convert(categoryById, CategoryUpdateVO.class);
-			updateCategory(convert);
+			final CategoryDAO convert = BeanConvertor.convert(categoryById, CategoryDAO.class);
+			mapper.updateByPrimaryKey(convert);
 		}
 		categoryDAO.setCreatedTime(LocalDateTime.now());
 		categoryDAO.setUpdatedTime(LocalDateTime.now());
@@ -153,7 +153,7 @@ public class CategoryServiceImpl implements CategoryService, ModelConvertor<Cate
 		if(!EntityUtils.containsFieldWithName(CategoryQueryVO.class,page.getOrderBy()) && !TextUtil.isEmpty(page.getOrderBy()) ){
 			throw new MaliciousAttackException("get off");
 		}
-		String orderBy = Optional.ofNullable(page.getOrderBy()).orElse("priority desc ");
+		String orderBy = Optional.ofNullable(page.getOrderBy()).orElse("created_time desc ");
 		categoryDAOExample.setOrderByClause(orderBy
 				/*+ " limit " + page.getPageSize() + " offset " + page.getOffset()*/
 		);

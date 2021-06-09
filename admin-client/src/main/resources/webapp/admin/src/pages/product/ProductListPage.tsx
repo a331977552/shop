@@ -57,8 +57,8 @@ const columns = [
         dataIndex: '',
         key: 'x',
         render: () => <Space size="middle">
-            <a>Delete</a>
-            <a>update</a>
+            <Button size={'small'} type={'link'}>删除</Button>
+            <Button size={'small'} type={'link'}>更新</Button>
         </Space>
         ,
     },
@@ -68,7 +68,7 @@ class ProductListPage extends Component<PropsFromRedux> {
 
 
     componentDidMount() {
-        this.props.getProductList({});
+        this.props.getProductList(null);
     }
 
     render() {

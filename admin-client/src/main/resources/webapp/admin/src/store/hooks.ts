@@ -4,7 +4,6 @@ import {
     ActionReducerMapBuilder,
     CaseReducers,
     createSlice,
-    PayloadAction,
     SliceCaseReducers,
     ValidateSliceCaseReducers
 } from "@reduxjs/toolkit";

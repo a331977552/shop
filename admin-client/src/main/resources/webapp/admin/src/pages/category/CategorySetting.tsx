@@ -3,13 +3,17 @@ import {Button, Switch} from "antd";
 import {CategoryModel} from "../../model";
 import {useAppDispatch} from "../../store/hooks";
 import {getCategoryList,toggleVisible} from '../../store/slices/cateogrySlice';
+import {useHistory} from "react-router-dom";
 
 function CategorySetting(props: { record: CategoryModel }) {
     const {record} = props
+    let history = useHistory();
     const dispatch = useAppDispatch();
     const onShowNextLevelClicked = () => {
-        dispatch(getCategoryList({currentPage: 0, pageSize: 20, example: {parent: record.id}}));
+        // history.push("category/"+ record.id,{})
+        dispatch(getCategoryList({currentPage: 0, pageSize: 100, example: {parent: record.id}}));
     }
+
 
     const onVisibleChanged = () => {
         dispatch(toggleVisible(record))

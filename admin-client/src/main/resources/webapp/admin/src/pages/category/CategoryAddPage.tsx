@@ -1,84 +1,110 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
+import {InputNumber, message, TreeSelect, Typography} from 'antd';
+import {Form, Input, Button, Radio} from 'antd';
+import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {
-    Form,
-    Input,
-    Button,
-    Radio,
-    Select,
-    Cascader,
-    DatePicker,
-    InputNumber,
-    TreeSelect,
-    Switch,
-} from 'antd';
+    getCategoryList, selectCategoryReducer,
+} from "../../store/slices/cateogrySlice";
+import {addCategoryAPI} from "../../store/api/CategoryAPI";
+import {CategoryTree, convertToTreeStyle} from "./CategoryConvertor";
 
-type SizeType = Parameters<typeof Form>[0]['size'];
+const {Title} = Typography;
+
+const formItemLayout = {
+    labelCol: {
+        xs: {span: 24},
+        sm: {span: 4, offset: 1},
+    },
+    wrapperCol: {
+        xs: {span: 24},
+        sm: {span: 16},
+    },
+};
+const tailFormItemLayout = {
+    wrapperCol: {
+        xs: {
+            span: 24,
+            offset: 0,
+        },
+        sm: {
+            span: 20,
+            offset: 5,
+        },
+    },
+};
+
+
 const CategoryAddPage = () => {
-    console.log("add page")
-    const [componentSize, setComponentSize] = useState<SizeType | 'default'>('default');
-    const onFormLayoutChange = ({ size }: { size: SizeType }) => {
-        setComponentSize(size);
+    const [categories, setCategories] = useState(new Array<CategoryTree>());
+    const [form] = Form.useForm();
+
+    const dispatch = useAppDispatch();
+    const hierarchyCategories = useAppSelector(selectCategoryReducer);
+    useEffect(() => {
+        dispatch(getCategoryList({currentPage: 0, pageSize: 20}))
+    }, [dispatch]);
+    useEffect(() => {
+       const topLevelTree = convertToTreeStyle(hierarchyCategories.categoryList.data?.items);
+        setCategories(topLevelTree);
+    }, [hierarchyCategories]);
+
+    const onFinish = (values: any) => {
+        values.parent = values.parent[values.parent.length-1]
+        const hide = message.loading("添加中...",0)
+        addCategoryAPI(values).then(response => {
+            hide();
+            dispatch(getCategoryList({currentPage: 0, pageSize: 20}))
+            form.resetFields();
+            message.success("添加成功")
+        }).catch(reason => {
+            hide();
+            message.error("添加失败,原因:"+reason.errorMsg);
+        });
     };
+
+
     return (
+        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%'}}>
+            <Title style={{marginBottom: '30px', marginTop: '10px'}}>种类添加</Title>
             <Form
-                labelCol={{ span: 4 }}
-                wrapperCol={{ span: 14 }}
+                form={form}
+                style={{width: '100%'}}
+                {...formItemLayout}
                 layout="horizontal"
-                initialValues={{ size: componentSize }}
-                onValuesChange={onFormLayoutChange}
-                size={componentSize as SizeType}
+                onFinish={onFinish}
             >
-                <Form.Item label="Form Size" name="size">
+                <Form.Item label="种类名称" name="name"
+                           rules={[{message: "种类名称不能为空", required: true}]}
+                >
+                    <Input/>
+                </Form.Item>
+                <Form.Item label="父种类" name="parent" initialValue={"0"}>
+                    <TreeSelect  notFoundContent={<div>数据加载错误,请检查网络</div>}
+                                 treeData={categories}
+                    />
+                </Form.Item>
+                <Form.Item label="是否显示" name="visible" initialValue={"true"}>
                     <Radio.Group>
-                        <Radio.Button value="small">Small</Radio.Button>
-                        <Radio.Button value="default">Default</Radio.Button>
-                        <Radio.Button value="large">Large</Radio.Button>
+                        <Radio.Button value="true">显示</Radio.Button>
+                        <Radio.Button value="false">隐藏</Radio.Button>
                     </Radio.Group>
                 </Form.Item>
-                <Form.Item label="Input">
-                    <Input />
+                <Form.Item label="排序" name="priority" initialValue={0}>
+                    <InputNumber max={9999} min={0}/>
                 </Form.Item>
-                <Form.Item label="Select">
-                    <Select>
-                        <Select.Option value="demo">Demo</Select.Option>
-                    </Select>
+                <Form.Item label="后缀单位" name={"suffix"}>
+                    <Input/>
                 </Form.Item>
-                <Form.Item label="TreeSelect">
-                    <TreeSelect
-                        treeData={[
-                            { title: 'Light', value: 'light', children: [{ title: 'Bamboo', value: 'bamboo' }] },
-                        ]}
-                    />
+                <Form.Item label="keyword" name="keyword">
+                    <Input/>
                 </Form.Item>
-                <Form.Item label="Cascader">
-                    <Cascader
-                        options={[
-                            {
-                                value: 'zhejiang',
-                                label: 'Zhejiang',
-                                children: [
-                                    {
-                                        value: 'hangzhou',
-                                        label: 'Hangzhou',
-                                    },
-                                ],
-                            },
-                        ]}
-                    />
-                </Form.Item>
-                <Form.Item label="DatePicker">
-                    <DatePicker />
-                </Form.Item>
-                <Form.Item label="InputNumber">
-                    <InputNumber />
-                </Form.Item>
-                <Form.Item label="Switch">
-                    <Switch />
-                </Form.Item>
-                <Form.Item label="Button">
-                    <Button>Button</Button>
+                <Form.Item  {...tailFormItemLayout}>
+                    <Button type="primary" htmlType="submit">
+                        Submit
+                    </Button>
                 </Form.Item>
             </Form>
+        </div>
     );
 };
 

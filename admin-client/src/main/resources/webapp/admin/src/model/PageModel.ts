@@ -1,7 +1,7 @@
 export interface PageModel<Item>{
     currentPage:number;
     pageSize: number;
-        items:Array<Item>;
+    items:Array<Item>;
     totalPages:number;
     totalElements:number;
     isEmpty:boolean;

@@ -11,7 +11,7 @@ class HomePage extends Component<PropsFromRedux> {
 
 
     componentDidMount() {
-        this.props.getHomeInfo({});
+        this.props.getHomeInfo(null);
     }
 
     render() {

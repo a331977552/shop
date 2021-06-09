@@ -12,6 +12,7 @@ export interface CategoryModel {
     priority: number;
     suffix: string;
     keyword: string;
+    children?:Array<CategoryModel>
 }
 
 export interface CategoryQueryVO {

@@ -4,11 +4,13 @@ import {deleteCategoryAPI} from "../../store/api/CategoryAPI";
 import {CategoryModel} from "../../model";
 import {useAppDispatch} from "../../store/hooks";
 import {deleteCategoryByID} from '../../store/slices/cateogrySlice';
+import {useHistory} from "react-router-dom";
 
-function CategoryDeletion(props: { record: CategoryModel }) {
+function CategoryOperation(props: { record: CategoryModel }) {
     const [loading, setLoading] = useState(false);
     const [visible, setVisible] = useState(false);
     const dispatch = useAppDispatch();
+    const history = useHistory();
     const onCategoryDeleteClicked = () => {
         setLoading(true);
         setVisible(true);
@@ -17,19 +19,22 @@ function CategoryDeletion(props: { record: CategoryModel }) {
             dispatch(deleteCategoryByID(props.record));
         }).catch(err => {
             setLoading(false);
+            setVisible(false);
             message.error(err.msgDetail, 3)
         });
-
-
     }
 
-    function onDeleteClicked() {
+    const onDeleteClicked = () => {
         setVisible(true);
-    }
+    };
 
-    function onCancelClick() {
+    const onCancelClick = () => {
         setVisible(false)
-    }
+    };
+
+    const onUpdateClick = () => {
+            history.push("category/update/"+props.record.id)
+    };
 
     return <Space size={"small"}>
         <Popconfirm title={"确认要删除吗?"} visible={visible} okButtonProps={{loading}}
@@ -37,7 +42,7 @@ function CategoryDeletion(props: { record: CategoryModel }) {
             <Button size={"small"}
                     onClick={onDeleteClicked}
                     type={'link'}>删除</Button></Popconfirm>
-        <Button size={"small"} type={'link'}>更新</Button></Space>
+        <Button size={"small"} type={'link'} onClick={onUpdateClick}>更新</Button></Space>
 }
 
-export default CategoryDeletion;
+export default CategoryOperation;

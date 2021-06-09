@@ -11,10 +11,10 @@ const initialState: GenericState<ProductListModel> = {
 };
 
 
-export const getProductList = createAsyncThunk<ResultModel<ProductListModel>, {}, ErrorModel>
+export const getProductList = createAsyncThunk<ResultModel<ProductListModel>, null, ErrorModel>
 (
     'product/list',
-    async ({}, {rejectWithValue}) => {
+    async (foo, {rejectWithValue}) => {
         try {
             return await getProductListAPI();
         } catch (errorResult) {
@@ -45,5 +45,5 @@ export const productSlice = createGenericSlice({
 
 export const selectProductReducer = (state: RootState) => state.product;
 
-export const {} = productSlice.actions;
+// export const {} = productSlice.actions;
 export default productSlice.reducer;

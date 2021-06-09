@@ -23,10 +23,10 @@ export const login = createAsyncThunk<ResultModel<string>, AuthenticationModel, 
     },
 );
 
-export const getUserInfo = createAsyncThunk<ResultModel<UserModel>, {}, ErrorModel>
+export const getUserInfo = createAsyncThunk<ResultModel<UserModel>, null, ErrorModel>
 (
     'user/get',
-    async ({}, {rejectWithValue}) => {
+    async (foo, {rejectWithValue}) => {
         try {
             return await getUserInfoAPI();
         } catch (errorResult) {

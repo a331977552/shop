@@ -16,39 +16,36 @@ function App() {
     const dispatch = useAppDispatch();
 
     const user = useAppSelector(selectUserReducer);
-    const token = getTokenFromStorage();
 
     useEffect(() => {
         const token = getTokenFromStorage();
-        if (token){
-            dispatch(getUserInfo({}));
+        if (token) {
+            dispatch(getUserInfo(null));
         }
-    }, [dispatch])
-
-    if (token === null) {
-        history.push("/login");
-        return <></>
-    }
-
+        if (token === null) {
+            history.push("/login");
+        }
+    }, [dispatch,history])
 
     function onRetryClick() {
-        dispatch(getUserInfo({}));
+        dispatch(getUserInfo(null));
     }
+
     const status = user.status;
 
     return (
         <Spin tip={"loading..."} style={{height: '100vh', width: '100%'}}
               spinning={(status === 'loading')}>
             <Layout style={{height: '100vh', display: 'flex'}}>
-                {status ===  'finished' && (<>
+                {status === 'finished' && (<>
                     <DrawerLeft/>
                     <Layout>
-                        <AppHeader id={123}/>
+                        <AppHeader/>
                         <ContentMain/>
                         <AppFooter/>
                     </Layout></>)
                 }
-                {status ===  'error' &&
+                {status === 'error' &&
                 <div style={{
                     height: '100%', width: '100%', display: 'flex', flexDirection: 'column',
                     justifyContent: 'center', textAlign: "center",

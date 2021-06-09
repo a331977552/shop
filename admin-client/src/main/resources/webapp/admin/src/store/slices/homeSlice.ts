@@ -11,10 +11,10 @@ const initialState: GenericState<HomeModel> = {
 };
 
 
-export const getHomeInfo = createAsyncThunk<ResultModel<HomeModel>, {}, ErrorModel>
+export const getHomeInfo = createAsyncThunk<ResultModel<HomeModel>, null, ErrorModel>
 (
     'home/getInfo',
-    async ({}, {rejectWithValue}) => {
+    async (foo, {rejectWithValue}) => {
         try {
             return await getHomeInfoAPI();
         } catch (errorResult) {
