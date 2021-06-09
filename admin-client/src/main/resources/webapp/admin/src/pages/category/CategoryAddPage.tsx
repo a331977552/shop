@@ -49,7 +49,8 @@ const CategoryAddPage = () => {
     }, [hierarchyCategories]);
 
     const onFinish = (values: any) => {
-        values.parent = values.parent[values.parent.length-1]
+        console.log(values)
+        values.parent = +values.parent;
         const hide = message.loading("添加中...",0)
         addCategoryAPI(values).then(response => {
             hide();

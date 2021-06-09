@@ -58,7 +58,6 @@ const CategoryUpdatePage = () => {
         }
     }, [hierarchyCategories, setCategories, setCategory, cateID]);
     const onFinish = (values: any) => {
-        console.log(values)
         values.parent = +values.parent;
         const hide = message.loading("更新中...", 0)
         updateCategoryAPI(values).then(response => {

@@ -7,9 +7,10 @@ export interface CategoryTree {
 }
 
 function transformData(parent: CategoryModel,ignore?:number) {
+    console.log(ignore)
     return (parent.children || []).filter(item=>item.id !== ignore).map((child, index) => {
         const parent = {value: child.id + "", title: child.name} as CategoryTree;
-        parent.children = transformData(child);
+        parent.children = transformData(child,ignore);
         return parent;
     })
 }
