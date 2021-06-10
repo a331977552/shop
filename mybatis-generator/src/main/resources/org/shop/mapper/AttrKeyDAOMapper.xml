@@ -105,7 +105,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="org.shop.model.dao.AttrKeyDAO" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+  <insert id="insert" parameterType="org.shop.model.dao.AttrKeyDAO">
     insert into attr_key (id, name, select_type, 
       entry_method, category_id, sort, 
       searchable, searchType, created_time, 

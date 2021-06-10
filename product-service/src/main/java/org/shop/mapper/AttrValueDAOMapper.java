@@ -6,6 +6,7 @@ import org.shop.model.dao.AttrValueDAO;
 import org.shop.model.dao.AttrValueDAOExample;
 
 import java.util.List;
+
 @Mapper
 public interface AttrValueDAOMapper {
     long countByExample(AttrValueDAOExample example);

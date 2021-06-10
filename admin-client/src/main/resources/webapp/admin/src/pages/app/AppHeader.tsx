@@ -17,13 +17,13 @@ const StyledSpan = styled.span`
 `
 
 const AppHeader = (props:any) => {
-    const user = useAppSelector(selectUser) as UserModel;
+    const user = useAppSelector(selectUser)?.result;
     return (
         <Header style={{display: 'flex',height:'50px', padding: '0 30px'}}>
             <div style={{backgroundColor: 'white', width: 200, height: 34, alignSelf: "center"}}/>
             <div style={{flex: '1 0 0px'}}/>
             <div style={{display: 'flex'}}>
-                 <StyledSpan > {user.alias}</StyledSpan>
+                 <StyledSpan > {user?.alias}</StyledSpan>
             </div>
         </Header>
     );

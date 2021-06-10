@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.shop.mapper.AttrKeyDAOMapper">
-  <resultMap id="BaseResultMap" type="org.shop.model.dao.AttrKeyDAO">
+<mapper namespace="org.shop.mapper.ProductSpecDAOMapper">
+  <resultMap id="BaseResultMap" type="org.shop.model.dao.ProductSpecDAO">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="select_type" jdbcType="CHAR" property="selectType" />
@@ -9,9 +9,9 @@
     <result column="category_id" jdbcType="INTEGER" property="categoryId" />
     <result column="sort" jdbcType="INTEGER" property="sort" />
     <result column="searchable" jdbcType="BIT" property="searchable" />
-    <result column="searchType" jdbcType="CHAR" property="searchtype" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+    <result column="value" jdbcType="VARCHAR" property="value" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -72,16 +72,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, select_type, entry_method, category_id, sort, searchable, searchType, created_time, 
-    updated_time
+    id, name, select_type, entry_method, category_id, sort, searchable, created_time, 
+    updated_time, value
   </sql>
-  <select id="selectByExample" parameterType="org.shop.model.dao.AttrKeyDAOExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="org.shop.model.dao.ProductSpecDAOExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from attr_key
+    from product_spec
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -92,31 +92,31 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from attr_key
+    from product_spec
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from attr_key
+    delete from product_spec
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="org.shop.model.dao.AttrKeyDAOExample">
-    delete from attr_key
+  <delete id="deleteByExample" parameterType="org.shop.model.dao.ProductSpecDAOExample">
+    delete from product_spec
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="org.shop.model.dao.AttrKeyDAO" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
-    insert into attr_key (id, name, select_type, 
+  <insert id="insert" parameterType="org.shop.model.dao.ProductSpecDAO">
+    insert into product_spec (id, name, select_type, 
       entry_method, category_id, sort, 
-      searchable, searchType, created_time, 
-      updated_time)
+      searchable, created_time, updated_time, 
+      value)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{selectType,jdbcType=CHAR}, 
       #{entryMethod,jdbcType=CHAR}, #{categoryId,jdbcType=INTEGER}, #{sort,jdbcType=INTEGER}, 
-      #{searchable,jdbcType=BIT}, #{searchtype,jdbcType=CHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{updatedTime,jdbcType=TIMESTAMP})
+      #{searchable,jdbcType=BIT}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, 
+      #{value,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="org.shop.model.dao.AttrKeyDAO">
-    insert into attr_key
+  <insert id="insertSelective" parameterType="org.shop.model.dao.ProductSpecDAO">
+    insert into product_spec
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -139,14 +139,14 @@
       <if test="searchable != null">
         searchable,
       </if>
-      <if test="searchtype != null">
-        searchType,
-      </if>
       <if test="createdTime != null">
         created_time,
       </if>
       <if test="updatedTime != null">
         updated_time,
+      </if>
+      <if test="value != null">
+        value,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -171,25 +171,25 @@
       <if test="searchable != null">
         #{searchable,jdbcType=BIT},
       </if>
-      <if test="searchtype != null">
-        #{searchtype,jdbcType=CHAR},
-      </if>
       <if test="createdTime != null">
         #{createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updatedTime != null">
         #{updatedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="value != null">
+        #{value,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="org.shop.model.dao.AttrKeyDAOExample" resultType="java.lang.Long">
-    select count(*) from attr_key
+  <select id="countByExample" parameterType="org.shop.model.dao.ProductSpecDAOExample" resultType="java.lang.Long">
+    select count(*) from product_spec
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update attr_key
+    update product_spec
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
@@ -212,14 +212,14 @@
       <if test="record.searchable != null">
         searchable = #{record.searchable,jdbcType=BIT},
       </if>
-      <if test="record.searchtype != null">
-        searchType = #{record.searchtype,jdbcType=CHAR},
-      </if>
       <if test="record.createdTime != null">
         created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.updatedTime != null">
         updated_time = #{record.updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.value != null">
+        value = #{record.value,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -227,7 +227,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update attr_key
+    update product_spec
     set id = #{record.id,jdbcType=INTEGER},
       name = #{record.name,jdbcType=VARCHAR},
       select_type = #{record.selectType,jdbcType=CHAR},
@@ -235,15 +235,15 @@
       category_id = #{record.categoryId,jdbcType=INTEGER},
       sort = #{record.sort,jdbcType=INTEGER},
       searchable = #{record.searchable,jdbcType=BIT},
-      searchType = #{record.searchtype,jdbcType=CHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
-      updated_time = #{record.updatedTime,jdbcType=TIMESTAMP}
+      updated_time = #{record.updatedTime,jdbcType=TIMESTAMP},
+      value = #{record.value,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="org.shop.model.dao.AttrKeyDAO">
-    update attr_key
+  <update id="updateByPrimaryKeySelective" parameterType="org.shop.model.dao.ProductSpecDAO">
+    update product_spec
     <set>
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
@@ -263,29 +263,29 @@
       <if test="searchable != null">
         searchable = #{searchable,jdbcType=BIT},
       </if>
-      <if test="searchtype != null">
-        searchType = #{searchtype,jdbcType=CHAR},
-      </if>
       <if test="createdTime != null">
         created_time = #{createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updatedTime != null">
         updated_time = #{updatedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="value != null">
+        value = #{value,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="org.shop.model.dao.AttrKeyDAO">
-    update attr_key
+  <update id="updateByPrimaryKey" parameterType="org.shop.model.dao.ProductSpecDAO">
+    update product_spec
     set name = #{name,jdbcType=VARCHAR},
       select_type = #{selectType,jdbcType=CHAR},
       entry_method = #{entryMethod,jdbcType=CHAR},
       category_id = #{categoryId,jdbcType=INTEGER},
       sort = #{sort,jdbcType=INTEGER},
       searchable = #{searchable,jdbcType=BIT},
-      searchType = #{searchtype,jdbcType=CHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
-      updated_time = #{updatedTime,jdbcType=TIMESTAMP}
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      value = #{value,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

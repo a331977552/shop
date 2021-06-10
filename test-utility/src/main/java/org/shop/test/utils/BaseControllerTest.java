@@ -34,7 +34,7 @@ public abstract class BaseControllerTest<returnVO> {
 
 	protected abstract ParameterizedTypeReference<Result<returnVO>> getParameterTypeRef();
 
-	protected ParameterizedTypeReference<String> strRef = new ParameterizedTypeReference<String>() {};
+	protected ParameterizedTypeReference<String> strRef = new ParameterizedTypeReference<>() {};
 	protected ParameterizedTypeReference<Result<String>> strResultRef = new ParameterizedTypeReference<Result<String>>() {};
 	protected String getToken() {
 		final ResponseEntity<Result<String>> post = helper.loginWithDefault();

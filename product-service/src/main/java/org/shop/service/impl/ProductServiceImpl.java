@@ -1,4 +1,4 @@
-package org.shop.service.imp;
+package org.shop.service.impl;
 
 import lombok.extern.log4j.Log4j2;
 import org.shop.common.util.BeanConvertor;

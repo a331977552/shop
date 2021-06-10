@@ -12,9 +12,4 @@ public class AttributeValueReturnVO {
 
 	private String value;
 
-	private String img;
-
-	private Integer sort;
-
-
 }

@@ -1,7 +1,8 @@
-package org.shop.service.imp;
+package org.shop.service.impl;
 
 import org.shop.common.util.*;
 import org.shop.exception.CategoryDeletionFailureException;
+import org.shop.exception.CategoryException;
 import org.shop.exception.MaliciousAttackException;
 import org.shop.mapper.CategoryDAOMapper;
 import org.shop.model.dao.CategoryDAO;
@@ -132,9 +133,7 @@ public class CategoryServiceImpl implements CategoryService, ModelConvertor<Cate
 	public CategoryReturnVO getCategoryById(Integer id) {
 		CategoryDAO one = mapper.selectByPrimaryKey(id);
 		if (one == null) {
-			final CategoryReturnVO categoryReturnVO = new CategoryReturnVO();
-			categoryReturnVO.setName("已删除");
-			categoryReturnVO.setId(-1);
+			throw new CategoryException("category with id "+ id +"doesn't exist");
 		}
 		return convertToReturnVO(one, CategoryReturnVO::new);
 	}

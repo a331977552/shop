@@ -12,27 +12,27 @@ import './index.css'
 
 function App() {
 
-    let history = useHistory();
+    const history = useHistory();
     const dispatch = useAppDispatch();
-
     const user = useAppSelector(selectUserReducer);
-
+    const code = user.data?.code;
     useEffect(() => {
+        loadUserOrRedirect();
+    }, [dispatch, history])
+
+    function loadUserOrRedirect() {
         const token = getTokenFromStorage();
-        if (token) {
-            dispatch(getUserInfo(null));
-        }
         if (token === null) {
             history.push("/login");
+        } else if (token) {
+            dispatch(getUserInfo(null));
         }
-    }, [dispatch,history])
-
-    function onRetryClick() {
-        dispatch(getUserInfo(null));
     }
 
     const status = user.status;
-
+    if (code === 401) {
+        history.push("/login");
+    }
     return (
         <Spin tip={"loading..."} style={{height: '100vh', width: '100%'}}
               spinning={(status === 'loading')}>
@@ -53,7 +53,7 @@ function App() {
                 }}>
                     <h3>network error, please retry </h3>
                     <h4>{user.errorMsg}</h4>
-                    <Button style={{width: '200px'}} onClick={onRetryClick}>retry</Button>
+                    <Button style={{width: '200px'}} onClick={loadUserOrRedirect}>retry</Button>
                 </div>}
             </Layout>
         </Spin>)

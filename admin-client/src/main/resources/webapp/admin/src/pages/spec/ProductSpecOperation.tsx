@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import {Button, message, Popconfirm, Space} from "antd";
-import {deleteCategoryAPI} from "../../store/api/CategoryAPI";
-import {CategoryModel} from "../../model";
+import {ProductSpecModel} from "../../model";
 import {useAppDispatch} from "../../store/hooks";
-import {deleteCategoryByID} from '../../store/slices/cateogrySlice';
 import {useHistory} from "react-router-dom";
+import {deleteProductSpecAPI} from "../../store/api/ProductSpecAPI";
+import {deleteProductSpecByIdLocally} from '../../store/slices/productSpecSlice';
 
-function CategoryOperation(props: { record: CategoryModel }) {
+function ProductSpecOperation(props: { record: ProductSpecModel }) {
     const [loading, setLoading] = useState(false);
     const [visible, setVisible] = useState(false);
     const dispatch = useAppDispatch();
@@ -14,9 +14,9 @@ function CategoryOperation(props: { record: CategoryModel }) {
     const onCategoryDeleteClicked = () => {
         setLoading(true);
         setVisible(true);
-        deleteCategoryAPI(props.record.id).then(res => {
+        deleteProductSpecAPI(props.record.id).then(res => {
             message.success("删除成功!", 1)
-            dispatch(deleteCategoryByID(props.record));
+            dispatch(deleteProductSpecByIdLocally(props.record));
         }).catch(err => {
             setLoading(false);
             setVisible(false);
@@ -33,11 +33,11 @@ function CategoryOperation(props: { record: CategoryModel }) {
     };
 
     const onUpdateClick = () => {
-        history.push("category/update/" + props.record.id)
+        history.push("product/spec/update" + props.record.id)
     };
 
     return <Space size={"small"}>
-        <Popconfirm title={"确认要删除吗?"} visible={visible} okButtonProps={{loading}}
+        <Popconfirm title={"确认要删除吗?"} visible={visible} okButtonProps={{loading:loading}}
                     onConfirm={onCategoryDeleteClicked} onCancel={onCancelClick}>
             <Button size={"small"}
                     type={'link'}
@@ -50,4 +50,4 @@ function CategoryOperation(props: { record: CategoryModel }) {
                 style={{padding: '0px'}}>更新</Button></Space>
 }
 
-export default CategoryOperation;
+export default ProductSpecOperation;

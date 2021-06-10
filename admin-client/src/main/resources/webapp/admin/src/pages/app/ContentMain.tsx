@@ -6,6 +6,7 @@ import ProductListPage from "../product/ProductListPage";
 import CategoryPage from "../category/CategoryPage";
 import CategoryAddPage from "../category/CategoryAddPage";
 import CategoryUpdatePage from "../category/CategoryUpdatePage";
+import ProductSpecPage from "../spec/ProductSpecPage";
 
 const {Content} = Layout;
 
@@ -31,6 +32,14 @@ class ContentMain extends Component<ContentProps, {}> {
                     </Route>
 
                     <Route path={"/product/category/add"} exact={true}>
+                        <CategoryAddPage/>
+                    </Route>
+
+                    <Route path={"/product/spec/:cateID"} exact={true}>
+                        <ProductSpecPage/>
+                    </Route>
+
+                    <Route path={"/product/attr/:cateID"} exact={true}>
                         <CategoryAddPage/>
                     </Route>
 

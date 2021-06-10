@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController()
-@RequestMapping("/api/product/sku")
+@RequestMapping("/api/product/attr")
 public class SkuAttributeController {
 
 
 	@Autowired
 	AttributeService attributeService;
 
-	@PostMapping("/attr")
+	@PostMapping()
 	public ResponseEntity<Result<AttributeReturnVO>> addAttribute(@Valid @RequestBody AttributeAddVO vo, BindingResult result) {
 		if (result.hasErrors())
 			return ResponseEntity.badRequest().body(Result.badRequest(ErrorResultConvertor.getErrorMsg(result)));
@@ -45,7 +45,7 @@ public class SkuAttributeController {
 
 
 
-	@DeleteMapping("/attr/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity deleteAttr(@PathVariable(value = "id") Integer id) {
 		attributeService.deleteAttribute(id);
 		return ResponseEntity.ok().build();

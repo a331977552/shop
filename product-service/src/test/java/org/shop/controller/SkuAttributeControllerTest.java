@@ -16,7 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class SkuAttributeControllerTest extends BaseControllerTest {
+class SkuAttributeControllerTest extends BaseControllerTest<AttributeReturnVO> {
+
+
 
 
 	@Test
@@ -24,7 +26,11 @@ class SkuAttributeControllerTest extends BaseControllerTest {
 
 		AttributeAddVO addVO = new AttributeAddVO();
 		addVO.setName("颜色");
-		addVO.setCategoryid(7);
+		addVO.setCategoryId(7);
+		addVO.setSearchable(true);
+		addVO.setEntryMethod("selection");
+		addVO.setSelectType("single");
+		addVO.setSearchtype("color");
 		java.util.List<AttributeValueAddVO> list = new ArrayList<>();
 		AttributeValueAddVO vo = new AttributeValueAddVO();
 		vo.setValue("红色");
@@ -40,7 +46,7 @@ class SkuAttributeControllerTest extends BaseControllerTest {
 
 		final String token = getToken();
 		final ResponseEntity<Result<AttributeReturnVO>> post = helper.
-				setUIPath("/api/product/sku/attr").setPort(port).
+				setUIPath("/api/product/attr").setPort(port).
 				builder().withToken(token).build().post(addVO, resVOReturnRef);
 		System.out.println(post);
 		final AttributeReturnVO result = post.getBody().getResult();
@@ -60,32 +66,30 @@ class SkuAttributeControllerTest extends BaseControllerTest {
 	void addValue() {
 		final String token = this.getToken();
 		AttributeValueAddVO valueAddVO =new AttributeValueAddVO();
-
-		valueAddVO.setAttrKey(1);
+		valueAddVO.setAttrKey(3);
 		valueAddVO.setValue("彩色");
 		final ResponseEntity<Result<AttributeValueReturnVO>> post = helper.
-				setUIPath("/api/product/sku/value").setPort(port).
+				setUIPath("/api/product/attr/value").setPort(port).
 				builder().withToken(token).build().post(valueAddVO, getValueParameterTypeRef());
 		System.out.println(post);
 		final AttributeValueReturnVO result = post.getBody().getResult();
 		Assertions.assertEquals(200,post.getStatusCodeValue());
 		final Integer id = result.getId();
-		Assertions.assertEquals(true,id !=null);
+		Assertions.assertNotNull(id);
 		this.deleteValue(id,token);
 	}
 
 	void deleteValue(Integer id,String token) {
 		final ResponseEntity<Result<String>> post = helper.
-				setUIPath("/api/product/sku/value/"+id).setPort(port).
+				setUIPath("/api/product/attr/value/"+id).setPort(port).
 				builder().withToken(token).build().delete(strResultRef);
 		System.out.println(post);
 		Assertions.assertEquals(200,post.getStatusCodeValue());
 
 	}
 
-	@Test
 	void deleteAttr(Integer id,String token) {
-		final ResponseEntity<String> delete = helper.setUIPath("/api/product/sku/attr/"+id).setPort(port).builder().withToken(token).build()
+		final ResponseEntity<String> delete = helper.setUIPath("/api/product/attr/"+id).setPort(port).builder().withToken(token).build()
 				.delete(strRef);
 		Assertions.assertEquals(200, delete.getStatusCodeValue());
 	}

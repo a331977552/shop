@@ -5,8 +5,6 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="attr_key" jdbcType="INTEGER" property="attrKey" />
     <result column="value" jdbcType="VARCHAR" property="value" />
-    <result column="img" jdbcType="CHAR" property="img" />
-    <result column="sort" jdbcType="INTEGER" property="sort" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
   </resultMap>
@@ -69,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, attr_key, value, img, sort, created_time, updated_time
+    id, attr_key, value, created_time, updated_time
   </sql>
   <select id="selectByExample" parameterType="org.shop.model.dao.AttrValueDAOExample" resultMap="BaseResultMap">
     select
@@ -103,13 +101,11 @@
   </delete>
   <insert id="insert" parameterType="org.shop.model.dao.AttrValueDAO" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
     insert into attr_value (id, attr_key, value, 
-      img, sort, created_time, 
-      updated_time)
+      created_time, updated_time)
     values (#{id,jdbcType=INTEGER}, #{attrKey,jdbcType=INTEGER}, #{value,jdbcType=VARCHAR}, 
-      #{img,jdbcType=CHAR}, #{sort,jdbcType=INTEGER}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{updatedTime,jdbcType=TIMESTAMP})
+      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="org.shop.model.dao.AttrValueDAO" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+  <insert id="insertSelective" parameterType="org.shop.model.dao.AttrValueDAO" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
     insert into attr_value
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -120,12 +116,6 @@
       </if>
       <if test="value != null">
         value,
-      </if>
-      <if test="img != null">
-        img,
-      </if>
-      <if test="sort != null">
-        sort,
       </if>
       <if test="createdTime != null">
         created_time,
@@ -143,12 +133,6 @@
       </if>
       <if test="value != null">
         #{value,jdbcType=VARCHAR},
-      </if>
-      <if test="img != null">
-        #{img,jdbcType=CHAR},
-      </if>
-      <if test="sort != null">
-        #{sort,jdbcType=INTEGER},
       </if>
       <if test="createdTime != null">
         #{createdTime,jdbcType=TIMESTAMP},
@@ -176,12 +160,6 @@
       <if test="record.value != null">
         value = #{record.value,jdbcType=VARCHAR},
       </if>
-      <if test="record.img != null">
-        img = #{record.img,jdbcType=CHAR},
-      </if>
-      <if test="record.sort != null">
-        sort = #{record.sort,jdbcType=INTEGER},
-      </if>
       <if test="record.createdTime != null">
         created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
@@ -198,8 +176,6 @@
     set id = #{record.id,jdbcType=INTEGER},
       attr_key = #{record.attrKey,jdbcType=INTEGER},
       value = #{record.value,jdbcType=VARCHAR},
-      img = #{record.img,jdbcType=CHAR},
-      sort = #{record.sort,jdbcType=INTEGER},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       updated_time = #{record.updatedTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -215,12 +191,6 @@
       <if test="value != null">
         value = #{value,jdbcType=VARCHAR},
       </if>
-      <if test="img != null">
-        img = #{img,jdbcType=CHAR},
-      </if>
-      <if test="sort != null">
-        sort = #{sort,jdbcType=INTEGER},
-      </if>
       <if test="createdTime != null">
         created_time = #{createdTime,jdbcType=TIMESTAMP},
       </if>
@@ -234,8 +204,6 @@
     update attr_value
     set attr_key = #{attrKey,jdbcType=INTEGER},
       value = #{value,jdbcType=VARCHAR},
-      img = #{img,jdbcType=CHAR},
-      sort = #{sort,jdbcType=INTEGER},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       updated_time = #{updatedTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}

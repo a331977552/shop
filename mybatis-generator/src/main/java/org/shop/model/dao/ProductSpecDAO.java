@@ -2,7 +2,7 @@ package org.shop.model.dao;
 
 import java.time.LocalDateTime;
 
-public class AttrKeyDAO {
+public class ProductSpecDAO {
     private Integer id;
 
     private String name;
@@ -17,11 +17,11 @@ public class AttrKeyDAO {
 
     private Boolean searchable;
 
-    private String searchtype;
-
     private LocalDateTime createdTime;
 
     private LocalDateTime updatedTime;
+
+    private String value;
 
     public Integer getId() {
         return id;
@@ -79,14 +79,6 @@ public class AttrKeyDAO {
         this.searchable = searchable;
     }
 
-    public String getSearchtype() {
-        return searchtype;
-    }
-
-    public void setSearchtype(String searchtype) {
-        this.searchtype = searchtype;
-    }
-
     public LocalDateTime getCreatedTime() {
         return createdTime;
     }
@@ -101,5 +93,13 @@ public class AttrKeyDAO {
 
     public void setUpdatedTime(LocalDateTime updatedTime) {
         this.updatedTime = updatedTime;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 }

@@ -4,14 +4,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AttrKeyDAOExample {
+public class ProductSpecDAOExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public AttrKeyDAOExample() {
+    public ProductSpecDAOExample() {
         oredCriteria = new ArrayList<>();
     }
 
@@ -555,76 +555,6 @@ public class AttrKeyDAOExample {
             return (Criteria) this;
         }
 
-        public Criteria andSearchtypeIsNull() {
-            addCriterion("searchType is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andSearchtypeIsNotNull() {
-            addCriterion("searchType is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andSearchtypeEqualTo(String value) {
-            addCriterion("searchType =", value, "searchtype");
-            return (Criteria) this;
-        }
-
-        public Criteria andSearchtypeNotEqualTo(String value) {
-            addCriterion("searchType <>", value, "searchtype");
-            return (Criteria) this;
-        }
-
-        public Criteria andSearchtypeGreaterThan(String value) {
-            addCriterion("searchType >", value, "searchtype");
-            return (Criteria) this;
-        }
-
-        public Criteria andSearchtypeGreaterThanOrEqualTo(String value) {
-            addCriterion("searchType >=", value, "searchtype");
-            return (Criteria) this;
-        }
-
-        public Criteria andSearchtypeLessThan(String value) {
-            addCriterion("searchType <", value, "searchtype");
-            return (Criteria) this;
-        }
-
-        public Criteria andSearchtypeLessThanOrEqualTo(String value) {
-            addCriterion("searchType <=", value, "searchtype");
-            return (Criteria) this;
-        }
-
-        public Criteria andSearchtypeLike(String value) {
-            addCriterion("searchType like", value, "searchtype");
-            return (Criteria) this;
-        }
-
-        public Criteria andSearchtypeNotLike(String value) {
-            addCriterion("searchType not like", value, "searchtype");
-            return (Criteria) this;
-        }
-
-        public Criteria andSearchtypeIn(List<String> values) {
-            addCriterion("searchType in", values, "searchtype");
-            return (Criteria) this;
-        }
-
-        public Criteria andSearchtypeNotIn(List<String> values) {
-            addCriterion("searchType not in", values, "searchtype");
-            return (Criteria) this;
-        }
-
-        public Criteria andSearchtypeBetween(String value1, String value2) {
-            addCriterion("searchType between", value1, value2, "searchtype");
-            return (Criteria) this;
-        }
-
-        public Criteria andSearchtypeNotBetween(String value1, String value2) {
-            addCriterion("searchType not between", value1, value2, "searchtype");
-            return (Criteria) this;
-        }
-
         public Criteria andCreatedTimeIsNull() {
             addCriterion("created_time is null");
             return (Criteria) this;
@@ -742,6 +672,76 @@ public class AttrKeyDAOExample {
 
         public Criteria andUpdatedTimeNotBetween(LocalDateTime value1, LocalDateTime value2) {
             addCriterion("updated_time not between", value1, value2, "updatedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andValueIsNull() {
+            addCriterion("value is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andValueIsNotNull() {
+            addCriterion("value is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andValueEqualTo(String value) {
+            addCriterion("value =", value, "value");
+            return (Criteria) this;
+        }
+
+        public Criteria andValueNotEqualTo(String value) {
+            addCriterion("value <>", value, "value");
+            return (Criteria) this;
+        }
+
+        public Criteria andValueGreaterThan(String value) {
+            addCriterion("value >", value, "value");
+            return (Criteria) this;
+        }
+
+        public Criteria andValueGreaterThanOrEqualTo(String value) {
+            addCriterion("value >=", value, "value");
+            return (Criteria) this;
+        }
+
+        public Criteria andValueLessThan(String value) {
+            addCriterion("value <", value, "value");
+            return (Criteria) this;
+        }
+
+        public Criteria andValueLessThanOrEqualTo(String value) {
+            addCriterion("value <=", value, "value");
+            return (Criteria) this;
+        }
+
+        public Criteria andValueLike(String value) {
+            addCriterion("value like", value, "value");
+            return (Criteria) this;
+        }
+
+        public Criteria andValueNotLike(String value) {
+            addCriterion("value not like", value, "value");
+            return (Criteria) this;
+        }
+
+        public Criteria andValueIn(List<String> values) {
+            addCriterion("value in", values, "value");
+            return (Criteria) this;
+        }
+
+        public Criteria andValueNotIn(List<String> values) {
+            addCriterion("value not in", values, "value");
+            return (Criteria) this;
+        }
+
+        public Criteria andValueBetween(String value1, String value2) {
+            addCriterion("value between", value1, value2, "value");
+            return (Criteria) this;
+        }
+
+        public Criteria andValueNotBetween(String value1, String value2) {
+            addCriterion("value not between", value1, value2, "value");
             return (Criteria) this;
         }
     }

@@ -40,7 +40,7 @@ public class TestHttpClient {
 	}
 
 	public <T> ResponseEntity<T> delete(ParameterizedTypeReference<T> reference) {
-		return this.exchange(new HttpHeaders(),HttpMethod.DELETE, null, reference,null);
+		return (ResponseEntity<T>)this.exchange(new HttpHeaders(),HttpMethod.DELETE, null, reference,null);
 	}
 
 	public <T> ResponseEntity<T> post(HttpHeaders headers, Object obj, ParameterizedTypeReference<T> reference) {

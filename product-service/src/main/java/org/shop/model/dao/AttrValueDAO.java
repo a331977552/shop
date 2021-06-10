@@ -9,10 +9,6 @@ public class AttrValueDAO {
 
     private String value;
 
-    private String img;
-
-    private Integer sort;
-
     private LocalDateTime createdTime;
 
     private LocalDateTime updatedTime;
@@ -39,22 +35,6 @@ public class AttrValueDAO {
 
     public void setValue(String value) {
         this.value = value;
-    }
-
-    public String getImg() {
-        return img;
-    }
-
-    public void setImg(String img) {
-        this.img = img;
-    }
-
-    public Integer getSort() {
-        return sort;
-    }
-
-    public void setSort(Integer sort) {
-        this.sort = sort;
     }
 
     public LocalDateTime getCreatedTime() {

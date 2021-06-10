@@ -13,6 +13,5 @@ public class AttributeValueAddVO {
 	private Integer attrKey;
 	@NotBlank
 	private String value;
-	private String img;
-	private Integer sort;
+
 }

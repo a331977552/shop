@@ -8,6 +8,7 @@ import CategoryOperation from "./CategoryOperation";
 import CategorySetting from "./CategorySetting";
 import {withRouter} from "react-router";
 import {RouteComponentProps} from "react-router";
+import CategoryArgs from "./CategoryArgs";
 
 
 const levelColor = [
@@ -67,6 +68,14 @@ const columns = [
         }
     },
     {
+        title: '属性设置',
+        dataIndex: '',
+        key: 'y',
+        render: (text: string, record: CategoryModel, index: number) => {
+            return <CategoryArgs {...record}/>
+        }
+    },
+    {
         fixed: false,
         title: '操作',
         dataIndex: '',
@@ -111,10 +120,6 @@ class CategoryPage extends Component<PropsFromRedux> {
                                dataSource={data?.items}
                                columns={columns}
                                pagination={{defaultPageSize: 20, total: categoryList.data?.totalElements}}
-                               expandable={{
-                                   rowExpandable: (record: CategoryModel) => false
-
-                               }}
                         />
                     </div>
                 </div>

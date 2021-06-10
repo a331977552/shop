@@ -1,22 +1,24 @@
-package org.shop.service.imp;
+package org.shop.service.impl;
 
 import org.shop.common.util.BeanConvertor;
+import org.shop.exception.AttributeOperationException;
 import org.shop.mapper.AttrKeyDAOMapper;
 import org.shop.mapper.AttrValueDAOMapper;
+import org.shop.mapper.CategoryDAOMapper;
 import org.shop.model.dao.AttrKeyDAO;
 import org.shop.model.dao.AttrKeyDAOExample;
 import org.shop.model.dao.AttrValueDAO;
 import org.shop.model.dao.AttrValueDAOExample;
-import org.shop.model.vo.AttributeAddVO;
-import org.shop.model.vo.AttributeReturnVO;
-import org.shop.model.vo.AttributeValueAddVO;
-import org.shop.model.vo.AttributeValueReturnVO;
+import org.shop.model.vo.*;
 import org.shop.service.AttributeService;
+import org.shop.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -26,24 +28,32 @@ public class AttributeServiceImpl implements AttributeService {
 	AttrKeyDAOMapper keyMapper;
 	@Autowired
 	AttrValueDAOMapper valueMapper;
-
+	@Autowired
+	CategoryService service;
+	@Autowired
+	CategoryDAOMapper mapper;
 	@Override
 	@Transactional
 	public AttributeReturnVO addAttribute(AttributeAddVO attrVO) {
+		//check if category exists
+		final CategoryReturnVO category = service.getCategoryById(attrVO.getCategoryId());
 
-		final AttrKeyDAO attrKeyDAO = new AttrKeyDAO();
-		attrKeyDAO.setCategoryid(attrVO.getCategoryid());
-		attrKeyDAO.setName(attrVO.getName());
-		keyMapper.insertSelective(attrKeyDAO);
-
+		final AttrKeyDAO attrKeyDAO = BeanConvertor.convert(attrVO, AttrKeyDAO.class);
+		attrKeyDAO.setCreatedTime(LocalDateTime.now());
+		attrKeyDAO.setUpdatedTime(LocalDateTime.now());
+		keyMapper.insert(attrKeyDAO);
 		final AttributeReturnVO attributeReturnVO = BeanConvertor.convert(attrKeyDAO, AttributeReturnVO.class);
-		final List<AttributeValueAddVO> valueVOList = attrVO.getValueVOList();
-		final List<AttributeValueReturnVO> attributeValueReturnVOS = new ArrayList<>();
-		for (AttributeValueAddVO vo : valueVOList) {
-			vo.setAttrKey(attrKeyDAO.getId());
-			attributeValueReturnVOS.add(this.addAttrValue(vo));
+		if(attrKeyDAO.getEntryMethod().equals("selection")){
+			final List<AttributeValueAddVO> valueVOList = attrVO.getValueVOList();
+			final List<AttributeValueReturnVO> attributeValueReturnVOS = new ArrayList<>();
+			for (AttributeValueAddVO vo : valueVOList) {
+				vo.setAttrKey(attrKeyDAO.getId());
+				attributeValueReturnVOS.add(this.addAttrValue(vo));
+			}
+			attributeReturnVO.setValues(attributeValueReturnVOS);
+		}else {
+			attributeReturnVO.setValues(Collections.emptyList());
 		}
-		attributeReturnVO.setValues(attributeValueReturnVOS);
 		return attributeReturnVO;
 	}
 
@@ -51,6 +61,10 @@ public class AttributeServiceImpl implements AttributeService {
 	@Override
 	public AttributeValueReturnVO addAttrValue(AttributeValueAddVO vo) {
 		final AttrValueDAO valDao = BeanConvertor.convert(vo, AttrValueDAO.class);
+		final Integer attrKey = vo.getAttrKey();
+		final AttrKeyDAO attrKeyDAO = keyMapper.selectByPrimaryKey(attrKey);
+		if(attrKeyDAO == null )
+			throw new AttributeOperationException("attr key: "+ attrKey +" doesn't exist");
 		valueMapper.insertSelective(valDao);
 		return BeanConvertor.convert(valDao, AttributeValueReturnVO.class);
 	}
@@ -73,7 +87,7 @@ public class AttributeServiceImpl implements AttributeService {
 	@Override
 	public List<AttributeReturnVO> getAttributeByCategoryID(Integer categoryID) {
 		AttrKeyDAOExample example = new AttrKeyDAOExample();
-		example.createCriteria().andCategoryidEqualTo(categoryID);
+		example.createCriteria().andCategoryIdEqualTo(categoryID);
 		List<AttrKeyDAO> attrKeyDAOS = keyMapper.selectByExample(example);
 		final List<AttributeReturnVO> convert = BeanConvertor.convert(attrKeyDAOS, AttributeReturnVO.class);
 		for (AttributeReturnVO returnVO : convert) {

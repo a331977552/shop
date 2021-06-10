@@ -6,7 +6,7 @@ import {getUserInfoAPI, loginAPI} from "../api";
 import {createGenericSlice, GenericState} from "../hooks";
 import {AuthenticationModel, ResultModel, UserModel,ErrorModel} from "../../model";
 
-const initialState: GenericState<UserModel> = {
+const initialState: GenericState<ResultModel<UserModel>> = {
     status: "loading"
 };
 
@@ -55,7 +55,7 @@ export const userSlice = createGenericSlice(
                 })
                 .addCase(getUserInfo.fulfilled, (state, action) => {
                     state.status = 'finished';
-                    state.data = action.payload.result;
+                    state.data = action.payload;
                 })
                 .addCase(getUserInfo.rejected, (state, action) => {
                     state.status = 'error';
