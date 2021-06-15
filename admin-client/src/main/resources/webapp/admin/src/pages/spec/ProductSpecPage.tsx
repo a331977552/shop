@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {Tag, Space, Button, Table, message, Result} from "antd";
+import {Tag, Space, Button, Table} from "antd";
 import {CategoryModel, ProductSpecModel} from "../../model";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {getProductSpecList, selectProductSpecReducer} from "../../store/slices/productSpecSlice";
-import {useParams, useHistory} from "react-router-dom";
+import { useHistory} from "react-router-dom";
 import ProductSpecOperation from "./ProductSpecOperation";
 import {selectCategoryDataReducer} from "../../store/slices/cateogrySlice";
 import {findCategoryByID} from "../category/CategoryConvertor";
@@ -84,7 +84,7 @@ function ProductSpecPage() {
     useEffect(() => {
         setCategory(findCategoryByID(cate, +cateID));
         appDispatch(getProductSpecList({example: {categoryId: +cateID}}))
-    }, [appDispatch]);
+    }, [appDispatch,cateID,setCategory,cate]);
     const {data, errorMsg, status} = spec;
 
     function onAddClick() {

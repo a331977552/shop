@@ -2,14 +2,13 @@ import React, {useEffect, useState} from 'react';
 import {Tag, Space, Button, Table} from "antd";
 import {CategoryModel, ProductAttrModel} from "../../model";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
-import {useParams, useHistory} from "react-router-dom";
+import { useHistory} from "react-router-dom";
 import ProductSpecOperation from "./ProductAttrOperation";
 import {selectCategoryDataReducer} from "../../store/slices/cateogrySlice";
 import {findCategoryByID} from "../category/CategoryConvertor";
 import StatusView from "../../components/StatusView";
 import {getProductAttrList, selectProductAttrReducer} from "../../store/slices/productAttrSlice";
 import {paramParser} from "../../services";
-import Title from "antd/es/typography/Title";
 
 const columns = [
     {
@@ -91,7 +90,7 @@ function ProductAttrPage() {
         } else {
             history.push("/")
         }
-    }, [appDispatch, cateID,history]);
+    }, [appDispatch, cateID,history, cate]);
 
     const {data, errorMsg, status} = spec;
 

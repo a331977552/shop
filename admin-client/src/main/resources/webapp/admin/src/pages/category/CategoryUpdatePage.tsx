@@ -1,14 +1,13 @@
-import React, {useEffect, useState} from 'react';
-import {InputNumber, message, Spin, Typography} from 'antd';
+import React from 'react';
+import {InputNumber, message, Typography} from 'antd';
 import {Form, Input, Button, Radio, TreeSelect} from 'antd';
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {
     getCategoryList, selectCategoryDataReducer, selectUITree,
 } from "../../store/slices/cateogrySlice";
 import {CategoryModel} from "../../model";
-import {addCategoryAPI, updateCategoryAPI} from "../../store/api/CategoryAPI";
+import {updateCategoryAPI} from "../../store/api/CategoryAPI";
 import {useParams} from "react-router-dom";
-import {CategoryTree, convertToUITree} from "./CategoryConvertor";
 
 
 const {Title} = Typography;
@@ -39,8 +38,7 @@ const tailFormItemLayout = {
 
 const CategoryUpdatePage = () => {
     const {cateID} = useParams<{ cateID: string }>();
-    const category = (useAppSelector(selectCategoryDataReducer)?.
-    items.find((item) => item.id === +cateID)) as  CategoryModel;
+    const category = (useAppSelector(selectCategoryDataReducer)?.items.find((item) => item.id === +cateID)) as  CategoryModel;
     const categories = useAppSelector(selectUITree);
     let dispatch = useAppDispatch();
 

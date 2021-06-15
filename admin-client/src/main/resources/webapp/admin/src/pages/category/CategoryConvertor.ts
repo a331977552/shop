@@ -1,5 +1,4 @@
 import {CategoryModel} from "../../model";
-import CategoryPage from "./CategoryListPage";
 
 export interface CategoryTree {
     value: string,
@@ -66,7 +65,7 @@ export function removeTreeNode(items:CategoryTree[],removeID:string) {
     function removeTreeNode_(parent:CategoryTree,removeID:string){
         const children = parent.children||[];
         const filteredNodes = children.filter(item=>item.value !== removeID);
-        if (filteredNodes.length != children.length){
+        if (filteredNodes.length !== children.length){
             parent.children = filteredNodes;
         }else{
             children.forEach((parent)=>{

@@ -7,13 +7,13 @@ import ProductSpecPage from "./spec/ProductSpecPage";
 import CategoryUpdatePage from "./category/CategoryUpdatePage";
 import CategoryListPage from "./category/CategoryListPage";
 import {useAppDispatch, useAppSelector} from "../store/hooks";
-import {getCategoryList, selectCategoryReducer, selectUITree} from "../store/slices/cateogrySlice";
+import {getCategoryList, selectCategoryReducer} from "../store/slices/cateogrySlice";
 import StatusView from "./../components/StatusView";
 import ProductAttrPage from "./attr/ProductAttrPage";
 import ProductAttrAddOrUpdatePage from "./attr/ProductAttrAddOrUpdatePage";
 import BrandListPage from "./brand/BrandListPage";
 
-function ProductBasePageHOC() {
+function ProductBasePage() {
     let dispatch = useAppDispatch();
     let categoryReducer = useAppSelector(selectCategoryReducer);
     useEffect(() => {
@@ -21,7 +21,7 @@ function ProductBasePageHOC() {
     }, [dispatch]);
 
     function retry() {
-
+        dispatch(getCategoryList({}))
     }
 
     return (
@@ -66,4 +66,4 @@ function ProductBasePageHOC() {
     );
 }
 
-export default ProductBasePageHOC;
+export default ProductBasePage;

@@ -1,12 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {InputNumber, message, TreeSelect, Typography} from 'antd';
 import {Form, Input, Button, Radio} from 'antd';
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {
-    getCategoryList, selectCategoryReducer, selectUITree,
+    getCategoryList, selectUITree,
 } from "../../store/slices/cateogrySlice";
 import {addCategoryAPI} from "../../store/api/CategoryAPI";
-import {CategoryTree, convertToUITree} from "./CategoryConvertor";
 
 const {Title} = Typography;
 

@@ -4,7 +4,6 @@ import {Layout} from "antd";
 
 import {useAppSelector} from "../../store/hooks";
 import {selectUser} from "../../store/slices/userSlice";
-import {UserModel} from '../../model';
 const {Header} = Layout;
 
 const StyledSpan = styled.span`

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Layout} from "antd";
 import {Route, Switch} from "react-router-dom";
 import HomePage from "../home/HomePage";
-import ProductBasePageHOC from "../ProductBasePageHOC";
+import ProductBasePage from "../ProductBasePage";
 
 const {Content} = Layout;
 
@@ -25,7 +25,7 @@ class ContentMain extends Component<ContentProps, {}> {
             >
                 <Switch>
                     <Route path={"/product/*"} >
-                        <ProductBasePageHOC/>
+                        <ProductBasePage/>
                     </Route>
                     <Route path={"/"}>
                         <HomePage/>

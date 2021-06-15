@@ -14,7 +14,6 @@ import {
     updateSpecAPI
 } from "../../store/api/ProductSpecAPI";
 import {useParams} from "react-router-dom";
-import StatusView from "../../components/StatusView";
 import {CategoryTree} from "../category/CategoryConvertor";
 import CentredLoading from "../../components/CentredLoading";
 

@@ -2,7 +2,7 @@ import React from 'react';
 import {Button, Space, Switch} from "antd";
 import {CategoryModel} from "../../model";
 import {useAppDispatch} from "../../store/hooks";
-import {getCategoryList, toggleVisible} from '../../store/slices/cateogrySlice';
+import { toggleVisible} from '../../store/slices/cateogrySlice';
 import {useHistory} from "react-router-dom";
 
 function CategorySetting(props: { record: CategoryModel }) {

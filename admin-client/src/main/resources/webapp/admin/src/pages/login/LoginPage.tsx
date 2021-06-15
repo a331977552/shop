@@ -24,6 +24,7 @@ function LoginPage() {
         loginAPI(values).then(response=>{
             let result = response.result as string;
             setTokenToStorage(result);
+
             history.push("/")
         }).catch(reason => {
             setStatus("error")
