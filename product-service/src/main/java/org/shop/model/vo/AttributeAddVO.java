@@ -26,12 +26,12 @@ public class AttributeAddVO {
 	private String entryMethod; //custom, selection
 
 	private Integer sort;
-
+	@NotNull(message = "searchable 不能为空")
 	private Boolean searchable;
 	@EnumNamePattern(regexp = "normal|color")
 	private String searchtype; //normal, color
 
-	private List<AttributeValueAddVO> valueVOList;//blue, red,  small, large
+	private List<AttributeValueAddVO> values;//blue, red,  small, large
 
 
 

@@ -1,5 +1,7 @@
 package org.shop.test.utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.shop.common.Result;
 import org.shop.common.util.Page;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +15,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public abstract class BaseControllerTest<returnVO> {
 
+	ObjectMapper mapper = new ObjectMapper();
+
 	@LocalServerPort
 	protected int port;
+	protected void prettyPrint(Object o){
+		try {
+			String prettyJson = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(o);
+			System.out.println(prettyJson);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+	}
 
 	@Autowired
 	protected RestTestHelper helper;

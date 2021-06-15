@@ -33,7 +33,7 @@ function ProductSpecOperation(props: { record: ProductSpecModel }) {
     };
 
     const onUpdateClick = () => {
-        history.push("product/spec/update" + props.record.id)
+        history.push("/product/spec/update/" + props.record.id)
     };
 
     return <Space size={"small"}>

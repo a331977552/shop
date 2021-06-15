@@ -7,7 +7,7 @@ import {
     PageQueryModel,
     ProductSpecQueryModel,
     PageModel,
-    ProductSpecModel, CategoryModel
+    ProductSpecModel
 } from "../../model";
 import {RootState} from "../store";
 import {GenericState} from "../hooks";
@@ -38,7 +38,6 @@ export const productSpecSlice = createSlice({
             let data = state.data as PageModel<ProductSpecModel>;
             data.items = data.items.filter(item =>
                 item.id !== action.payload.id) as ProductSpecModel[];
-
         }
     },
     extraReducers: (builder) => {

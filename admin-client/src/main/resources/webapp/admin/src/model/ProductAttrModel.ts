@@ -1,4 +1,4 @@
-export interface AttributeModel {
+export interface ProductAttrModel {
     id: number
 
     name: string;
@@ -8,12 +8,25 @@ export interface AttributeModel {
     entryMethod: 'custom' | 'selection'; // custom, selection
 
     categoryId: number;
+
     searchtype: 'color' | 'normal'
+
     sort: number;
 
     searchable: boolean;
 
     value: string;
 
+    values:Array<ProductAttrValueModel>;
 
+}
+export interface ProductAttrValueModel{
+    value:string
+    id?:number,
+    attrKey?:number,
+}
+export interface ProductAttrQueryModel{
+
+    name?: string;
+    categoryId?: number;
 }

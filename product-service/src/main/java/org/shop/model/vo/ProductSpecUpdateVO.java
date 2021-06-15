@@ -5,13 +5,14 @@ import lombok.ToString;
 import org.shop.common.validator.IDValid;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Data
 @ToString
 public class ProductSpecUpdateVO {
 
 	@IDValid
-	private int id;
+	private Integer id;
 	@NotEmpty(message = "product spec name cannot be empty")
 	private String name;
 
@@ -21,6 +22,8 @@ public class ProductSpecUpdateVO {
 	@NotEmpty(message = "product spec entryMethod cannot be empty")
 	private String entryMethod; // custom, selection
 
+	@NotNull(message = "参数的分类ID不能为空")
+	private Integer categoryId;
 
 	private Integer sort = 0;
 

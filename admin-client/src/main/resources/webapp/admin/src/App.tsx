@@ -16,9 +16,6 @@ function App() {
     const dispatch = useAppDispatch();
     const user = useAppSelector(selectUserReducer);
     const code = user.data?.code;
-    useEffect(() => {
-        loadUserOrRedirect();
-    }, [dispatch, history])
 
     function loadUserOrRedirect() {
         const token = getTokenFromStorage();
@@ -28,6 +25,10 @@ function App() {
             dispatch(getUserInfo(null));
         }
     }
+    useEffect(() => {
+        loadUserOrRedirect();
+    }, [dispatch, history])
+
 
     const status = user.status;
     if (code === 401) {

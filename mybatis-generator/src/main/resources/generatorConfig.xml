@@ -37,12 +37,12 @@
 <!--        <table tableName="sku" domainObjectName="SkuDAO">-->
 <!--            <generatedKey column="id" sqlStatement="MySql"></generatedKey>-->
 <!--        </table>-->
-        <table tableName="attr_key" domainObjectName="AttrKeyDAO"></table>
+<!--        <table tableName="attr_key" domainObjectName="AttrKeyDAO"></table>-->
 <!--        <table tableName="attr_value" domainObjectName="AttrValueDAO"></table>-->
-        <table tableName="product_spec" domainObjectName="ProductSpecDAO"></table>
+<!--        <table tableName="product_spec" domainObjectName="ProductSpecDAO"></table>-->
 
-<!--        <table tableName="category"  domainObjectName="CategoryDAO">-->
-<!--            <generatedKey column="id" sqlStatement="MySql"></generatedKey>-->
-<!--        </table>-->
+        <table tableName="category"  domainObjectName="CategoryDAO">
+            <generatedKey column="id" sqlStatement="MySql"></generatedKey>
+        </table>
     </context>
 </generatorConfiguration>

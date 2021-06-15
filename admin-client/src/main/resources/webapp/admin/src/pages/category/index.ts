@@ -1,3 +1,3 @@
-export * from './CategoryPage'
+export * from './CategoryListPage'
 export * from './CategoryAddPage'
 export * from './CategoryUpdatePage'

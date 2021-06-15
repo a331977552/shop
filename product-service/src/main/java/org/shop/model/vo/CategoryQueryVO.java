@@ -6,7 +6,7 @@ import lombok.ToString;
 @Data
 @ToString
 public class CategoryQueryVO {
-
+	private Integer id;
 	private String name;
 
 	private Integer parent;

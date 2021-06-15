@@ -28,15 +28,16 @@ public class ProductSpecController {
 		return ResponseEntity.ok(Result.of(specService.addSpec(vo)));
 	}
 
-	@PutMapping()
-	public void updateSpec(@Valid @RequestBody ProductSpecUpdateVO vo) {
-		specService.updateSpec(vo);
-	}
 
 
 	@DeleteMapping("/{id}")
 	public void deleteSpec(@PathVariable(value = "id") Integer id) {
 		specService.deleteSpec(id);
+	}
+
+	@PutMapping()
+	public void updateSpec(@Valid @RequestBody ProductSpecUpdateVO vo) {
+		specService.updateSpec(vo);
 	}
 
 	@GetMapping("/{id}")

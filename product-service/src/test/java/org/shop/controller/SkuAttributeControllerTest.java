@@ -3,22 +3,28 @@ package org.shop.controller;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.shop.common.Result;
-import org.shop.model.vo.AttributeAddVO;
-import org.shop.model.vo.AttributeReturnVO;
-import org.shop.model.vo.AttributeValueAddVO;
-import org.shop.model.vo.AttributeValueReturnVO;
+import org.shop.common.util.BeanConvertor;
+import org.shop.common.util.Page;
+import org.shop.model.vo.*;
+import org.shop.service.AttributeService;
 import org.shop.test.utils.BaseControllerTest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class SkuAttributeControllerTest extends BaseControllerTest<AttributeReturnVO> {
 
 
+	@Autowired
+	AttributeService service;
 
 
 	@Test
@@ -42,57 +48,73 @@ class SkuAttributeControllerTest extends BaseControllerTest<AttributeReturnVO> {
 		list.add(vo);
 		list.add(vo2);
 		list.add(vo3);
-		addVO.setValueVOList(list);
+		addVO.setValues(list);
 
 		final String token = getToken();
 		final ResponseEntity<Result<AttributeReturnVO>> post = helper.
-				setUIPath("/api/product/attr").setPort(port).
+				setUIPath("/api/category/attr").setPort(port).
 				builder().withToken(token).build().post(addVO, resVOReturnRef);
 		System.out.println(post);
-		final AttributeReturnVO result = post.getBody().getResult();
+		final AttributeReturnVO result = Objects.requireNonNull(post.getBody()).getResult();
 		Assertions.assertEquals(200,post.getStatusCodeValue());
 		final Integer id = result.getId();
-		Assertions.assertEquals(true,id !=null);
+		Assertions.assertNotNull(id);
 		final List<AttributeValueReturnVO> values = result.getValues();
 		for (AttributeValueReturnVO value : values) {
-			Assertions.assertEquals(true,value.getId() !=null);
+			Assertions.assertNotNull(value.getId());
 		}
 
 		this.deleteAttr(id,token);
 
 	}
 
-	@Test
-	void addValue() {
-		final String token = this.getToken();
-		AttributeValueAddVO valueAddVO =new AttributeValueAddVO();
-		valueAddVO.setAttrKey(3);
-		valueAddVO.setValue("彩色");
-		final ResponseEntity<Result<AttributeValueReturnVO>> post = helper.
-				setUIPath("/api/product/attr/value").setPort(port).
-				builder().withToken(token).build().post(valueAddVO, getValueParameterTypeRef());
-		System.out.println(post);
-		final AttributeValueReturnVO result = post.getBody().getResult();
-		Assertions.assertEquals(200,post.getStatusCodeValue());
-		final Integer id = result.getId();
-		Assertions.assertNotNull(id);
-		this.deleteValue(id,token);
-	}
 
-	void deleteValue(Integer id,String token) {
-		final ResponseEntity<Result<String>> post = helper.
-				setUIPath("/api/product/attr/value/"+id).setPort(port).
-				builder().withToken(token).build().delete(strResultRef);
-		System.out.println(post);
-		Assertions.assertEquals(200,post.getStatusCodeValue());
-
-	}
 
 	void deleteAttr(Integer id,String token) {
-		final ResponseEntity<String> delete = helper.setUIPath("/api/product/attr/"+id).setPort(port).builder().withToken(token).build()
+		final ResponseEntity<String> delete = helper.setUIPath("/api/category/attr/"+id).setPort(port).builder().withToken(token).build()
 				.delete(strRef);
 		Assertions.assertEquals(200, delete.getStatusCodeValue());
 	}
+
+
+	@Test
+	@Rollback
+	@Transactional
+	void update(){
+
+		final AttributeReturnVO attribute = service.getAttribute(3);
+		attribute.setName("代销方式");
+		final AttributeUpdateVO convert = BeanConvertor.convert(attribute, AttributeUpdateVO.class);
+		convert.setCategoryId(7);
+		convert.setSort(87);
+		convert.setEntryMethod("selection");
+		List<AttributeValueReturnVO> v=new ArrayList<>();
+		AttributeValueReturnVO e=new AttributeValueReturnVO();
+		e.setValue("小明");
+		v.add(e);
+		convert.setValues(v);
+		final AttributeReturnVO attributeReturnVO = service.updateAttribute(convert);
+		prettyPrint(attributeReturnVO);
+		final AttributeReturnVO attributeByExample = service.getAttribute(3);
+		prettyPrint(attributeByExample);
+		Assertions.assertEquals(attribute.getName(), attributeByExample.getName()) ;
+	}
+
+	@Test
+	void getByExample(){
+		AttriQueryVO queryVO =new AttriQueryVO();
+		queryVO.setCategoryId(7);
+		queryVO.setName("规格");
+		final Page<AttributeReturnVO> attributeByExample = service.getAttributeByExample(queryVO);
+		prettyPrint(attributeByExample);
+		Assertions.assertTrue(attributeByExample.isEmpty());
+		queryVO.setName("");
+		final Page<AttributeReturnVO> attributeByExample1 = service.getAttributeByExample(queryVO);
+		Assertions.assertEquals(2, attributeByExample1.getItems().size());
+
+
+	}
+
 
 	@Override
 	protected ParameterizedTypeReference<Result<AttributeReturnVO>> getParameterTypeRef() {

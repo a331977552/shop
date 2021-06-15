@@ -7,11 +7,11 @@ function CategoryArgs(record:CategoryModel) {
     let history = useHistory();
 
     function onClickSpec() {
-        history.push("/product/spec/"+record.id)
+        history.push("/product/spec?cid="+record.id)
     }
 
     function onAttributeClick() {
-        history.push("/product/attr/"+record.id)
+        history.push("/product/attr?cid="+record.id)
     }
 
     return (

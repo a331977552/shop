@@ -6,5 +6,6 @@ export * from './PageModel';
 export * from './ProductListModel';
 export * from './ResultModel';
 export * from './UserModel';
-export * from './AttributeModel';
+export * from './ProductAttrModel';
 export * from './ProductSpecModel';
+export * from './BrandModel';

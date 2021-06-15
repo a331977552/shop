@@ -3,10 +3,10 @@ import {InputNumber, message, TreeSelect, Typography} from 'antd';
 import {Form, Input, Button, Radio} from 'antd';
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {
-    getCategoryList, selectCategoryReducer,
+    getCategoryList, selectCategoryReducer, selectUITree,
 } from "../../store/slices/cateogrySlice";
 import {addCategoryAPI} from "../../store/api/CategoryAPI";
-import {CategoryTree, convertToTreeStyle} from "./CategoryConvertor";
+import {CategoryTree, convertToUITree} from "./CategoryConvertor";
 
 const {Title} = Typography;
 
@@ -35,37 +35,28 @@ const tailFormItemLayout = {
 
 
 const CategoryAddPage = () => {
-    const [categories, setCategories] = useState(new Array<CategoryTree>());
-    const [form] = Form.useForm();
-
     const dispatch = useAppDispatch();
-    const hierarchyCategories = useAppSelector(selectCategoryReducer);
-    useEffect(() => {
-        dispatch(getCategoryList({currentPage: 0, pageSize: 20}))
-    }, [dispatch]);
-    useEffect(() => {
-       const topLevelTree = convertToTreeStyle(hierarchyCategories.categoryList.data?.items);
-        setCategories(topLevelTree);
-    }, [hierarchyCategories]);
+
+    const [form] = Form.useForm();
+    const categories = useAppSelector(selectUITree);
+
 
     const onFinish = (values: any) => {
-        console.log(values)
         values.parent = +values.parent;
-        const hide = message.loading("添加中...",0)
+        const key= "category_add_key";
+        message.loading({content:"添加中...",key})
         addCategoryAPI(values).then(response => {
-            hide();
-            dispatch(getCategoryList({currentPage: 0, pageSize: 20}))
+            dispatch(getCategoryList({}))
             form.resetFields();
-            message.success("添加成功")
+            message.success({content:"添加成功",key})
         }).catch(reason => {
-            hide();
-            message.error("添加失败,原因:"+reason.errorMsg);
+            message.error({content:"添加失败,原因:"+reason.errorMsg,key});
         });
     };
 
 
     return (
-        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%'}}>
+        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', overflow:'auto', width: '100%'}}>
             <Title style={{marginBottom: '30px', marginTop: '10px'}}>种类添加</Title>
             <Form
                 form={form}
@@ -79,10 +70,22 @@ const CategoryAddPage = () => {
                 >
                     <Input/>
                 </Form.Item>
-                <Form.Item label="父种类" name="parent" initialValue={"0"}>
+                <Form.Item label="上级分类" name="parent" initialValue={"0"}>
                     <TreeSelect  notFoundContent={<div>数据加载错误,请检查网络</div>}
                                  treeData={categories}
                     />
+                </Form.Item>
+
+                <Form.Item label="后缀单位" name={"suffix"}>
+                    <Input/>
+                </Form.Item>
+                <Form.Item label="关键字" name="keyword">
+                    <Input/>
+                </Form.Item>
+                <Form.Item label="分类描述" name="description"
+                rules={[{max:32,message:'描述长度不可超过32'}]}
+                >
+                    <Input/>
                 </Form.Item>
                 <Form.Item label="是否显示" name="visible" initialValue={"true"}>
                     <Radio.Group>
@@ -90,14 +93,14 @@ const CategoryAddPage = () => {
                         <Radio.Button value="false">隐藏</Radio.Button>
                     </Radio.Group>
                 </Form.Item>
+                <Form.Item label="导航显示" name="navVisible" initialValue={"true"}>
+                    <Radio.Group>
+                        <Radio.Button value="true">显示</Radio.Button>
+                        <Radio.Button value="false">隐藏</Radio.Button>
+                    </Radio.Group>
+                </Form.Item>
                 <Form.Item label="排序" name="priority" initialValue={0}>
                     <InputNumber max={9999} min={0}/>
-                </Form.Item>
-                <Form.Item label="后缀单位" name={"suffix"}>
-                    <Input/>
-                </Form.Item>
-                <Form.Item label="keyword" name="keyword">
-                    <Input/>
                 </Form.Item>
                 <Form.Item  {...tailFormItemLayout}>
                     <Button type="primary" htmlType="submit">

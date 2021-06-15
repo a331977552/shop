@@ -1,11 +1,7 @@
 package org.shop.service;
 
-import org.shop.model.vo.AttributeAddVO;
-import org.shop.model.vo.AttributeReturnVO;
-import org.shop.model.vo.AttributeValueAddVO;
-import org.shop.model.vo.AttributeValueReturnVO;
-
-import java.util.List;
+import org.shop.common.util.Page;
+import org.shop.model.vo.*;
 
 public interface AttributeService {
 
@@ -18,6 +14,10 @@ public interface AttributeService {
 
 	void deleteValue(Integer id);
 
-	List<AttributeReturnVO> getAttributeByCategoryID(Integer categoryID);
 
+	Page<AttributeReturnVO> getAttributeByExample(AttriQueryVO queryVO);
+
+	AttributeReturnVO getAttribute(Integer id);
+
+	AttributeReturnVO updateAttribute(AttributeUpdateVO vo);
 }

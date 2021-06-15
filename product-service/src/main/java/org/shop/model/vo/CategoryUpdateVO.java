@@ -25,6 +25,10 @@ public class CategoryUpdateVO {
 
 	private Integer priority= 0;
 
+	private Boolean navVisible;
+
+	private String description;
+
 	private String suffix;
 
 	private String keyword;

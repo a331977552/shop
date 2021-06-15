@@ -3,12 +3,12 @@ import {InputNumber, message, Spin, Typography} from 'antd';
 import {Form, Input, Button, Radio, TreeSelect} from 'antd';
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {
-    getCategoryList, selectCategoryDataReducer,
+    getCategoryList, selectCategoryDataReducer, selectUITree,
 } from "../../store/slices/cateogrySlice";
 import {CategoryModel} from "../../model";
 import {addCategoryAPI, updateCategoryAPI} from "../../store/api/CategoryAPI";
 import {useParams} from "react-router-dom";
-import {CategoryTree, convertToTreeStyle} from "./CategoryConvertor";
+import {CategoryTree, convertToUITree} from "./CategoryConvertor";
 
 
 const {Title} = Typography;
@@ -39,40 +39,23 @@ const tailFormItemLayout = {
 
 const CategoryUpdatePage = () => {
     const {cateID} = useParams<{ cateID: string }>();
-
-    const [categories, setCategories] = useState(new Array<CategoryTree>());
-    const [category, setCategory] = useState<CategoryModel>();
-    const hierarchyCategories = useAppSelector(selectCategoryDataReducer);
+    const category = (useAppSelector(selectCategoryDataReducer)?.
+    items.find((item) => item.id === +cateID)) as  CategoryModel;
+    const categories = useAppSelector(selectUITree);
     let dispatch = useAppDispatch();
-    useEffect(() => {
-        //user can directly access this url without initializing category list
-        dispatch(getCategoryList(null));
-    }, [dispatch]);
 
-    useEffect(() => {
-        if (hierarchyCategories) {
-            const topLevelTree = convertToTreeStyle(hierarchyCategories.items, +cateID)
-            setCategories(topLevelTree);
-            let find = hierarchyCategories.items.find((item) => item.id === +cateID);
-            setCategory(find);
-        }
-    }, [hierarchyCategories, setCategories, setCategory, cateID]);
     const onFinish = (values: any) => {
         values.parent = +values.parent;
-        const hide = message.loading("更新中...", 0)
+        const key = "category_update_key";
+        message.loading({content:"更新中...",key})
         updateCategoryAPI(values).then(response => {
-            dispatch(getCategoryList({currentPage: 0, pageSize: 20}))
-            message.success("更新成功")
+            dispatch(getCategoryList({}));
+            message.success({content:"更新成功",key})
         }).catch(reason => {
-            message.error("更新失败,原因:" + reason.errorMsg);
-        }).finally(() => {
-            hide();
-        });
+            message.error({content:"更新失败,原因:" +reason.errorMsg,key});
+        })
     };
-    if (category == null) {
-        return <Spin spinning={true}/>
-    }
-    console.log(categories, category)
+
     return (
         <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%'}}>
             <Title style={{marginBottom: '30px', marginTop: '10px'}}>种类更新</Title>
@@ -96,12 +79,30 @@ const CategoryUpdatePage = () => {
                 >
                     <Input/>
                 </Form.Item>
-                <Form.Item label="父种类" name="parent" initialValue={category.parent + ""}>
+                <Form.Item label="上级分类" name="parent" initialValue={category.parent + ""}>
                     <TreeSelect notFoundContent={<div>数据加载错误,请检查网络</div>}
                                 treeData={categories}
                     />
                 </Form.Item>
+                <Form.Item label="分类描述" name="description" initialValue={category.description}
+                           rules={[{max:32,message:'描述长度不可超过32'}]}
+                >
+                    <Input/>
+                </Form.Item>
+                <Form.Item label="关键字" name="keyword" initialValue={category?.keyword}>
+                    <Input/>
+                </Form.Item>
+                <Form.Item label="后缀单位" name={"suffix"} initialValue={category?.suffix}>
+                    <Input/>
+                </Form.Item>
+
                 <Form.Item label="是否显示" name="visible" initialValue={category.visible + ""}>
+                    <Radio.Group>
+                        <Radio.Button value="true">显示</Radio.Button>
+                        <Radio.Button value="false">隐藏</Radio.Button>
+                    </Radio.Group>
+                </Form.Item>
+                <Form.Item label="导航显示" name="navVisible" initialValue={category.navVisible}>
                     <Radio.Group>
                         <Radio.Button value="true">显示</Radio.Button>
                         <Radio.Button value="false">隐藏</Radio.Button>
@@ -109,12 +110,6 @@ const CategoryUpdatePage = () => {
                 </Form.Item>
                 <Form.Item label="排序" name="priority" initialValue={category.priority}>
                     <InputNumber max={9999} min={0}/>
-                </Form.Item>
-                <Form.Item label="后缀单位" name={"suffix"} initialValue={category?.suffix}>
-                    <Input/>
-                </Form.Item>
-                <Form.Item label="keyword" name="keyword" initialValue={category?.keyword}>
-                    <Input/>
                 </Form.Item>
                 <Form.Item  {...tailFormItemLayout}>
                     <Button type="primary" htmlType="submit">

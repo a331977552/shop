@@ -162,5 +162,15 @@ public class CategoryServiceImpl implements CategoryService, ModelConvertor<Cate
 		return 	Page.createFrom(page, count,BeanConvertor.convert(categories, CategoryReturnVO.class));
 	}
 
+	@Override
+	public long countByExample(CategoryQueryVO vo) {
+		CategoryDAOExample example = new CategoryDAOExample();
+		final CategoryDAOExample.Criteria criteria = example.createCriteria();
+		if(vo.getId()!=null){
+			criteria.andIdEqualTo(vo.getId());
+		}
+		return mapper.countByExample(example);
+	}
+
 
 }

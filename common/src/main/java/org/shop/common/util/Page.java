@@ -44,6 +44,19 @@ public class Page<VO> {
         return target;
     }
 
+    public static <VO> Page<VO> createSinglePage(List<VO> items) {
+        Page page = new Page<>();
+        page.setCurrentPage(0);
+        page.setPageSize(items.size());
+        page.setEmpty(items.isEmpty());
+        page.setOffset(0);
+        page.setItems(items);
+        page.setTotalElements(items.size());
+        page.setTotalPages(1);
+        page.setLast(true);
+        return page;
+    }
+
     public static <VO> Page<VO> emptyPage() {
         Page<VO> target = new Page<>();
         target.setItems(Collections.emptyList());

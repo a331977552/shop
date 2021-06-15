@@ -6,7 +6,6 @@ import org.shop.model.dao.CategoryDAO;
 import org.shop.model.dao.CategoryDAOExample;
 
 import java.util.List;
-
 @Mapper
 public interface CategoryDAOMapper {
     long countByExample(CategoryDAOExample example);

@@ -13,8 +13,8 @@ export interface PageModel<Item>{
 }
 
 export interface PageQueryModel<Example>{
-    currentPage:number;
-    pageSize: number;
+    currentPage?:number;
+    pageSize?: number;
     orderBy?:string;
     example?:Example|undefined
 }

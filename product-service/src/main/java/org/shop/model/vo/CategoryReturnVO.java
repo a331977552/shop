@@ -22,6 +22,10 @@ public class CategoryReturnVO {
 
 	private Integer priority;
 
+	private Boolean navVisible;
+
+	private String description;
+
 	private LocalDateTime createdTime;
 
 	private LocalDateTime updatedTime;

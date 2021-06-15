@@ -53,17 +53,7 @@ public class ProductSpecServiceImpl implements ProductSpecService {
 		}
 
 		final List<ProductSpecDAO> list = mapper.selectByExample(ex);
-		final Page<ProductSpecReturnVO> page = new Page<>();
-		page.setCurrentPage(0);
-		page.setPageSize(list.size());
-		page.setEmpty(false);
-		page.setCurrentPage(0);
-		page.setOffset(0);
-		page.setItems(BeanConvertor.convert(list, ProductSpecReturnVO.class));
-		page.setTotalElements(list.size());
-		page.setTotalPages(1);
-		page.setLast(true);
-		return page;
+		return Page.createSinglePage(BeanConvertor.convert(list, ProductSpecReturnVO.class));
 	}
 
 	@Override

@@ -123,7 +123,7 @@ class ProductListPage extends Component<PropsFromRedux> {
                         </Form>
                     </Spin>
                     <div style={{width: '100%', flex: '1 0 0px', overflow: 'auto', marginTop: '10px'}}>
-                        <Table loading={status === 'loading'} dataSource={this.props.data?.products} columns={columns}/>;
+                        <Table loading={status === 'loading'} rowKey={"id"} dataSource={this.props.data?.products} columns={columns}/>;
                     </div>
                 </div>
         );

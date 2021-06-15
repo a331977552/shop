@@ -1,23 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import {Tag, Space, Button, Table, message} from "antd";
+import {Tag, Space, Button, Table, message, Result} from "antd";
 import {CategoryModel, ProductSpecModel} from "../../model";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {getProductSpecList, selectProductSpecReducer} from "../../store/slices/productSpecSlice";
-import {useParams, useLocation} from "react-router-dom";
-import {getCategoryAPI} from "../../store/api/CategoryAPI";
+import {useParams, useHistory} from "react-router-dom";
+import ProductSpecOperation from "./ProductSpecOperation";
+import {selectCategoryDataReducer} from "../../store/slices/cateogrySlice";
+import {findCategoryByID} from "../category/CategoryConvertor";
+import StatusView from "../../components/StatusView";
+import {paramParser} from "../../services";
 
-
-const levelColor = [
-    "#f50",
-    "#2db7f5",
-    "#87d068",
-    "#108ee9",
-    "gold",
-    "lime",
-    "green",
-    "cyan",
-    "blue"
-]
 const columns = [
     {
         title: '序号(编号)',
@@ -58,13 +50,24 @@ const columns = [
         title: '值',
         dataIndex: 'value',
         key: 'value',
+        render: (text: string, record: ProductSpecModel) => {
+            return text?.split("\n").map(value => <Tag>{value}</Tag>)
+        }
     },
     {
         title: '是否能被检索',
         dataIndex: 'searchable',
         key: 'searchable',
+        render: (text: boolean, record: ProductSpecModel) => {
+            return text ? '可以' : "否"
+        }
+    },
+    {
+        title: '操作',
+        dataIndex: '',
+        key: 'x',
         render: (text: string, record: ProductSpecModel) => {
-            return text === 'true' ? '可以' : "否"
+            return <ProductSpecOperation record={record}/>
         }
     },
 ];
@@ -73,30 +76,31 @@ const columns = [
 function ProductSpecPage() {
     let [category, setCategory] = useState<CategoryModel>();
     let appDispatch = useAppDispatch();
+    let history = useHistory();
     let spec = useAppSelector(selectProductSpecReducer);
-    const param = useParams<{ cateID: string, cateName: string }>();
-    let locationStateLocation = useLocation();
-    const {cateID, cateName} = param;
-    console.log(param, locationStateLocation)
+    let cate = useAppSelector(selectCategoryDataReducer)?.items as CategoryModel[];
+    let parsedQs = paramParser(history.location.search);
+    const cateID = parsedQs['cid'] as string;
     useEffect(() => {
-        getCategoryAPI(cateID)
-            .then((result) => {
-                setCategory(result.result);
-            }).catch((error) => {
-            message.error("加载种类错误,原因: " + error.msgDetail)
-        })
-        appDispatch(getProductSpecList({currentPage: 0, pageSize: 100, example: {categoryId: +cateID}}))
-    }, [appDispatch, cateID, setCategory]);
+        setCategory(findCategoryByID(cate, +cateID));
+        appDispatch(getProductSpecList({example: {categoryId: +cateID}}))
+    }, [appDispatch]);
     const {data, errorMsg, status} = spec;
 
     function onAddClick() {
+        history.push("/product/spec/add")
+    }
+
+    function onRetry() {
+        appDispatch(getProductSpecList({example: {categoryId: +cateID}}))
     }
 
     return (
-        status === 'error' ? <div> error: {errorMsg}</div> :
+        <StatusView retry={onRetry} status={status} errorMsg={errorMsg}>
             <div style={{display: 'flex', height: '100%', flexDirection: 'column'}}>
+                <h2 style={{textAlign:'center'}}>商品参数</h2>
                 <div><Button style={{float: 'right'}} onClick={onAddClick}>添加商品参数</Button>
-                    {category?.name}
+                    所在分类:<b>{category?.name}</b>
                 </div>
                 <div style={{width: '100%', flex: '1 0 0px', overflow: 'auto', marginTop: '10px'}}>
                     <Table childrenColumnName={"null"} loading={status === 'loading'} rowKey={"id"}
@@ -106,6 +110,8 @@ function ProductSpecPage() {
                     />
                 </div>
             </div>
+        </StatusView>
+
     );
 }
 

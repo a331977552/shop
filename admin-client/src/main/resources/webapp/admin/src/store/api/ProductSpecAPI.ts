@@ -1,4 +1,4 @@
-import {get, httpDelete} from "../HttpClient";
+import {get, httpDelete, post, put} from "../HttpClient";
 import {ProductSpecModel} from "../../model";
 import {PageModel, PageQueryModel, ProductSpecQueryModel} from "../../model";
 
@@ -10,5 +10,17 @@ export function getProductSpecListAPI(pageQueryModel: PageQueryModel<ProductSpec
 }
 
 export function deleteProductSpecAPI(id:number) {
-    return httpDelete<string>("/api-gateway/product-service/api/product/spec"+ id);
+    return httpDelete<string>("/api-gateway/product-service/api/product/spec/"+ id);
+}
+
+
+export function getProductSpecAPI(id:number) {
+    return get<ProductSpecModel>("/api-gateway/product-service/api/product/spec/"+ id);
+}
+
+export function AddSpecAPI(value:ProductSpecModel) {
+    return post<ProductSpecModel>("/api-gateway/product-service/api/product/spec/",value);
+}
+export function updateSpecAPI(value:ProductSpecModel) {
+    return put<ProductSpecModel>("/api-gateway/product-service/api/product/spec/",value);
 }

@@ -39,8 +39,8 @@ function DrawerLeft() {
                 <SubMenu key="/product" icon={<UserOutlined/>} title="商品">
                     <Menu.Item key="/product_list">商品列表</Menu.Item>
                     <Menu.Item key="/productAdd">添加商品</Menu.Item>
-                    <Menu.Item key="/category">种类设置</Menu.Item>
-                    <Menu.Item key="/attribute">种类属性设置</Menu.Item>
+                    <Menu.Item key="/category">分类列表</Menu.Item>
+                    <Menu.Item key="/brand">品牌列表</Menu.Item>
                 </SubMenu>
                 <SubMenu key="/order" icon={<LaptopOutlined/>} title="订单">
                     <Menu.Item key="/order_list">订单列表</Menu.Item>

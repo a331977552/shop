@@ -9,10 +9,12 @@ export interface CategoryModel {
     level: number,
     isleaf: boolean;
     visible: boolean;
+    navVisible: boolean;
+    description?: string;
     priority: number;
     suffix: string;
     keyword: string;
-    children?:Array<CategoryModel>
+    children?: Array<CategoryModel>
 }
 
 export interface CategoryQueryVO {

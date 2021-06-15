@@ -13,7 +13,7 @@ export interface ProductSpecModel{
 
     searchable: boolean;
 
-    value: string;
+    value?: string;
 }
 export interface ProductSpecQueryModel{
 

@@ -26,4 +26,8 @@ public class CategoryAddVO {
 
 	private String keyword;
 
+
+	private Boolean navVisible;
+
+	private String description;
 }

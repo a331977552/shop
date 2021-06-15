@@ -10,4 +10,5 @@ public interface CategoryService {
     void deleteCategoryById(Integer id);
     CategoryReturnVO getCategoryById(Integer id);
     Page<CategoryReturnVO> getAll(CategoryQueryVO categoryQueryVO, Page<ProductQueryVO> of);
+    long countByExample(CategoryQueryVO vo);
 }

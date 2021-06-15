@@ -9,6 +9,9 @@ import CategorySetting from "./CategorySetting";
 import {withRouter} from "react-router";
 import {RouteComponentProps} from "react-router";
 import CategoryArgs from "./CategoryArgs";
+import {findCategoriesByParentID} from "./CategoryConvertor";
+import {paramParser} from "../../services";
+import StatusView from "../../components/StatusView";
 
 
 const levelColor = [
@@ -45,13 +48,12 @@ const columns = [
         }
     },
     {
-        title: '优先级',
+        title: '排序',
         dataIndex: 'priority',
         key: 'priority',
     },
-
     {
-        title: '商品单位',
+        title: '单位',
         dataIndex: 'suffix',
         key: 'suffix',
     },
@@ -86,43 +88,49 @@ const columns = [
 ];
 
 
-class CategoryPage extends Component<PropsFromRedux> {
+class CategoryListPage extends Component<PropsFromRedux> {
 
 
-    componentDidMount() {
-        let currentPage = (this.props.categoryList.data?.currentPage) || 0;
-        let pageSize = (this.props.categoryList.data?.pageSize) || 20;
-        let parentID = this.props.match.params.parentID;
-        const example = {} as any
-        if (parentID) {
-            example.parent = parentID;
-        }
-        this.props.getCategoryList({currentPage: currentPage, pageSize: pageSize, example});
+    state = {
+        items: []
     }
-    isRowExpandable = (record: any) => {
-        return true;
-    };
+
+    static getDerivedStateFromProps(nextProps: PropsFromRedux) {
+        let items = nextProps.categoryList.data?.items as CategoryModel[];
+        let param = paramParser(nextProps.location.search);
+        const pid = param["pid"];
+        return {items: pid ? findCategoriesByParentID(items, +pid) : items}
+    }
+
 
     onAddClick = () => {
         const {history} = this.props;
-        history.push("category/add")
+        history.push("/product/category/add")
+    };
+    onRetry = () => {
+        console.log("onretry")
     };
 
     render() {
         const {categoryList} = this.props;
-        const {errorMsg, status, data} = categoryList;
+        const {items} = this.state;
+        const {errorMsg, status} = categoryList;
+
+
         return (
-            status === 'error' ? <div> error: {errorMsg}</div> :
+            <StatusView retry={this.onRetry} status={status} errorMsg={errorMsg}>
                 <div style={{display: 'flex', height: '100%', flexDirection: 'column'}}>
                     <div><Button style={{float: 'right'}} onClick={this.onAddClick}>添加种类</Button></div>
                     <div style={{width: '100%', flex: '1 0 0px', overflow: 'auto', marginTop: '10px'}}>
                         <Table childrenColumnName={"null"} loading={status === 'loading'} rowKey={"id"}
-                               dataSource={data?.items}
+                               dataSource={items}
                                columns={columns}
                                pagination={{defaultPageSize: 20, total: categoryList.data?.totalElements}}
                         />
                     </div>
                 </div>
+            </StatusView>
+
         );
     }
 
@@ -136,8 +144,8 @@ const mapState = (state: RootState) => {
 const connector = connect(mapState,
     {...categorySlice.actions, getCategoryList})
 
-type PropsFromRedux = ConnectedProps<typeof connector> & RouteComponentProps<{ parentID: string | undefined }>
-export default withRouter(connector(CategoryPage));
+type PropsFromRedux = ConnectedProps<typeof connector> & RouteComponentProps<{ pid: string | undefined }>
+export default withRouter(connector(CategoryListPage));
 
 
 

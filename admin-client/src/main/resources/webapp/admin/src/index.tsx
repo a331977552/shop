@@ -10,15 +10,17 @@ import {
     Switch,
     Route,
 } from "react-router-dom";
+import { LoadingOutlined } from '@ant-design/icons';
 import {Provider} from "react-redux";
 import {store} from "./store/store";
 import LoginPage from "./pages/login/LoginPage";
-import {log} from "./services/loggerService";
-log();
+import {Spin} from "antd";
 
 addRequestInterceptor();
 addResponseTransformInterceptor();
 
+const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+Spin.setDefaultIndicator(antIcon);
 
 function Index() {
 
