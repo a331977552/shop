@@ -22,7 +22,7 @@ public class ProductSpecUpdateVO {
 	@NotEmpty(message = "product spec entryMethod cannot be empty")
 	private String entryMethod; // custom, selection
 
-	@NotNull(message = "参数的分类ID不能为空")
+	@NotNull(message = "规格的分类ID不能为空")
 	private Integer categoryId;
 
 	private Integer sort = 0;

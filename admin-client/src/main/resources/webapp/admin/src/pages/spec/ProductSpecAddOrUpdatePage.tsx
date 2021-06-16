@@ -56,7 +56,7 @@ function ProductSpecAddOrUpdatePage() {
                 setSpecModel(r.result);
                 setShowEntryMethod(r.result?.entryMethod === 'selection')
             }).catch((error) => {
-                message.error("获取产品参数错误,请检查网络")
+                message.error("获取产品规格错误,请检查网络")
             })
         }
     }, [specID, setSpecModel]);
@@ -96,7 +96,7 @@ function ProductSpecAddOrUpdatePage() {
             alignItems: 'center',
             width: '100%'
         }}>
-            <Title level={2} style={{marginBottom: '30px', marginTop: '10px'}}>{specID ? "商品参数更新" : "商品参数添加"}</Title>
+            <Title level={2} style={{marginBottom: '30px', marginTop: '10px'}}>{specID ? "商品规格更新" : "商品规格添加"}</Title>
             <Form
                 form={form}
                 style={{width: '100%'}}
@@ -110,9 +110,9 @@ function ProductSpecAddOrUpdatePage() {
                     <Input/>
                 </Form.Item>}
 
-                <Form.Item label="参数名称" name="name"
+                <Form.Item label="规格名称" name="name"
                            initialValue={specModel?.name}
-                           rules={[{message: "参数名称不能为空", required: true}]}
+                           rules={[{message: "规格名称不能为空", required: true}]}
                 >
                     <Input/>
                 </Form.Item>

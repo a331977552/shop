@@ -55,7 +55,7 @@ function ProductAttrAddOrUpdatePage() {
                 setAttrModel(r.result);
                 setShowEntryMethod(r.result?.entryMethod === 'selection')
             }).catch((error) => {
-                message.error("获取产品参数错误,请检查网络")
+                message.error("获取产品规格错误,请检查网络")
             })
         }
     }, [attrID, setAttrModel]);

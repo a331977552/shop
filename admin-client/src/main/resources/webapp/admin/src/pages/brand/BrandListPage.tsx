@@ -78,40 +78,41 @@ function BrandListPage() {
     let brandState = useAppSelector(selectBrandReducer)
     let history = useHistory();
     const {status, errorMsg, data} = brandState;
+    let localName: string | undefined = undefined;
     useEffect(() => {
         dispatch(getBrandList());
     }, [dispatch]);
 
     function onRetry() {
-        dispatch(getBrandList());
+        dispatch(getBrandList({name: localName}));
     }
 
     function onAddClick() {
         history.push("/product/brand/add")
     }
 
-    function onSearch(name:string) {
+    function onSearch(name: string) {
+        localName = name;
         dispatch(getBrandList({name}))
     }
 
     return (
-            <div style={{display: 'flex', height: '100%', flexDirection: 'column'}}>
-                <h2 style={{textAlign: 'center'}}>商品品牌</h2>
-                <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                       <Search placeholder="品牌名称" onSearch={onSearch} loading={status ==='loading'} style={{width: 200}}/>
-                    <Button style={{float: 'right'}} onClick={onAddClick}>添加品牌</Button>
-                </div>
-                <div style={{width: '100%', flex: '1 0 0px', overflow: 'auto', marginTop: '10px'}}>
-                    <StatusView retry={onRetry} status={status} errorMsg={errorMsg}>
-                    <Table childrenColumnName={"null"} loading={status === 'loading'} rowKey={"id"}
+        <div style={{display: 'flex', height: '100%', flexDirection: 'column'}}>
+            <h2 style={{textAlign: 'center'}}>商品品牌</h2>
+            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                <Search placeholder="品牌名称" onSearch={onSearch} loading={status === 'loading'} style={{width: 200}}/>
+                <Button style={{float: 'right'}} onClick={onAddClick}>添加品牌</Button>
+            </div>
+            <div style={{width: '100%', flex: '1 0 0px', overflow: 'auto', marginTop: '10px'}}>
+                <StatusView retry={onRetry} status={status} loadOnce={true}  errorMsg={errorMsg}>
+                    <Table childrenColumnName={"null"} rowKey={"id"}
                            dataSource={data?.items}
                            columns={columns}
                            pagination={{defaultPageSize: 20, total: data?.totalElements}}
                     />
-                    </StatusView>
-                </div>
+                </StatusView>
             </div>
-
+        </div>
     );
 }
 

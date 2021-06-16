@@ -29,7 +29,21 @@ public class ProductReturnVO {
 
 	private Integer brand;
 	private List<SkuReturnVO> skuList;
+	private String subtitle;
 
+	private String description;
+
+	private String itemNo;
+
+	private BigDecimal price;
+
+	private BigDecimal marketPrice;
+
+	private String reviewStatus;
+
+	private String suffix;
+
+	private Integer sales;
 	@Data
 	@ToString
 	public static class SkuReturnVO {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Button} from "antd";
 import CentredLoading from "./CentredLoading";
 
@@ -6,11 +6,16 @@ interface Loading {
     status: "loading" | "error" | "finished"
     children: JSX.Element,
     retry: React.MouseEventHandler<HTMLElement>,
-    errorMsg?:string
+    errorMsg?: string,
+    loadOnce?: boolean
 }
 
 function StatusView(props: Loading) {
-    if (props.status === 'error') {
+    const [loadOnce, setLoadOnce] = useState(false);
+
+    if (loadOnce)
+        return props.children;
+    else if (props.status === 'error') {
         return <div style={{
             width: '100%',
             height: '100%',
@@ -23,8 +28,12 @@ function StatusView(props: Loading) {
 
     } else if (props.status === 'loading') {
         return <CentredLoading/>;
-    } else
+    } else {
+        if (props.loadOnce) {
+            setLoadOnce(true)
+        }
         return props.children;
+    }
 }
 
 export default StatusView;

@@ -19,7 +19,7 @@ function CategoryArgs(record:CategoryModel) {
             <Button style={{padding: '0 3px'}} onClick={onAttributeClick}
                     size={"small"}>属性</Button>
             <Button style={{padding: '0 3px'}} onClick={onClickSpec}
-                    size={"small"}>参数</Button>
+                    size={"small"}>规格</Button>
         </Space>
     );
 }

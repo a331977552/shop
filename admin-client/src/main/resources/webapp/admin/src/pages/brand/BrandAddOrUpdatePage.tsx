@@ -81,7 +81,7 @@ function BrandAddOrUpdatePage() {
             alignItems: 'center',
             width: '100%'
         }}>
-            <Title level={2} style={{marginBottom: '30px', marginTop: '10px'}}>{bid ? "商品参数更新" : "商品参数添加"}</Title>
+            <Title level={2} style={{marginBottom: '30px', marginTop: '10px'}}>{bid ? "商品品牌更新" : "商品品牌添加"}</Title>
             <Form
                 form={form}
                 style={{width: '100%'}}

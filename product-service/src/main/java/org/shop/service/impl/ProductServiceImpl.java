@@ -48,6 +48,7 @@ public class ProductServiceImpl implements ProductService {
 		product.setId(UUIDUtils.generateID());
 		product.setStatus(product.getSales()==null? "ON_SALE":product.getStatus());
 		product.setSales(0);
+		product.setReviewStatus("PASSED");
 		mapper.insertSelective(product);
 		//map product into  categories
 		List<ProductAddVO.SkuAddVO> skuList = Optional.ofNullable(productVO.getSkuList()).orElse(new ArrayList<>());

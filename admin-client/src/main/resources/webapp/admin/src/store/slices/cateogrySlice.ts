@@ -27,11 +27,11 @@ interface CategoryListAction {
     pageQuery?: PageQueryModel<CategoryQueryVO>,
 }
 
-export const getCategoryList = createAsyncThunk<ResultModel<PageModel<CategoryModel>>, CategoryListAction, ErrorModel>(
+export const getCategoryList = createAsyncThunk<ResultModel<PageModel<CategoryModel>>, CategoryListAction|undefined, ErrorModel>(
     'category/list',
     async (actions, {rejectWithValue}) => {
         try {
-            return await getCategoryListAPI(actions.pageQuery);
+            return await getCategoryListAPI(actions?.pageQuery);
         } catch (errorResult) {
             return rejectWithValue(errorResult);
         }

@@ -6,6 +6,7 @@ import org.shop.common.validator.EnumNamePattern;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,14 +28,35 @@ public class ProductUpdateVO {
 	@EnumNamePattern(regexp = "ON_SALE|OUT_OF_ORDER")
 	private String status;
 
+
+	@NotNull
 	private Integer priority;
 
 	private String thumbnailImg;
-
+	@NotNull
 	private String standardImg;
+	@NotEmpty(message = "subtitle cannot be empty")
+	private String subtitle;
+
+
+
 
 	@Min(1)
 	private Integer brand;
+
+
+	private String description;
+
+	private String itemNo;
+
+	private BigDecimal price;
+
+	private BigDecimal marketPrice;
+
+	private String reviewStatus; //"PASSED", "FAILED", "REVIEWING"
+
+	private String suffix;
+
 	@NotNull(message = "sku不能为空")
 	private List<SkuUpdateVO> skuList;
 

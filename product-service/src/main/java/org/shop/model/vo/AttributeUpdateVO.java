@@ -26,7 +26,7 @@ public class AttributeUpdateVO {
 	@EnumNamePattern(regexp = "custom|selection")
 	private String entryMethod; // custom, selection
 
-	@NotNull(message = "参数的分类ID不能为空")
+	@NotNull(message = "规格的分类ID不能为空")
 	private Integer categoryId;
 	@EnumNamePattern(regexp = "normal|color")
 	private String searchtype; //normal, color

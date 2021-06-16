@@ -98,8 +98,8 @@ function ProductSpecPage() {
     return (
         <StatusView retry={onRetry} status={status} errorMsg={errorMsg}>
             <div style={{display: 'flex', height: '100%', flexDirection: 'column'}}>
-                <h2 style={{textAlign:'center'}}>商品参数</h2>
-                <div><Button style={{float: 'right'}} onClick={onAddClick}>添加商品参数</Button>
+                <h2 style={{textAlign:'center'}}>商品规格</h2>
+                <div><Button style={{float: 'right'}} onClick={onAddClick}>添加商品规格</Button>
                     所在分类:<b>{category?.name}</b>
                 </div>
                 <div style={{width: '100%', flex: '1 0 0px', overflow: 'auto', marginTop: '10px'}}>

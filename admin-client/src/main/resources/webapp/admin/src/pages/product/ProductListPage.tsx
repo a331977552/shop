@@ -1,51 +1,58 @@
-import React, {Component} from 'react';
-import {Spin, Input, Button, Select, Form, Row, Col, Table, Space} from "antd";
-import {connect, ConnectedProps} from 'react-redux'
-import {RootState} from "../../store/store";
-import {getProductList, productSlice, selectProductReducer} from "../../store/slices/productSlice";
-import styled from "styled-components";
+import React, {useEffect} from 'react';
+import { Button, Table, Space} from "antd";
+import {getProductList, selectProductReducer} from "../../store/slices/productSlice";
+import {useHistory} from "react-router-dom";
+import {useAppDispatch, useAppSelector} from "../../store/hooks";
+import StatusView from "../../components/StatusView";
+import { ProductModel} from "../../model";
+import ProductSearch from "./ProductSearch";
 
-const {Option} = Select;
-const StyledCol = styled(Col)`
-  padding: 10px;
-`
-
+const statusMap:{[key:string]:string} = {
+    "ON_SALE":"上架中",
+    "OUT_OF_ORDER":"已下架",
+}
 
 const columns = [
     {
-        title: 'ID',
-        dataIndex: 'id',
+        title: '序号',
         key: 'id',
+        render(text:string,record:ProductModel,index:number){
+            return index;
+        }
     },
     {
-        title: 'name',
+        title: '商品名',
         dataIndex: 'name',
         key: 'name',
     },
+
     {
-        title: 'category',
-        dataIndex: 'category',
-        key: 'category',
-    },
-    {
-        title: 'status',
+        title: '状态',
         dataIndex: 'status',
         key: 'status',
+        render(text:string,record:ProductModel,index:number){
+            return statusMap[text];
+        }
     },
     {
-        title: 'thumbnailImg',
+        title: '图片',
         dataIndex: 'thumbnailImg',
         key: 'thumbnailImg',
     },
     {
-        title: 'brand',
-        dataIndex: 'brand',
-        key: 'brand',
+        title: '销量',
+        dataIndex: 'sales',
+        key: 'sales',
     },
     {
-        title: 'price',
+        title: '价格',
         dataIndex: 'price',
         key: 'price',
+    },
+    {
+        title: '排序',
+        dataIndex: 'priority',
+        key: 'priority',
     },
     {
         title: 'sku',
@@ -53,7 +60,7 @@ const columns = [
         key: 'sku',
     },
     {
-        title: 'Action',
+        title: '操作',
         dataIndex: '',
         key: 'x',
         render: () => <Space size="middle">
@@ -64,82 +71,41 @@ const columns = [
     },
 ];
 
-class ProductListPage extends Component<PropsFromRedux> {
+
+export default function ProductListPage() {
+    let history = useHistory();
+    let dispatch = useAppDispatch();
+    let productReducer = useAppSelector(selectProductReducer);
+    const { status, errorMsg,data} = productReducer;
+    useEffect(() => {
+        dispatch(getProductList({currentPage:0,pageSize:20}));
+    }, [])
 
 
-    componentDidMount() {
-        this.props.getProductList(null);
+    function onRetry() {
+        dispatch(getProductList({currentPage:data?data.currentPage:0,pageSize:data?data.pageSize:20}));
     }
 
-    render() {
-        const {status, errorMsg} = this.props;
-        return (
-            status === 'error' ? <div> error: {errorMsg}</div> :
-                <div style={{display: 'flex', height: '100%', flexDirection: 'column'}}>
-                    <Spin style={{width: '100%', height: '100%'}} spinning={status === 'loading'}>
-                        <Form style={{width: '100%'}} layout={'inline'}>
-                            <Row gutter={24}>
-                                <StyledCol span={8}>
-                                    <Form.Item
-                                        name={`product.name`}
-                                        label={'商品名称'}
-                                    >
-                                        <Input placeholder="商品名称"/>
-                                    </Form.Item>
-                                </StyledCol>
-                                <StyledCol span={8}>
-                                    <Form.Item
-                                        name={`product.ibnb`}
-                                        label={'商品货号'}
-                                    >
-                                        <Input placeholder="商品货号"/>
-                                    </Form.Item>
-                                </StyledCol>
-                                <StyledCol span={8}>
-                                    <Form.Item
-                                        name={`product.category`}
-                                        label={'商品分类'}
-                                    >
-                                        <Input placeholder="商品分类"/>
-                                    </Form.Item>
-                                </StyledCol>
-                                <StyledCol span={8}>
-                                    <Form.Item
-                                        name={`product.onsale`}
-                                        label={'上架状态'}
-                                        initialValue={"ON_SALE"}
-                                    >
-                                        <Select placeholder={"上架状态"}>
-                                            <Option value="ON_SALE">上架中</Option>
-                                            <Option value="OUT_OF_ORDER">已下架</Option>
-                                        </Select>
-                                    </Form.Item>
-                                </StyledCol>
-                                <StyledCol span={8}>
-                                    <Button style={{marginRight: '20px'}} type={'primary'}>搜索</Button>
-                                    <Button>重置</Button>
-                                </StyledCol>
-                            </Row>
-                        </Form>
-                    </Spin>
-                    <div style={{width: '100%', flex: '1 0 0px', overflow: 'auto', marginTop: '10px'}}>
-                        <Table loading={status === 'loading'} rowKey={"id"} dataSource={this.props.data?.products} columns={columns}/>;
-                    </div>
+    function onPageChange(page:number, pageSize?:number) {
+        dispatch(getProductList({currentPage:Math.max(0,--page),pageSize:pageSize}));
+    }
+    return (
+        <div style={{display: 'flex', height: '100%', flexDirection: 'column'}}>
+            <ProductSearch/>
+            <StatusView status={status} retry={onRetry} loadOnce={true} errorMsg={errorMsg}>
+                <div style={{width: '100%', flex: '1 0 0px', overflow: 'auto', marginTop: '10px'}}>
+                    <Table loading={status === 'loading'} rowKey={"id"} dataSource={data?.items} columns={columns}
+                    pagination={data&&{total:data.totalElements,
+                        current:(data.currentPage+1),pageSize:data.pageSize,onChange:onPageChange}}
+                    />
                 </div>
-        );
-    }
+            </StatusView>
+        </div>
+    );
 }
 
 
-const mapState = (state: RootState) => {
-    return selectProductReducer(state);
-}
 
-const connector = connect(mapState,
-    {...productSlice.actions, getProductList})
-
-type PropsFromRedux = ConnectedProps<typeof connector>
-export default connector(ProductListPage);
 
 
 

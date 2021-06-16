@@ -3,10 +3,7 @@ package org.shop.controller;
 import lombok.extern.log4j.Log4j2;
 import org.shop.common.Result;
 import org.shop.common.util.Page;
-import org.shop.model.vo.ProductAddVO;
-import org.shop.model.vo.ProductQueryVO;
-import org.shop.model.vo.ProductReturnVO;
-import org.shop.model.vo.ProductUpdateVO;
+import org.shop.model.vo.*;
 import org.shop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Optional;
+
 @Log4j2
 @RestController
 @RequestMapping("/api/product")
@@ -60,9 +58,15 @@ public class ProductController {
 	@GetMapping("/{page}/{pageSize}")
 	public ResponseEntity<Result<Page<ProductReturnVO>>> getAllProductByPage(@PathVariable(name = "page") Integer page,
 	                                                                         @PathVariable(name = "pageSize") int pageSize,
-	                                                                         @RequestParam(name = "orderBy", required = false) String order, @RequestBody(required = false) ProductQueryVO example) {
+	                                                                         @RequestParam(name = "orderBy", required = false) String order,
+	                                                                         @RequestParam(name = "name", required = false) String name,
+	                                                                         @RequestParam(name = "category", required = false) Integer category,
+	                                                                         @RequestParam(name = "status", required = false) String status,
+	                                                                         @RequestParam(name = "brand", required = false) Integer brand
+	                                                                         ) {
 		Page<ProductQueryVO> of = Page.of(page, Math.max(5, Math.min(pageSize, this.pageSize)), order);
-		return ResponseEntity.ok(Result.of(service.getAll(Optional.ofNullable(example).orElse(new ProductQueryVO()), of)));
+		return ResponseEntity.ok(Result.of(service.getAll(
+				new ProductQueryVO(name,category, Status.valueOf(Optional.ofNullable(status).orElse("ON_SALE")) ,brand), of)));
 	}
 
 	@GetMapping("/findByCategoryId/{id}/{page}/{pageSize}")
