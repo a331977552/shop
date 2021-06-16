@@ -33,7 +33,9 @@
 <!--        <table tableName="shop_order" domainObjectName="ShopOrderDAO"/>-->
 <!--        <table tableName="shopping_cart" domainObjectName="ShoppingCartDAO"></table>-->
 <!--        <table tableName="snapshot_product" domainObjectName="SnapshotProductDAO"></table>-->
-<!--        <table tableName="brand" domainObjectName="BrandDAO"></table>-->
+        <table tableName="brand" domainObjectName="BrandDAO">
+                        <generatedKey column="id" sqlStatement="MySql"></generatedKey>
+        </table>
 <!--        <table tableName="sku" domainObjectName="SkuDAO">-->
 <!--            <generatedKey column="id" sqlStatement="MySql"></generatedKey>-->
 <!--        </table>-->
@@ -41,8 +43,8 @@
 <!--        <table tableName="attr_value" domainObjectName="AttrValueDAO"></table>-->
 <!--        <table tableName="product_spec" domainObjectName="ProductSpecDAO"></table>-->
 
-        <table tableName="category"  domainObjectName="CategoryDAO">
-            <generatedKey column="id" sqlStatement="MySql"></generatedKey>
-        </table>
+<!--        <table tableName="category"  domainObjectName="CategoryDAO">-->
+<!--            <generatedKey column="id" sqlStatement="MySql"></generatedKey>-->
+<!--        </table>-->
     </context>
 </generatorConfiguration>

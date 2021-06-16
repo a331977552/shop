@@ -153,13 +153,10 @@ class ProductControllerTest {
 		System.out.println(put);
 		assertEquals(400, put.getStatusCodeValue());
 		updateVO.setStatus("OUT_OF_ORDER");
-		updateVO.setBrand("fb6189d4b86c11eb80e6b8c3a8fe010");
 		final ResponseEntity<String> put2 = helper.builder().setPort(port).setUipath(getUiPath()).withToken(token)
 				.build().put(null, updateVO, strRef);
 		System.out.println(put2);
 		assertEquals(400, put2.getStatusCodeValue());
-
-		updateVO.setBrand("fb6189d4b86c11eb80e6b8c3a8fe0109");
 
 		final ResponseEntity<String> success = helper.builder().setPort(port).setUipath(getUiPath()).withToken(token)
 				.build().put(null, updateVO, strRef);

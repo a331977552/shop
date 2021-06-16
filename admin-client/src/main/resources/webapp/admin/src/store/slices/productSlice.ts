@@ -4,7 +4,7 @@ import {
 import {ErrorModel,ResultModel,ProductListModel} from "../../model";
 import {RootState} from "../store";
 import { createGenericSlice, GenericState} from "../hooks";
-import {getProductListAPI} from "../api";
+import {getProductListAPI} from "../../api";
 
 const initialState: GenericState<ProductListModel> = {
     status: 'loading'

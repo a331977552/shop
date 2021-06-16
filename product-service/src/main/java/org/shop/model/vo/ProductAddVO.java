@@ -30,7 +30,7 @@ public class ProductAddVO {
 
 	private String standardImg;
 
-	private String brand;
+	private Integer brand;
 
 	@Data
 	@ToString

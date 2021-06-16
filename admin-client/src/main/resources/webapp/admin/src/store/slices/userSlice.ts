@@ -2,7 +2,7 @@ import {
     createAsyncThunk,
 } from '@reduxjs/toolkit';
 import {RootState} from "../store";
-import {getUserInfoAPI, loginAPI} from "../api";
+import {getUserInfoAPI, loginAPI} from "../../api";
 import {createGenericSlice, GenericState} from "../hooks";
 import {AuthenticationModel, ResultModel, UserModel,ErrorModel} from "../../model";
 

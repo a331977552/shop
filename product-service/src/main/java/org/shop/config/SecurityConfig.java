@@ -55,16 +55,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				authorizeRequests().
 				requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll().
 				antMatchers(HttpMethod.GET,"/api/product/**","api/product/test/**",
-						"/api/category/**").permitAll().
+						"/api/category/**","/api/brand/**").permitAll().
 
 				antMatchers(HttpMethod.POST, "/api/product").hasAuthority("ADMIN").
 				antMatchers(HttpMethod.POST, "/api/category").hasAuthority("ADMIN").
-				antMatchers(HttpMethod.PUT, "/api/product").hasAuthority("ADMIN").
+				antMatchers(HttpMethod.POST, "/api/brand").hasAuthority("ADMIN").
 				antMatchers(HttpMethod.PUT, "/api/product").hasAuthority("ADMIN").
 				antMatchers(HttpMethod.PUT, "/api/category").hasAuthority("ADMIN").
+				antMatchers(HttpMethod.PUT, "/api/brand").hasAuthority("ADMIN").
 				antMatchers( "/api/product/sku/*").hasAuthority("ADMIN").
 				antMatchers(HttpMethod.DELETE, "/api/product/*").hasAuthority("ADMIN").
 				antMatchers(HttpMethod.DELETE, "/api/category/*").hasAuthority("ADMIN").
+				antMatchers(HttpMethod.DELETE, "/api/brand/*").hasAuthority("ADMIN").
 				anyRequest().hasAnyAuthority("ADMIN").
 				and().
 				exceptionHandling().authenticationEntryPoint(new AuthenticationFailureHandler()).

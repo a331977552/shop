@@ -5,7 +5,7 @@
     <id column="id" jdbcType="CHAR" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="category" jdbcType="INTEGER" property="category" />
-    <result column="brand" jdbcType="CHAR" property="brand" />
+    <result column="brand" jdbcType="INTEGER" property="brand" />
     <result column="weight" jdbcType="INTEGER" property="weight" />
     <result column="sales" jdbcType="INTEGER" property="sales" />
     <result column="status" jdbcType="CHAR" property="status" />
@@ -114,7 +114,7 @@
       standard_img, created_time, updated_time
       )
     values (#{id,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, #{category,jdbcType=INTEGER}, 
-      #{brand,jdbcType=CHAR}, #{weight,jdbcType=INTEGER}, #{sales,jdbcType=INTEGER}, 
+      #{brand,jdbcType=INTEGER}, #{weight,jdbcType=INTEGER}, #{sales,jdbcType=INTEGER}, 
       #{status,jdbcType=CHAR}, #{priority,jdbcType=INTEGER}, #{thumbnailImg,jdbcType=VARCHAR}, 
       #{standardImg,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}
       )
@@ -170,7 +170,7 @@
         #{category,jdbcType=INTEGER},
       </if>
       <if test="brand != null">
-        #{brand,jdbcType=CHAR},
+        #{brand,jdbcType=INTEGER},
       </if>
       <if test="weight != null">
         #{weight,jdbcType=INTEGER},
@@ -217,7 +217,7 @@
         category = #{record.category,jdbcType=INTEGER},
       </if>
       <if test="record.brand != null">
-        brand = #{record.brand,jdbcType=CHAR},
+        brand = #{record.brand,jdbcType=INTEGER},
       </if>
       <if test="record.weight != null">
         weight = #{record.weight,jdbcType=INTEGER},
@@ -253,7 +253,7 @@
     set id = #{record.id,jdbcType=CHAR},
       name = #{record.name,jdbcType=VARCHAR},
       category = #{record.category,jdbcType=INTEGER},
-      brand = #{record.brand,jdbcType=CHAR},
+      brand = #{record.brand,jdbcType=INTEGER},
       weight = #{record.weight,jdbcType=INTEGER},
       sales = #{record.sales,jdbcType=INTEGER},
       status = #{record.status,jdbcType=CHAR},
@@ -276,7 +276,7 @@
         category = #{category,jdbcType=INTEGER},
       </if>
       <if test="brand != null">
-        brand = #{brand,jdbcType=CHAR},
+        brand = #{brand,jdbcType=INTEGER},
       </if>
       <if test="weight != null">
         weight = #{weight,jdbcType=INTEGER},
@@ -309,7 +309,7 @@
     update product
     set name = #{name,jdbcType=VARCHAR},
       category = #{category,jdbcType=INTEGER},
-      brand = #{brand,jdbcType=CHAR},
+      brand = #{brand,jdbcType=INTEGER},
       weight = #{weight,jdbcType=INTEGER},
       sales = #{sales,jdbcType=INTEGER},
       status = #{status,jdbcType=CHAR},

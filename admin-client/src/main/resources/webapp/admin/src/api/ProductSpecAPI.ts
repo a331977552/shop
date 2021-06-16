@@ -1,6 +1,6 @@
-import {get, httpDelete, post, put} from "../HttpClient";
-import {ProductSpecModel} from "../../model";
-import {PageModel, PageQueryModel, ProductSpecQueryModel} from "../../model";
+import {get, httpDelete, post, put} from "../store/HttpClient";
+import {ProductSpecModel} from "../model";
+import {PageModel, PageQueryModel, ProductSpecQueryModel} from "../model";
 
 
 export function getProductSpecListAPI(pageQueryModel: PageQueryModel<ProductSpecQueryModel>) {

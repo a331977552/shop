@@ -1,5 +1,5 @@
-import {get, httpDelete, post, put} from "../HttpClient";
-import {ProductAttrModel, ProductAttrQueryModel,PageModel, PageQueryModel} from "../../model";
+import {get, httpDelete, post, put} from "../store/HttpClient";
+import {ProductAttrModel, ProductAttrQueryModel,PageModel, PageQueryModel} from "../model";
 
 
 export function getProductAttrListAPI(pageQueryModel: PageQueryModel<ProductAttrQueryModel>) {

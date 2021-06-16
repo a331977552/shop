@@ -12,7 +12,7 @@ import {
     AddSpecAPI,
     getProductSpecAPI,
     updateSpecAPI
-} from "../../store/api/ProductSpecAPI";
+} from "../../api/ProductSpecAPI";
 import {useParams} from "react-router-dom";
 import {CategoryTree} from "../category/CategoryConvertor";
 import CentredLoading from "../../components/CentredLoading";

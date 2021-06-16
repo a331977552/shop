@@ -5,7 +5,7 @@ import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {
     getCategoryList, selectUITree,
 } from "../../store/slices/cateogrySlice";
-import {addCategoryAPI} from "../../store/api/CategoryAPI";
+import {addCategoryAPI} from "../../api/CategoryAPI";
 
 const {Title} = Typography;
 

@@ -96,7 +96,7 @@ public class ProductServiceImpl implements ProductService {
 		productDAO.setUpdatedTime(LocalDateTime.now());
 		productDAO.setUpdatedTime(LocalDateTime.now());
 		mapper.updateByPrimaryKeySelective(productDAO);
-		if(TextUtil.hasText(example.getBrand())){
+		if(example.getBrand()!=null){
 			BrandDAOExample brexample = new BrandDAOExample();
 			brexample.createCriteria().andIdEqualTo(example.getBrand());
 			final long l = brandDAOMapper.countByExample(brexample);
@@ -139,7 +139,7 @@ public class ProductServiceImpl implements ProductService {
 		if(TextUtil.hasText(example.getName())){
 			criteria.andNameEqualTo(example.getName());
 		}
-		if(TextUtil.hasText(example.getBrand())){
+		if(example.getBrand() !=null ){
 			criteria.andBrandEqualTo(example.getBrand());
 		}
 		if(example.getStatus() !=null){

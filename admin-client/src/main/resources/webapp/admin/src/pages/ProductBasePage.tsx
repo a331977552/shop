@@ -12,6 +12,7 @@ import StatusView from "./../components/StatusView";
 import ProductAttrPage from "./attr/ProductAttrPage";
 import ProductAttrAddOrUpdatePage from "./attr/ProductAttrAddOrUpdatePage";
 import BrandListPage from "./brand/BrandListPage";
+import BrandAddOrUpdatePage from "./brand/BrandAddOrUpdatePage";
 
 function ProductBasePage() {
     let dispatch = useAppDispatch();
@@ -49,12 +50,12 @@ function ProductBasePage() {
                 <Route path={"/product/brand"} exact={true}>
                     <BrandListPage/>
                 </Route>
-
-
+                <Route path={["/product/brand/add","/product/brand/update/:bid"]} exact={true}>
+                    <BrandAddOrUpdatePage/>
+                </Route>
                 <Route path={["/product/attr/add", "/product/attr/update/:attrID"]} exact={true}>
                     <ProductAttrAddOrUpdatePage/>
                 </Route>
-
                 <Route path={"/product/category/update/:cateID"} exact={true}>
                     <CategoryUpdatePage/>
                 </Route>

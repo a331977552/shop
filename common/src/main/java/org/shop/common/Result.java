@@ -4,8 +4,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.shop.common.util.ErrorResultConvertor;
-import org.springframework.boot.ApplicationContextFactory;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 
 import java.time.Instant;
@@ -53,7 +51,7 @@ public final class Result<T>{
 			if (list.isEmpty())
 				return Result.emptyList();
 		} else if (t == null) {
-			return Result.empty(null);
+			return Result.empty("请求内容为空");
 		}
 		Result<T> objectResult = new Result<T>(200, null);
 		objectResult.setResult(t);

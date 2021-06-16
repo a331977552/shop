@@ -9,7 +9,7 @@ public class ProductDAO {
 
     private Integer category;
 
-    private String brand;
+    private Integer brand;
 
     private Integer weight;
 
@@ -51,11 +51,11 @@ public class ProductDAO {
         this.category = category;
     }
 
-    public String getBrand() {
+    public Integer getBrand() {
         return brand;
     }
 
-    public void setBrand(String brand) {
+    public void setBrand(Integer brand) {
         this.brand = brand;
     }
 

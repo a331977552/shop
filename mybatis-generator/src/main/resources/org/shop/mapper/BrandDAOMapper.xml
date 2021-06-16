@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.shop.mapper.CategoryDAOMapper">
-  <resultMap id="BaseResultMap" type="org.shop.model.dao.CategoryDAO">
+<mapper namespace="org.shop.mapper.BrandDAOMapper">
+  <resultMap id="BaseResultMap" type="org.shop.model.dao.BrandDAO">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="parent" jdbcType="INTEGER" property="parent" />
+    <result column="registration_num" jdbcType="VARCHAR" property="registrationNum" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
-    <result column="level" jdbcType="INTEGER" property="level" />
-    <result column="isLeaf" jdbcType="BIT" property="isleaf" />
-    <result column="visible" jdbcType="BIT" property="visible" />
+    <result column="capital_letter" jdbcType="CHAR" property="capitalLetter" />
     <result column="priority" jdbcType="INTEGER" property="priority" />
-    <result column="suffix" jdbcType="VARCHAR" property="suffix" />
-    <result column="keyword" jdbcType="VARCHAR" property="keyword" />
-    <result column="nav_visible" jdbcType="BIT" property="navVisible" />
+    <result column="is_manufacturer" jdbcType="BIT" property="isManufacturer" />
+    <result column="visible" jdbcType="BIT" property="visible" />
+    <result column="info" jdbcType="VARCHAR" property="info" />
     <result column="description" jdbcType="VARCHAR" property="description" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -75,16 +73,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, parent, created_time, updated_time, level, isLeaf, visible, priority, suffix, 
-    keyword, nav_visible, description
+    id, name, registration_num, created_time, updated_time, capital_letter, priority, 
+    is_manufacturer, visible, info, description
   </sql>
-  <select id="selectByExample" parameterType="org.shop.model.dao.CategoryDAOExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="org.shop.model.dao.BrandDAOExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from category
+    from brand
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -95,46 +93,44 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from category
+    from brand
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from category
+    delete from brand
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="org.shop.model.dao.CategoryDAOExample">
-    delete from category
+  <delete id="deleteByExample" parameterType="org.shop.model.dao.BrandDAOExample">
+    delete from brand
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="org.shop.model.dao.CategoryDAO">
+  <insert id="insert" parameterType="org.shop.model.dao.BrandDAO">
     <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into category (id, name, parent, 
-      created_time, updated_time, level, 
-      isLeaf, visible, priority, 
-      suffix, keyword, nav_visible, 
-      description)
-    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{parent,jdbcType=INTEGER}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, #{level,jdbcType=INTEGER}, 
-      #{isleaf,jdbcType=BIT}, #{visible,jdbcType=BIT}, #{priority,jdbcType=INTEGER}, 
-      #{suffix,jdbcType=VARCHAR}, #{keyword,jdbcType=VARCHAR}, #{navVisible,jdbcType=BIT}, 
-      #{description,jdbcType=VARCHAR})
+    insert into brand (id, name, registration_num, 
+      created_time, updated_time, capital_letter, 
+      priority, is_manufacturer, visible, 
+      info, description)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{registrationNum,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, #{capitalLetter,jdbcType=CHAR}, 
+      #{priority,jdbcType=INTEGER}, #{isManufacturer,jdbcType=BIT}, #{visible,jdbcType=BIT}, 
+      #{info,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="org.shop.model.dao.CategoryDAO">
+  <insert id="insertSelective" parameterType="org.shop.model.dao.BrandDAO">
     <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into category
+    insert into brand
     <trim prefix="(" suffix=")" suffixOverrides=",">
       id,
       <if test="name != null">
         name,
       </if>
-      <if test="parent != null">
-        parent,
+      <if test="registrationNum != null">
+        registration_num,
       </if>
       <if test="createdTime != null">
         created_time,
@@ -142,26 +138,20 @@
       <if test="updatedTime != null">
         updated_time,
       </if>
-      <if test="level != null">
-        level,
-      </if>
-      <if test="isleaf != null">
-        isLeaf,
-      </if>
-      <if test="visible != null">
-        visible,
+      <if test="capitalLetter != null">
+        capital_letter,
       </if>
       <if test="priority != null">
         priority,
       </if>
-      <if test="suffix != null">
-        suffix,
+      <if test="isManufacturer != null">
+        is_manufacturer,
       </if>
-      <if test="keyword != null">
-        keyword,
+      <if test="visible != null">
+        visible,
       </if>
-      <if test="navVisible != null">
-        nav_visible,
+      <if test="info != null">
+        info,
       </if>
       <if test="description != null">
         description,
@@ -172,8 +162,8 @@
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
       </if>
-      <if test="parent != null">
-        #{parent,jdbcType=INTEGER},
+      <if test="registrationNum != null">
+        #{registrationNum,jdbcType=VARCHAR},
       </if>
       <if test="createdTime != null">
         #{createdTime,jdbcType=TIMESTAMP},
@@ -181,40 +171,34 @@
       <if test="updatedTime != null">
         #{updatedTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="level != null">
-        #{level,jdbcType=INTEGER},
-      </if>
-      <if test="isleaf != null">
-        #{isleaf,jdbcType=BIT},
-      </if>
-      <if test="visible != null">
-        #{visible,jdbcType=BIT},
+      <if test="capitalLetter != null">
+        #{capitalLetter,jdbcType=CHAR},
       </if>
       <if test="priority != null">
         #{priority,jdbcType=INTEGER},
       </if>
-      <if test="suffix != null">
-        #{suffix,jdbcType=VARCHAR},
+      <if test="isManufacturer != null">
+        #{isManufacturer,jdbcType=BIT},
       </if>
-      <if test="keyword != null">
-        #{keyword,jdbcType=VARCHAR},
+      <if test="visible != null">
+        #{visible,jdbcType=BIT},
       </if>
-      <if test="navVisible != null">
-        #{navVisible,jdbcType=BIT},
+      <if test="info != null">
+        #{info,jdbcType=VARCHAR},
       </if>
       <if test="description != null">
         #{description,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="org.shop.model.dao.CategoryDAOExample" resultType="java.lang.Long">
-    select count(*) from category
+  <select id="countByExample" parameterType="org.shop.model.dao.BrandDAOExample" resultType="java.lang.Long">
+    select count(*) from brand
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update category
+    update brand
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
@@ -222,8 +206,8 @@
       <if test="record.name != null">
         name = #{record.name,jdbcType=VARCHAR},
       </if>
-      <if test="record.parent != null">
-        parent = #{record.parent,jdbcType=INTEGER},
+      <if test="record.registrationNum != null">
+        registration_num = #{record.registrationNum,jdbcType=VARCHAR},
       </if>
       <if test="record.createdTime != null">
         created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -231,26 +215,20 @@
       <if test="record.updatedTime != null">
         updated_time = #{record.updatedTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.level != null">
-        level = #{record.level,jdbcType=INTEGER},
-      </if>
-      <if test="record.isleaf != null">
-        isLeaf = #{record.isleaf,jdbcType=BIT},
-      </if>
-      <if test="record.visible != null">
-        visible = #{record.visible,jdbcType=BIT},
+      <if test="record.capitalLetter != null">
+        capital_letter = #{record.capitalLetter,jdbcType=CHAR},
       </if>
       <if test="record.priority != null">
         priority = #{record.priority,jdbcType=INTEGER},
       </if>
-      <if test="record.suffix != null">
-        suffix = #{record.suffix,jdbcType=VARCHAR},
+      <if test="record.isManufacturer != null">
+        is_manufacturer = #{record.isManufacturer,jdbcType=BIT},
       </if>
-      <if test="record.keyword != null">
-        keyword = #{record.keyword,jdbcType=VARCHAR},
+      <if test="record.visible != null">
+        visible = #{record.visible,jdbcType=BIT},
       </if>
-      <if test="record.navVisible != null">
-        nav_visible = #{record.navVisible,jdbcType=BIT},
+      <if test="record.info != null">
+        info = #{record.info,jdbcType=VARCHAR},
       </if>
       <if test="record.description != null">
         description = #{record.description,jdbcType=VARCHAR},
@@ -261,32 +239,30 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update category
+    update brand
     set id = #{record.id,jdbcType=INTEGER},
       name = #{record.name,jdbcType=VARCHAR},
-      parent = #{record.parent,jdbcType=INTEGER},
+      registration_num = #{record.registrationNum,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       updated_time = #{record.updatedTime,jdbcType=TIMESTAMP},
-      level = #{record.level,jdbcType=INTEGER},
-      isLeaf = #{record.isleaf,jdbcType=BIT},
-      visible = #{record.visible,jdbcType=BIT},
+      capital_letter = #{record.capitalLetter,jdbcType=CHAR},
       priority = #{record.priority,jdbcType=INTEGER},
-      suffix = #{record.suffix,jdbcType=VARCHAR},
-      keyword = #{record.keyword,jdbcType=VARCHAR},
-      nav_visible = #{record.navVisible,jdbcType=BIT},
+      is_manufacturer = #{record.isManufacturer,jdbcType=BIT},
+      visible = #{record.visible,jdbcType=BIT},
+      info = #{record.info,jdbcType=VARCHAR},
       description = #{record.description,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="org.shop.model.dao.CategoryDAO">
-    update category
+  <update id="updateByPrimaryKeySelective" parameterType="org.shop.model.dao.BrandDAO">
+    update brand
     <set>
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
       </if>
-      <if test="parent != null">
-        parent = #{parent,jdbcType=INTEGER},
+      <if test="registrationNum != null">
+        registration_num = #{registrationNum,jdbcType=VARCHAR},
       </if>
       <if test="createdTime != null">
         created_time = #{createdTime,jdbcType=TIMESTAMP},
@@ -294,26 +270,20 @@
       <if test="updatedTime != null">
         updated_time = #{updatedTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="level != null">
-        level = #{level,jdbcType=INTEGER},
-      </if>
-      <if test="isleaf != null">
-        isLeaf = #{isleaf,jdbcType=BIT},
-      </if>
-      <if test="visible != null">
-        visible = #{visible,jdbcType=BIT},
+      <if test="capitalLetter != null">
+        capital_letter = #{capitalLetter,jdbcType=CHAR},
       </if>
       <if test="priority != null">
         priority = #{priority,jdbcType=INTEGER},
       </if>
-      <if test="suffix != null">
-        suffix = #{suffix,jdbcType=VARCHAR},
+      <if test="isManufacturer != null">
+        is_manufacturer = #{isManufacturer,jdbcType=BIT},
       </if>
-      <if test="keyword != null">
-        keyword = #{keyword,jdbcType=VARCHAR},
+      <if test="visible != null">
+        visible = #{visible,jdbcType=BIT},
       </if>
-      <if test="navVisible != null">
-        nav_visible = #{navVisible,jdbcType=BIT},
+      <if test="info != null">
+        info = #{info,jdbcType=VARCHAR},
       </if>
       <if test="description != null">
         description = #{description,jdbcType=VARCHAR},
@@ -321,19 +291,17 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="org.shop.model.dao.CategoryDAO">
-    update category
+  <update id="updateByPrimaryKey" parameterType="org.shop.model.dao.BrandDAO">
+    update brand
     set name = #{name,jdbcType=VARCHAR},
-      parent = #{parent,jdbcType=INTEGER},
+      registration_num = #{registrationNum,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       updated_time = #{updatedTime,jdbcType=TIMESTAMP},
-      level = #{level,jdbcType=INTEGER},
-      isLeaf = #{isleaf,jdbcType=BIT},
-      visible = #{visible,jdbcType=BIT},
+      capital_letter = #{capitalLetter,jdbcType=CHAR},
       priority = #{priority,jdbcType=INTEGER},
-      suffix = #{suffix,jdbcType=VARCHAR},
-      keyword = #{keyword,jdbcType=VARCHAR},
-      nav_visible = #{navVisible,jdbcType=BIT},
+      is_manufacturer = #{isManufacturer,jdbcType=BIT},
+      visible = #{visible,jdbcType=BIT},
+      info = #{info,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>

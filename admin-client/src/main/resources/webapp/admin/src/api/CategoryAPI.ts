@@ -1,7 +1,7 @@
-import {get, httpDelete, post, put} from "../HttpClient";
-import {CategoryQueryVO} from "../../model";
-import {CategoryModel} from "../../model";
-import {PageModel, PageQueryModel} from "../../model";
+import {get, httpDelete, post, put} from "../store/HttpClient";
+import {CategoryQueryVO} from "../model";
+import {CategoryModel} from "../model";
+import {PageModel, PageQueryModel} from "../model";
 
 
 export function getCategoryListAPI(pageQueryModel?:PageQueryModel<CategoryQueryVO>) {

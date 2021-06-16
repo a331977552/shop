@@ -2,7 +2,7 @@ import React, { useState} from 'react';
 import {Form, Input, Button, Checkbox} from 'antd';
 import {Spin} from 'antd';
 import {useHistory} from 'react-router-dom';
-import loginAPI from "../../store/api/UserAPI";
+import loginAPI from "../../api/UserAPI";
 import {setTokenToStorage} from "../../store/TokenConfig";
 
 

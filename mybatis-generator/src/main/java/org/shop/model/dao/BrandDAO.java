@@ -2,30 +2,26 @@ package org.shop.model.dao;
 
 import java.time.LocalDateTime;
 
-public class CategoryDAO {
+public class BrandDAO {
     private Integer id;
 
     private String name;
 
-    private Integer parent;
+    private String registrationNum;
 
     private LocalDateTime createdTime;
 
     private LocalDateTime updatedTime;
 
-    private Integer level;
-
-    private Boolean isleaf;
-
-    private Boolean visible;
+    private String capitalLetter;
 
     private Integer priority;
 
-    private String suffix;
+    private Boolean isManufacturer;
 
-    private String keyword;
+    private Boolean visible;
 
-    private Boolean navVisible;
+    private String info;
 
     private String description;
 
@@ -45,12 +41,12 @@ public class CategoryDAO {
         this.name = name;
     }
 
-    public Integer getParent() {
-        return parent;
+    public String getRegistrationNum() {
+        return registrationNum;
     }
 
-    public void setParent(Integer parent) {
-        this.parent = parent;
+    public void setRegistrationNum(String registrationNum) {
+        this.registrationNum = registrationNum;
     }
 
     public LocalDateTime getCreatedTime() {
@@ -69,28 +65,12 @@ public class CategoryDAO {
         this.updatedTime = updatedTime;
     }
 
-    public Integer getLevel() {
-        return level;
+    public String getCapitalLetter() {
+        return capitalLetter;
     }
 
-    public void setLevel(Integer level) {
-        this.level = level;
-    }
-
-    public Boolean getIsleaf() {
-        return isleaf;
-    }
-
-    public void setIsleaf(Boolean isleaf) {
-        this.isleaf = isleaf;
-    }
-
-    public Boolean getVisible() {
-        return visible;
-    }
-
-    public void setVisible(Boolean visible) {
-        this.visible = visible;
+    public void setCapitalLetter(String capitalLetter) {
+        this.capitalLetter = capitalLetter;
     }
 
     public Integer getPriority() {
@@ -101,28 +81,28 @@ public class CategoryDAO {
         this.priority = priority;
     }
 
-    public String getSuffix() {
-        return suffix;
+    public Boolean getIsManufacturer() {
+        return isManufacturer;
     }
 
-    public void setSuffix(String suffix) {
-        this.suffix = suffix;
+    public void setIsManufacturer(Boolean isManufacturer) {
+        this.isManufacturer = isManufacturer;
     }
 
-    public String getKeyword() {
-        return keyword;
+    public Boolean getVisible() {
+        return visible;
     }
 
-    public void setKeyword(String keyword) {
-        this.keyword = keyword;
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
     }
 
-    public Boolean getNavVisible() {
-        return navVisible;
+    public String getInfo() {
+        return info;
     }
 
-    public void setNavVisible(Boolean navVisible) {
-        this.navVisible = navVisible;
+    public void setInfo(String info) {
+        this.info = info;
     }
 
     public String getDescription() {

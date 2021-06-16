@@ -11,6 +11,6 @@ public class ProductQueryVO {
 	private Integer category;
 	private Status status;
 	private Integer priority;
-	private String brand;
+	private Integer brand;
 
 }

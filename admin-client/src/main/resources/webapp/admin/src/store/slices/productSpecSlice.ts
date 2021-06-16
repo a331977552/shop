@@ -11,7 +11,7 @@ import {
 } from "../../model";
 import {RootState} from "../store";
 import {GenericState} from "../hooks";
-import {getProductSpecListAPI} from "../api/ProductSpecAPI";
+import {getProductSpecListAPI} from "../../api/ProductSpecAPI";
 
 const initialState: GenericState<PageModel<ProductSpecModel>> = {
     status: 'loading'

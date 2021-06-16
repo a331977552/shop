@@ -3,7 +3,7 @@ import {Button, message, Popconfirm, Space} from "antd";
 import {ProductSpecModel} from "../../model";
 import {useAppDispatch} from "../../store/hooks";
 import {useHistory} from "react-router-dom";
-import {deleteProductSpecAPI} from "../../store/api/ProductSpecAPI";
+import {deleteProductSpecAPI} from "../../api/ProductSpecAPI";
 import {deleteProductSpecByIdLocally} from '../../store/slices/productSpecSlice';
 
 function ProductSpecOperation(props: { record: ProductSpecModel }) {

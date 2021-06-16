@@ -11,7 +11,7 @@ import {ProductAttrModel} from "../../model";
 import {
     AddAttrAPI, getProductAttrAPI,
     updateAttrAPI
-} from "../../store/api/ProductAttrAPI";
+} from "../../api/ProductAttrAPI";
 import {useParams} from "react-router-dom";
 import {CategoryTree} from "../category/CategoryConvertor";
 import CentredLoading from "../../components/CentredLoading";

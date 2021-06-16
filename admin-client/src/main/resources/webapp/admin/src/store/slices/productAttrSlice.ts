@@ -10,7 +10,7 @@ import {
 } from "../../model";
 import {RootState} from "../store";
 import {GenericState} from "../hooks";
-import {getProductAttrListAPI} from "../api/ProductAttrAPI";
+import {getProductAttrListAPI} from "../../api/ProductAttrAPI";
 
 const initialState: GenericState<PageModel<ProductAttrModel>> = {
     status: 'loading'

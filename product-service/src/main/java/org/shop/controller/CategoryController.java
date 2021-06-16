@@ -5,7 +5,6 @@ import org.shop.common.Result;
 import org.shop.common.util.Page;
 import org.shop.model.vo.*;
 import org.shop.service.CategoryService;
-import org.shop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +21,6 @@ public class CategoryController {
 
 	@Autowired
 	CategoryService service;
-
-	@Autowired
-	ProductService productService;
 
 	@Value("${category.list.page.size}")
 	Integer pageSize;

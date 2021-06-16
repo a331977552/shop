@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Button, message, Popconfirm, Space} from "antd";
-import {deleteCategoryAPI} from "../../store/api/CategoryAPI";
+import {deleteCategoryAPI} from "../../api/CategoryAPI";
 import {CategoryModel} from "../../model";
 import {useAppDispatch} from "../../store/hooks";
 import {deleteCategoryByID} from '../../store/slices/cateogrySlice';

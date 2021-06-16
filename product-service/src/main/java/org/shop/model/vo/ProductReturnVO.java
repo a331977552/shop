@@ -27,7 +27,7 @@ public class ProductReturnVO {
 
 	private String standardImg;
 
-	private String brand;
+	private Integer brand;
 	private List<SkuReturnVO> skuList;
 
 	@Data

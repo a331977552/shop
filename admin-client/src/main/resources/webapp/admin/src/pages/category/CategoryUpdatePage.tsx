@@ -6,7 +6,7 @@ import {
     getCategoryList, selectCategoryDataReducer, selectUITree,
 } from "../../store/slices/cateogrySlice";
 import {CategoryModel} from "../../model";
-import {updateCategoryAPI} from "../../store/api/CategoryAPI";
+import {updateCategoryAPI} from "../../api/CategoryAPI";
 import {useParams} from "react-router-dom";
 
 

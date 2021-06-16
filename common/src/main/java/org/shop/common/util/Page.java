@@ -51,6 +51,7 @@ public class Page<VO> {
         page.setEmpty(items.isEmpty());
         page.setOffset(0);
         page.setItems(items);
+        page.setFirst(true);
         page.setTotalElements(items.size());
         page.setTotalPages(1);
         page.setLast(true);

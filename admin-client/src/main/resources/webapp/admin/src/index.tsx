@@ -4,26 +4,35 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'antd/dist/antd.css';
-import {addRequestInterceptor, addResponseTransformInterceptor} from "./store/HttpConfig";
+import {
+    authenticationRequestInterceptor,
+    addResponseTransformInterceptor,
+    authenticationInterceptor
+} from "./store/HttpConfig";
 import {
     BrowserRouter as Router,
     Switch,
-    Route,
+    Route, useHistory,
 } from "react-router-dom";
-import { LoadingOutlined } from '@ant-design/icons';
+import {LoadingOutlined} from '@ant-design/icons';
 import {Provider} from "react-redux";
 import {store} from "./store/store";
 import LoginPage from "./pages/login/LoginPage";
 import {Spin} from "antd";
+import {getTokenFromStorage, removeTokenFromStorage} from "./store/TokenConfig";
 
-addRequestInterceptor();
-addResponseTransformInterceptor();
 
-const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+const antIcon = <LoadingOutlined style={{fontSize: 24}} spin/>;
 Spin.setDefaultIndicator(antIcon);
 
 function Index() {
-
+    let history = useHistory();
+    authenticationInterceptor(() => {
+        removeTokenFromStorage();
+        history.push("/login");
+    });
+    addResponseTransformInterceptor();
+    authenticationRequestInterceptor();
     return <Switch>
         <Route path={"/login"}>
             <LoginPage/>
@@ -36,11 +45,11 @@ function Index() {
 }
 
 ReactDOM.render(
-        <Provider store={store}>
-            <Router>
-                <Index/>
-            </Router>
-        </Provider>,
+    <Provider store={store}>
+        <Router>
+            <Index/>
+        </Router>
+    </Provider>,
     document.getElementById('root')
 );
 

@@ -7,23 +7,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public interface ModelConvertor<DAO,VO,ReturnVO> {
+public interface ModelConvertor<DAO, AddVO,ReturnVO> {
 
-	default VO convertToVO(DAO dao, Supplier<? extends VO> ctor){
-		VO vo = ctor.get();
-		BeanUtils.copyProperties(dao,vo);
-		return  vo;
+	default AddVO convertToVO(DAO dao, Supplier<? extends AddVO> ctor){
+		AddVO addVo = ctor.get();
+		BeanUtils.copyProperties(dao, addVo);
+		return addVo;
 	}
 
-	default DAO convertToDAO(VO vo, Supplier<? extends DAO> ctor){
+	default DAO convertToDAO(AddVO addVo, Supplier<? extends DAO> ctor){
 		DAO dao = ctor.get();
-		BeanUtils.copyProperties(vo,dao);
+		BeanUtils.copyProperties(addVo,dao);
 		return  dao;
 	}
 
 
 	default ReturnVO convertToReturnVO(DAO dao, Supplier<? extends ReturnVO> ctor){
 		ReturnVO vo = ctor.get();
+		if(dao==null)
+			return null;
 		BeanUtils.copyProperties(dao,vo);
 		return  vo;
 	}

@@ -3,7 +3,7 @@ import {
 } from '@reduxjs/toolkit';
 import {RootState} from "../store";
 import {GenericState} from "../hooks";
-import {getCategoryListAPI, toggleCategoryVisibleAPI} from "../api/CategoryAPI";
+import {getCategoryListAPI, toggleCategoryVisibleAPI} from "../../api/CategoryAPI";
 import {CategoryModel, PageQueryModel, ErrorModel, ResultModel, PageModel, CategoryQueryVO} from "../../model";
 import {
     CategoryTree,

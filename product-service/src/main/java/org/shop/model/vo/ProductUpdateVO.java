@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.ToString;
 import org.shop.common.validator.EnumNamePattern;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -32,7 +33,8 @@ public class ProductUpdateVO {
 
 	private String standardImg;
 
-	private String brand;
+	@Min(1)
+	private Integer brand;
 	@NotNull(message = "sku不能为空")
 	private List<SkuUpdateVO> skuList;
 

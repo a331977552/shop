@@ -315,62 +315,52 @@ public class ProductDAOExample {
             return (Criteria) this;
         }
 
-        public Criteria andBrandEqualTo(String value) {
+        public Criteria andBrandEqualTo(Integer value) {
             addCriterion("brand =", value, "brand");
             return (Criteria) this;
         }
 
-        public Criteria andBrandNotEqualTo(String value) {
+        public Criteria andBrandNotEqualTo(Integer value) {
             addCriterion("brand <>", value, "brand");
             return (Criteria) this;
         }
 
-        public Criteria andBrandGreaterThan(String value) {
+        public Criteria andBrandGreaterThan(Integer value) {
             addCriterion("brand >", value, "brand");
             return (Criteria) this;
         }
 
-        public Criteria andBrandGreaterThanOrEqualTo(String value) {
+        public Criteria andBrandGreaterThanOrEqualTo(Integer value) {
             addCriterion("brand >=", value, "brand");
             return (Criteria) this;
         }
 
-        public Criteria andBrandLessThan(String value) {
+        public Criteria andBrandLessThan(Integer value) {
             addCriterion("brand <", value, "brand");
             return (Criteria) this;
         }
 
-        public Criteria andBrandLessThanOrEqualTo(String value) {
+        public Criteria andBrandLessThanOrEqualTo(Integer value) {
             addCriterion("brand <=", value, "brand");
             return (Criteria) this;
         }
 
-        public Criteria andBrandLike(String value) {
-            addCriterion("brand like", value, "brand");
-            return (Criteria) this;
-        }
-
-        public Criteria andBrandNotLike(String value) {
-            addCriterion("brand not like", value, "brand");
-            return (Criteria) this;
-        }
-
-        public Criteria andBrandIn(List<String> values) {
+        public Criteria andBrandIn(List<Integer> values) {
             addCriterion("brand in", values, "brand");
             return (Criteria) this;
         }
 
-        public Criteria andBrandNotIn(List<String> values) {
+        public Criteria andBrandNotIn(List<Integer> values) {
             addCriterion("brand not in", values, "brand");
             return (Criteria) this;
         }
 
-        public Criteria andBrandBetween(String value1, String value2) {
+        public Criteria andBrandBetween(Integer value1, Integer value2) {
             addCriterion("brand between", value1, value2, "brand");
             return (Criteria) this;
         }
 
-        public Criteria andBrandNotBetween(String value1, String value2) {
+        public Criteria andBrandNotBetween(Integer value1, Integer value2) {
             addCriterion("brand not between", value1, value2, "brand");
             return (Criteria) this;
         }

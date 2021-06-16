@@ -3,7 +3,7 @@ import {message} from "antd";
 import {ProductAttrModel} from "../../model";
 import {useAppDispatch} from "../../store/hooks";
 import {useHistory} from "react-router-dom";
-import {deleteProductAttrAPI} from "../../store/api/ProductAttrAPI";
+import {deleteProductAttrAPI} from "../../api/ProductAttrAPI";
 import DeletionOperationHOC from "../../components/DeletionOperationHOC";
 import { deleteProductAttrByIdLocally } from '../../store/slices/productAttrSlice';
 
