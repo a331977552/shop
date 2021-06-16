@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {Button, Table, Tag, Space} from "antd";
+import React, {useEffect, useState} from 'react';
+import {Button, Table, Tag, Space, Input, Form} from "antd";
 import {BrandModel} from "../../model";
 import BrandOperation from "./BrandOperation";
 import BrandSetting from "./BrandSetting";
@@ -7,11 +7,12 @@ import StatusView from "../../components/StatusView";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {getBrandList, selectBrandReducer} from "../../store/slices/brandSlice";
 import {useHistory} from "react-router-dom";
+import Search from "antd/es/input/Search";
 
 
-const levelColor :{ [key: string]: string; } = {
-    "true":"#f50",
-    "false":"#87d068"
+const levelColor: { [key: string]: string; } = {
+    "true": "#f50",
+    "false": "#87d068"
 }
 const columns = [
     {
@@ -45,7 +46,7 @@ const columns = [
         dataIndex: 'isManufacturer',
         key: 'isManufacturer',
         render: (text: string, record: BrandModel, index: number) => {
-            return <Tag color={levelColor[String(record.isManufacturer)]}>{record.isManufacturer?"是":"否"}</Tag>
+            return <Tag color={levelColor[String(record.isManufacturer)]}>{record.isManufacturer ? "是" : "否"}</Tag>
         }
     },
     {
@@ -74,12 +75,12 @@ const columns = [
 
 function BrandListPage() {
     let dispatch = useAppDispatch();
-    let brandState = useAppSelector(selectBrandReducer);
+    let brandState = useAppSelector(selectBrandReducer)
     let history = useHistory();
-    const {status,errorMsg,data} = brandState;
-    useEffect(()=>{
+    const {status, errorMsg, data} = brandState;
+    useEffect(() => {
         dispatch(getBrandList());
-    },[dispatch]);
+    }, [dispatch]);
 
     function onRetry() {
         dispatch(getBrandList());
@@ -89,21 +90,27 @@ function BrandListPage() {
         history.push("/product/brand/add")
     }
 
+    function onSearch(name:string) {
+        dispatch(getBrandList({name}))
+    }
+
     return (
-        <StatusView retry={onRetry} status={status} errorMsg={errorMsg}>
             <div style={{display: 'flex', height: '100%', flexDirection: 'column'}}>
                 <h2 style={{textAlign: 'center'}}>商品品牌</h2>
-                <div><Button style={{float: 'right'}} onClick={onAddClick}>添加品牌</Button>
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                       <Search placeholder="品牌名称" onSearch={onSearch} loading={status ==='loading'} style={{width: 200}}/>
+                    <Button style={{float: 'right'}} onClick={onAddClick}>添加品牌</Button>
                 </div>
                 <div style={{width: '100%', flex: '1 0 0px', overflow: 'auto', marginTop: '10px'}}>
+                    <StatusView retry={onRetry} status={status} errorMsg={errorMsg}>
                     <Table childrenColumnName={"null"} loading={status === 'loading'} rowKey={"id"}
                            dataSource={data?.items}
                            columns={columns}
                            pagination={{defaultPageSize: 20, total: data?.totalElements}}
                     />
+                    </StatusView>
                 </div>
             </div>
-        </StatusView>
 
     );
 }
