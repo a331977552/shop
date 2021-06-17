@@ -64,7 +64,7 @@ const columns = [
     },
     {
         title: '操作',
-        dataIndex: '',
+        dataIndex: 'x',
         key: 'x',
         render: (text: string, record: ProductSpecModel) => {
             return <ProductSpecOperation record={record}/>
@@ -103,7 +103,7 @@ function ProductSpecPage() {
                     所在分类:<b>{category?.name}</b>
                 </div>
                 <div style={{width: '100%', flex: '1 0 0px', overflow: 'auto', marginTop: '10px'}}>
-                    <Table childrenColumnName={"null"} loading={status === 'loading'} rowKey={"id"}
+                    <Table loading={status === 'loading'} rowKey={"id"}
                            dataSource={data?.items}
                            columns={columns}
                            pagination={{defaultPageSize: 20, total: data?.totalElements}}

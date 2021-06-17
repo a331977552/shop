@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 import {Button, message, Popconfirm, Space} from "antd";
 
-function DeletionOperationHOC(props: { id: number, onDelete: Function, onUpdateClick: React.MouseEventHandler<HTMLElement> }) {
+function DeletionOperationHOC(props: { onDelete: Function, onUpdateClick: React.MouseEventHandler<HTMLElement> }) {
     const [loading, setLoading] = useState(false);
     const [visible, setVisible] = useState(false);
     const onCategoryDeleteClicked = () => {
         setLoading(true);
         setVisible(true);
-        props.onDelete(props.id).catch((err: any) => {
+        props.onDelete().catch((err: any) => {
             setLoading(false);
             setVisible(false);
             message.error(err.msgDetail, 3)

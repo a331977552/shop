@@ -1,5 +1,5 @@
 import {
-    createAsyncThunk
+    createAsyncThunk, PayloadAction
 } from '@reduxjs/toolkit';
 import {ErrorModel, ResultModel, ProductModel, PageModel, PageQueryModel, ProductQueryModel} from "../../model";
 import {RootState} from "../store";
@@ -23,9 +23,15 @@ export const getProductList = createAsyncThunk<ResultModel<PageModel<ProductMode
     },
 );
 
+
 export const productSlice = createGenericSlice({
     name: 'product',
     initialState: initialState, reducers: {
+        deleteProductByIdLocally:(state,action:PayloadAction<ProductModel>)=>{
+            const pageModel = state.data as PageModel<ProductModel>;
+            const items = pageModel.items as ProductModel[];
+            pageModel.items = items.filter(item=>item.id !== action.payload.id) ;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -46,5 +52,5 @@ export const productSlice = createGenericSlice({
 export const selectProductReducer = (state: RootState) => state.product;
 export const selectProductList = (state: RootState) => state.product.data;
 
-// export const {} = productSlice.actions;
+export const {deleteProductByIdLocally} = productSlice.actions;
 export default productSlice.reducer;

@@ -15,5 +15,6 @@ public class ProductQueryVO {
 	private Integer category;
 	private Status status;
 	private Integer brand;
+	private String itemNo;
 
 }

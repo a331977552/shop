@@ -34,8 +34,6 @@ public class ProductController {
 	}
 
 
-
-
 	@DeleteMapping("/{id}")
 	public void deleteProduct(@PathVariable("id") String id) {
 		service.deleteProductById(id);
@@ -53,8 +51,6 @@ public class ProductController {
 	}
 
 
-
-
 	@GetMapping("/{page}/{pageSize}")
 	public ResponseEntity<Result<Page<ProductReturnVO>>> getAllProductByPage(@PathVariable(name = "page") Integer page,
 	                                                                         @PathVariable(name = "pageSize") int pageSize,
@@ -62,11 +58,12 @@ public class ProductController {
 	                                                                         @RequestParam(name = "name", required = false) String name,
 	                                                                         @RequestParam(name = "category", required = false) Integer category,
 	                                                                         @RequestParam(name = "status", required = false) String status,
-	                                                                         @RequestParam(name = "brand", required = false) Integer brand
-	                                                                         ) {
+	                                                                         @RequestParam(name = "brand", required = false) Integer brand,
+	                                                                         @RequestParam(name = "itemNo", required = false) String itemNo
+	) {
 		Page<ProductQueryVO> of = Page.of(page, Math.max(5, Math.min(pageSize, this.pageSize)), order);
 		return ResponseEntity.ok(Result.of(service.getAll(
-				new ProductQueryVO(name,category, Status.valueOf(Optional.ofNullable(status).orElse("ON_SALE")) ,brand), of)));
+				new ProductQueryVO(name, category, Status.valueOf(Optional.ofNullable(status).orElse("ON_SALE")), brand, itemNo), of)));
 	}
 
 	@GetMapping("/findByCategoryId/{id}/{page}/{pageSize}")

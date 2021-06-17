@@ -13,23 +13,27 @@ import ProductAttrPage from "./attr/ProductAttrPage";
 import ProductAttrAddOrUpdatePage from "./attr/ProductAttrAddOrUpdatePage";
 import BrandListPage from "./brand/BrandListPage";
 import BrandAddOrUpdatePage from "./brand/BrandAddOrUpdatePage";
+import ProductAddPage from "./product/ProductAddPage";
 
 function ProductBasePage() {
     let dispatch = useAppDispatch();
     let categoryReducer = useAppSelector(selectCategoryReducer);
     useEffect(() => {
-        dispatch(getCategoryList({}))
+        dispatch(getCategoryList())
     }, [dispatch]);
 
     function retry() {
-        dispatch(getCategoryList({}))
+        dispatch(getCategoryList())
     }
 
     return (
         <StatusView status={categoryReducer.categoryList.status} retry={retry}>
             <Switch>
-                <Route path={"/product/product_list"} exact={true}>
+                <Route path={"/product/list"} exact={true}>
                     <ProductListPage/>
+                </Route>
+                <Route path={["/product/add"]} >
+                    <ProductAddPage/>
                 </Route>
 
                 <Route path={"/product/category/add"} exact={true}>

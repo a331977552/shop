@@ -6,6 +6,7 @@ import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import StatusView from "../../components/StatusView";
 import { ProductModel} from "../../model";
 import ProductSearch from "./ProductSearch";
+import ProductOperation from "./ProductOperation";
 
 const statusMap:{[key:string]:string} = {
     "ON_SALE":"上架中",
@@ -63,24 +64,19 @@ const columns = [
         title: '操作',
         dataIndex: '',
         key: 'x',
-        render: () => <Space size="middle">
-            <Button size={'small'} type={'link'}>删除</Button>
-            <Button size={'small'} type={'link'}>更新</Button>
-        </Space>
-        ,
+        render: (text:any, record:ProductModel,index:number) =>
+            <ProductOperation {...record}/>
     },
 ];
 
 
 export default function ProductListPage() {
-    let history = useHistory();
     let dispatch = useAppDispatch();
     let productReducer = useAppSelector(selectProductReducer);
     const { status, errorMsg,data} = productReducer;
     useEffect(() => {
         dispatch(getProductList({currentPage:0,pageSize:20}));
     }, [])
-
 
     function onRetry() {
         dispatch(getProductList({currentPage:data?data.currentPage:0,pageSize:data?data.pageSize:20}));

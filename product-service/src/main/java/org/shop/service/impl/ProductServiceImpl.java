@@ -46,7 +46,7 @@ public class ProductServiceImpl implements ProductService {
 	public ProductReturnVO addProduct(ProductAddVO productVO) {
 		ProductDAO product = convertToDAO(productVO);
 		product.setId(UUIDUtils.generateID());
-		product.setStatus(product.getSales()==null? "ON_SALE":product.getStatus());
+		product.setStatus(product.getSales() == null ? "ON_SALE" : product.getStatus());
 		product.setSales(0);
 		product.setReviewStatus("PASSED");
 		mapper.insertSelective(product);
@@ -62,18 +62,20 @@ public class ProductServiceImpl implements ProductService {
 		ProductReturnVO productReturnVO = convertToReturnVO(product, convert);
 		return productReturnVO;
 	}
-	ProductDAO convertToDAO(ProductAddVO vo){
+
+	ProductDAO convertToDAO(ProductAddVO vo) {
 		ProductDAO product = new ProductDAO();
-		BeanUtils.copyProperties(vo,product);
-		return product;
-	}
-	ProductDAO convertToDAO(ProductUpdateVO vo){
-		ProductDAO product = new ProductDAO();
-		BeanUtils.copyProperties(vo,product);
+		BeanUtils.copyProperties(vo, product);
 		return product;
 	}
 
-	ProductReturnVO convertToReturnVO(ProductDAO save,List<SkuDAO> list){
+	ProductDAO convertToDAO(ProductUpdateVO vo) {
+		ProductDAO product = new ProductDAO();
+		BeanUtils.copyProperties(vo, product);
+		return product;
+	}
+
+	ProductReturnVO convertToReturnVO(ProductDAO save, List<SkuDAO> list) {
 		ProductReturnVO vo = BeanConvertor.convert(save, ProductReturnVO.class);
 		List<ProductReturnVO.SkuReturnVO> skuVO = BeanConvertor.convert(list, ProductReturnVO.SkuReturnVO.class);
 		vo.setSkuList(skuVO);
@@ -97,16 +99,16 @@ public class ProductServiceImpl implements ProductService {
 		productDAO.setUpdatedTime(LocalDateTime.now());
 		productDAO.setUpdatedTime(LocalDateTime.now());
 		mapper.updateByPrimaryKeySelective(productDAO);
-		if(example.getBrand()!=null){
+		if (example.getBrand() != null) {
 			BrandDAOExample brexample = new BrandDAOExample();
 			brexample.createCriteria().andIdEqualTo(example.getBrand());
 			final long l = brandDAOMapper.countByExample(brexample);
-			if (l <= 0 ){
-				log.error("产品更新失败， brand ID: {} 错误 ",example.getBrand());
+			if (l <= 0) {
+				log.error("产品更新失败， brand ID: {} 错误 ", example.getBrand());
 				throw new ProductUpdateException("产品更新失败， brand ID 错误");
 			}
 		}
-	   List<ProductUpdateVO.SkuUpdateVO> skuList = example.getSkuList();
+		List<ProductUpdateVO.SkuUpdateVO> skuList = example.getSkuList();
 		for (ProductUpdateVO.SkuUpdateVO vo : skuList) {
 			SkuDAO convert = BeanConvertor.convert(vo, SkuDAO.class);
 			convert.setProductId(productDAO.getId());
@@ -124,12 +126,12 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public ProductReturnVO getProductById(String id) {
 		ProductDAO product = mapper.selectByPrimaryKey(id);
-		if(product==null)
-			throw new ProductException("cannot get product by id "+ id);
+		if (product == null)
+			throw new ProductException("cannot get product by id " + id);
 		SkuDAOExample example = new SkuDAOExample();
 		example.createCriteria().andProductIdEqualTo(id);
 		List<SkuDAO> skuDAOS = skuMapper.selectByExample(example);
-		return convertToReturnVO(product,skuDAOS);
+		return convertToReturnVO(product, skuDAOS);
 	}
 
 	@Override
@@ -137,16 +139,16 @@ public class ProductServiceImpl implements ProductService {
 
 		ProductDAOExample productDAOExample = createExample();
 		ProductDAOExample.Criteria criteria = productDAOExample.createCriteria();
-		if(TextUtil.hasText(example.getName())){
+		if (TextUtil.hasText(example.getName())) {
 			criteria.andNameEqualTo(example.getName());
 		}
-		if(example.getBrand() !=null ){
+		if (example.getBrand() != null) {
 			criteria.andBrandEqualTo(example.getBrand());
 		}
-		if(example.getStatus() !=null){
+		if (example.getStatus() != null) {
 			criteria.andStatusEqualTo(example.getStatus().name());
 		}
-		if(example.getCategory() !=null){
+		if (example.getCategory() != null) {
 			criteria.andCategoryEqualTo(example.getCategory());
 		}
 
@@ -159,13 +161,13 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Page<ProductReturnVO> getProductsByCategoryId(Integer id,Page page) {
+	public Page<ProductReturnVO> getProductsByCategoryId(Integer id, Page page) {
 		ProductDAOExample productDAOExample = createExample();
 		ProductDAOExample.Criteria criteria = productDAOExample.createCriteria();
 		criteria.andCategoryEqualTo(id);
 
 		String orderBy = Optional.ofNullable(page.getOrderBy()).orElse("updated_time desc ");
-		productDAOExample.setOrderByClause(orderBy+ " limit "+ page.getPageSize() +" offset "+ page.getOffset());
+		productDAOExample.setOrderByClause(orderBy + " limit " + page.getPageSize() + " offset " + page.getOffset());
 		final long count = mapper.countByExample(productDAOExample);
 		final List<ProductDAO> products = mapper.selectByExample(productDAOExample);
 
@@ -174,7 +176,7 @@ public class ProductServiceImpl implements ProductService {
 			example.createCriteria().andProductIdEqualTo(product.getId());
 			return convertToReturnVO(product, skuMapper.selectByExample(example));
 		}).collect(Collectors.toList());
-		return Page.createFrom(page,count,results);
+		return Page.createFrom(page, count, results);
 	}
 
 
@@ -206,13 +208,29 @@ public class ProductServiceImpl implements ProductService {
 	public Page<ProductReturnVO> getAll(ProductQueryVO exampleParameter, Page<ProductQueryVO> page) {
 		final ProductDAOExample example = createExample();
 		final ProductDAOExample.Criteria criteria = example.createCriteria();
-		if(TextUtil.hasText(exampleParameter.getName())){
-			criteria.andNameLike("%"+exampleParameter.getName().trim()+"%");
+		if (TextUtil.hasText(exampleParameter.getName())) {
+			criteria.andNameLike("%" + exampleParameter.getName().trim() + "%");
 		}
+
+		criteria.andStatusEqualTo(exampleParameter.getStatus().name());
+		final Integer category = exampleParameter.getCategory();
+
+		if (category != null) {
+			criteria.andCategoryEqualTo(category);
+		}
+		if (exampleParameter.getBrand() != null) {
+			criteria.andBrandEqualTo(exampleParameter.getBrand());
+		}
+		if (TextUtil.hasText(exampleParameter.getItemNo())) {
+			criteria.andItemNoLike("%"+exampleParameter.getItemNo()+"%");
+		}
+
+
+
 		long count = mapper.countByExample(example);
 
 		String orderBy = Optional.ofNullable(page.getOrderBy()).orElse("updated_time desc ");
-		example.setOrderByClause(orderBy+ " limit "+ page.getPageSize() +" offset "+ page.getOffset());
+		example.setOrderByClause(orderBy + " limit " + page.getPageSize() + " offset " + page.getOffset());
 
 		final List<ProductDAO> productDAOS = mapper.selectByExample(example);
 		SkuDAOExample skuExample = new SkuDAOExample();

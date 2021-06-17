@@ -22,7 +22,7 @@ function BrandOperation(props: BrandModel) {
     }
 
     return (
-        <DeletionOperationHOC id={props.id} onDelete={onBrandDeleteClicked} onUpdateClick={onUpdate}/>
+        <DeletionOperationHOC onDelete={onBrandDeleteClicked} onUpdateClick={onUpdate}/>
     );
 }
 
