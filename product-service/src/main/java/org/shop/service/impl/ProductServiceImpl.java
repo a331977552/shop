@@ -225,13 +225,12 @@ public class ProductServiceImpl implements ProductService {
 			criteria.andItemNoLike("%"+exampleParameter.getItemNo()+"%");
 		}
 
-
+		//TODO remove detail part for optimizing
 
 		long count = mapper.countByExample(example);
 
 		String orderBy = Optional.ofNullable(page.getOrderBy()).orElse("updated_time desc ");
 		example.setOrderByClause(orderBy + " limit " + page.getPageSize() + " offset " + page.getOffset());
-
 		final List<ProductDAO> productDAOS = mapper.selectByExample(example);
 		SkuDAOExample skuExample = new SkuDAOExample();
 		final List<ProductReturnVO> collect = productDAOS.stream().map(dao -> {

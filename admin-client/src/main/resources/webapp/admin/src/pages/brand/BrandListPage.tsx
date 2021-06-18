@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {Button, Table, Tag, Space, Input, Form} from "antd";
+import React, {useEffect} from 'react';
+import {Button, Table, Tag, Space} from "antd";
 import {BrandModel} from "../../model";
 import BrandOperation from "./BrandOperation";
 import BrandSetting from "./BrandSetting";

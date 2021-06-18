@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
-import { Button, Table, Space} from "antd";
+import { Table} from "antd";
 import {getProductList, selectProductReducer} from "../../store/slices/productSlice";
-import {useHistory} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import StatusView from "../../components/StatusView";
 import { ProductModel} from "../../model";
@@ -76,7 +75,7 @@ export default function ProductListPage() {
     const { status, errorMsg,data} = productReducer;
     useEffect(() => {
         dispatch(getProductList({currentPage:0,pageSize:20}));
-    }, [])
+    }, [dispatch])
 
     function onRetry() {
         dispatch(getProductList({currentPage:data?data.currentPage:0,pageSize:data?data.pageSize:20}));

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {Button, Col, Form, Input, Row, Select, TreeSelect} from "antd";
 import styled from "styled-components";
 import {ProductQueryModel} from "../../model";

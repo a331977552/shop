@@ -24,7 +24,7 @@ public class ImageController {
 	}
 
 	@PostMapping
-	public Result<ImageReturnVO> addImg(@RequestParam("img") MultipartFile file){
+	public Result<ImageReturnVO> addImg(@RequestBody MultipartFile file){
 		final ImageReturnVO imageReturnVO = service.addImg(file);
 		return Result.of(imageReturnVO);
 	}

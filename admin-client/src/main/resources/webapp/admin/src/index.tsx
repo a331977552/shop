@@ -19,7 +19,7 @@ import {Provider} from "react-redux";
 import {store} from "./store/store";
 import LoginPage from "./pages/login/LoginPage";
 import {Spin} from "antd";
-import {getTokenFromStorage, removeTokenFromStorage} from "./store/TokenConfig";
+import {removeTokenFromStorage} from "./store/TokenConfig";
 
 
 const antIcon = <LoadingOutlined style={{fontSize: 24}} spin/>;

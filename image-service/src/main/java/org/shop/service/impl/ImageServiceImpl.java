@@ -2,11 +2,7 @@ package org.shop.service.impl;
 
 import com.mongodb.client.gridfs.model.GridFSFile;
 import org.bson.types.ObjectId;
-import org.shop.common.util.ModelConvertor;
 import org.shop.exception.ImgException;
-import org.shop.mapper.ImageDAOMapper;
-import org.shop.model.dao.ImageDAO;
-import org.shop.model.vo.ImageAddVO;
 import org.shop.model.vo.ImageReturnVO;
 import org.shop.service.ImageService;
 import org.shop.util.ImgUtil;
@@ -26,13 +22,12 @@ import java.io.InputStream;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 @Service
-public class ImageServiceImpl implements ImageService, ModelConvertor<ImageDAO,ImageAddVO,ImageReturnVO> {
+public class ImageServiceImpl implements ImageService {
 
 
 	@Autowired
 	GridFsTemplate client2;
 
-	private ImageDAOMapper mapper;
 
 	@Value("${img.thumb.width}")
 	private int thumbnailW;
@@ -40,8 +35,8 @@ public class ImageServiceImpl implements ImageService, ModelConvertor<ImageDAO,I
 	@Value("${img.thumb.height}")
 	private int thumbnailH;
 
-	public ImageServiceImpl(ImageDAOMapper mapper) {
-		this.mapper = mapper;
+	public ImageServiceImpl() {
+
 	}
 
 

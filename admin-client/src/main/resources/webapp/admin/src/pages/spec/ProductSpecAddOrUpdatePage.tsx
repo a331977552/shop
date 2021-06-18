@@ -67,7 +67,6 @@ function ProductSpecAddOrUpdatePage() {
         message.loading({content: isUpdate ? "更新中" : "添加中...", key});
         let promise;
         if (isUpdate) {
-            console.log(value)
             promise = updateSpecAPI(value);
         } else {
             promise = AddSpecAPI(value).then(() => {

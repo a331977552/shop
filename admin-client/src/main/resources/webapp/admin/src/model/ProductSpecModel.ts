@@ -14,6 +14,7 @@ export interface ProductSpecModel{
     searchable: boolean;
 
     value?: string;
+    valueArray?:Array<string>;
 }
 export interface ProductSpecQueryModel{
 

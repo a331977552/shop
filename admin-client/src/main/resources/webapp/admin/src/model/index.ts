@@ -9,3 +9,4 @@ export * from './UserModel';
 export * from './ProductAttrModel';
 export * from './ProductSpecModel';
 export * from './BrandModel';
+export * from './ImgModel';

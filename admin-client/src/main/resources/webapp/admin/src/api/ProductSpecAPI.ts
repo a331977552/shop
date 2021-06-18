@@ -18,6 +18,7 @@ export function getProductSpecAPI(id:number) {
     return get<ProductSpecModel>("/api-gateway/product-service/api/product/spec/"+ id);
 }
 
+
 export function AddSpecAPI(value:ProductSpecModel) {
     return post<ProductSpecModel>("/api-gateway/product-service/api/product/spec/",value);
 }

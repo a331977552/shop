@@ -17,8 +17,28 @@ export interface ProductModel {
 
     thumbnailImg: string;
 
-    standardImg: string;
+    standardImg?: string;
 
+    subtitle:string;
+
+    description?:string;
+
+    itemNo?:string;
+
+    price?:number;
+
+    marketPrice?:number;
+
+    suffix?:string //计量单位
+
+    specs:Array<KeyValueModel>
+    // attributes:Array<KeyValueModel>
+
+
+}
+export interface KeyValueModel {
+    name:string;
+    value:string;
 }
 
 export interface ProductQueryModel {
