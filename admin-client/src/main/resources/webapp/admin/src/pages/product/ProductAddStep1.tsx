@@ -14,7 +14,7 @@ import {log} from "../../services";
 const formItemLayout = {
     labelCol: {
         xs: {span: 24},
-        sm: {span: 4, offset: 1},
+        sm: {span: 4, offset: 2},
     },
     wrapperCol: {
         xs: {span: 24},
@@ -29,7 +29,7 @@ const tailFormItemLayout = {
         },
         sm: {
             span: 20,
-            offset: 5,
+            offset: 6,
         },
     },
 };
@@ -83,13 +83,18 @@ function ProductAddStep1(props: {
         }
     };
 
+    useEffect(() => {
+        if (!productModel) {
+            form.resetFields();
+        }
+    }, [productModel, form]);
+
     function onReset() {
         setProductModel(undefined);
-        form.resetFields();
     }
 
-    function onChange(changedFields: ProductModel, allFields: ProductModel) {
-        props.setProductModel({...productModel, ...allFields});
+    function onValuesChange(changedFields: ProductModel, allFields: ProductModel) {
+        setProductModel({...productModel, ...allFields});
     }
 
 
@@ -111,7 +116,7 @@ function ProductAddStep1(props: {
                 layout="horizontal"
                 onFinish={onFinish}
                 onReset={onReset}
-                onValuesChange={onChange}
+                onValuesChange={onValuesChange}
                 scrollToFirstError={true}
             >
 
@@ -132,13 +137,19 @@ function ProductAddStep1(props: {
                 </Form.Item>
                 <Form.Item label="商品分类"
                            name="category"
-                           rules={[{required: true, message: '必须设置种类所属'}]}>
+                           rules={[{required: true, message: '必须设置种类所属'}]}
+                           initialValue={productModel?.category}
+
+                >
                     <TreeSelect notFoundContent={<div>数据加载错误,请检查网络</div>}
                                 treeData={props.categories}
                     />
                 </Form.Item>
                 <Form.Item label="品牌" name={"brand"}
-                           rules={[{required: true, message: '必须选择品牌'}]}>
+                           rules={[{required: true, message: '必须选择品牌'}]}
+                           initialValue={productModel?.brand}
+
+                >
                     <Select
                         allowClear={true}
                         options={brandOptions}
@@ -148,24 +159,30 @@ function ProductAddStep1(props: {
                     </Select>
                 </Form.Item>
                 <Form.Item label="货号" name={"itemNo"}
+                           initialValue={productModel?.itemNo}
                 >
                     <Input maxLength={32}/>
                 </Form.Item>
-                <Form.Item label="计量单位" name={"suffix"}>
+                <Form.Item label="计量单位" name={"suffix"}
+                           initialValue={productModel?.itemNo}
+                >
                     <Input max={10}/>
                 </Form.Item>
 
-                <Form.Item label="描述" name={"description"} >
-                    <Input />
+                <Form.Item label="描述" name={"description"}
+                           initialValue={productModel?.description}
+                >
+                    <Input/>
                 </Form.Item>
-                <Form.Item label="上架状态" name={"status"} >
-                    <Radio.Group >
+                <Form.Item label="上架状态" name={"status"}
+                           initialValue={productModel?.status || "ON_SALE"}
+                >
+                    <Radio.Group>
                         <Radio.Button value={"ON_SALE"}>上架中</Radio.Button>
                         <Radio.Button value={"OUT_OF_ORDER"}>已下架</Radio.Button>
                     </Radio.Group>
                 </Form.Item>
-                <Form.Item label="图片"
-                >
+                <Form.Item label="图片">
 
                     <Upload
                         listType="picture-card"
@@ -190,29 +207,36 @@ function ProductAddStep1(props: {
                 </Form.Item>
 
 
-                <Form.Item label="排序" name={"sort"} >
+                <Form.Item label="排序" name={"priority"}
+                           initialValue={productModel?.priority}
+                >
                     <InputNumber min={0} max={9999}/>
                 </Form.Item>
 
 
-                <Form.Item label="重量" name={"weight"} >
-                    <InputNumber  min={0} max={999999999}/>
+                <Form.Item label="重量" name={"weight"}
+                           initialValue={productModel?.weight}
+                >
+                    <InputNumber min={0} max={999999999}/>
                 </Form.Item>
 
-                <Form.Item label="价格" name={"price"}>
-                    <InputNumber  min={0} max={999999999}/>
+                <Form.Item label="价格" name={"price"}
+                           initialValue={productModel?.price}
+                >
+                    <InputNumber min={0} max={999999999}/>
                 </Form.Item>
 
-                <Form.Item label="市场价格" name={"marketPrice"}>
-                    <InputNumber  min={0} max={999999999}/>
+                <Form.Item label="市场价格" name={"marketPrice"}
+                           initialValue={productModel?.marketPrice}
+                >
+                    <InputNumber min={0} max={999999999}/>
                 </Form.Item>
-
 
                 <Form.Item  {...tailFormItemLayout}>
                     <Button type="primary" htmlType="submit">
                         下一步
                     </Button>
-                    <Button style={{marginLeft:30}} htmlType={"reset"}>
+                    <Button style={{marginLeft: 30}} htmlType={"reset"}>
                         重置
                     </Button>
                 </Form.Item>

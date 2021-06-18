@@ -21,7 +21,7 @@ const {Title} = Typography;
 const formItemLayout = {
     labelCol: {
         xs: {span: 24},
-        sm: {span: 4, offset: 1},
+        sm: {span: 4, offset: 2},
     },
     wrapperCol: {
         xs: {span: 24},
@@ -36,7 +36,7 @@ const tailFormItemLayout = {
         },
         sm: {
             span: 20,
-            offset: 5,
+            offset: 6,
         },
     },
 };
