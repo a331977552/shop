@@ -1,82 +1,96 @@
-import React from 'react';
-import {Button, Col, Form, Row, Checkbox} from "antd";
+import React, {useEffect, useState} from 'react';
+import {Button, Col, Form, Row, Checkbox, message} from "antd";
 import TextArea from "antd/es/input/TextArea";
 import {ProductAttrModel, ProductModel} from "../../model";
+import {getProductAttrListAPI} from "../../api/ProductAttrAPI";
+
 const CheckboxGroup = Checkbox.Group;
 
 
-function AttrAddForm(props:{
-    productAttrs:Array<ProductAttrModel>,
+function AttrAddForm(props: {
     setProductModel: (productModel: ProductModel | undefined) => void,
-    productModel:ProductModel
+    productModel: ProductModel
 }) {
     const [attrForm] = Form.useForm();
-    const {productAttrs,setProductModel,productModel} = props;
+    const {setProductModel, productModel} = props;
+    const [productAttrs, setProductAttrs] = useState<Array<ProductAttrModel>>();
+
+
+    useEffect(() => {
+        getProductAttrListAPI({example: {categoryId: productModel?.category}}).then((result) => {
+            const items = result.result?.items;
+            setProductAttrs(items);
+        }).catch((error) => {
+            message.error(error.msgDetail, 3);
+        })
+    }, [setProductAttrs, productModel?.category]);
+
+
     function onAttrValueChange(changedFields: any, allFields: { [key: string]: string[] }) {
-        setProductModel({...productModel,attrs:allFields})
+        setProductModel({...productModel, attrs: allFields})
     }
 
     function onRefreshClick() {
 
     }
 
-    return (
-        <Row justify={'center'}
-             style={{width: "100%", marginBottom: '20px'}}
-        >
-            <Col
-                style={{backgroundColor: '#eeeeee', padding: "10px 20px", border: '1'}}
-                xs={{span: 24}} sm={{span: 14}}
+    return (((productAttrs?.length || 0) == 0) ? null :
+            <Row justify={'center'}
+                 style={{width: "100%", marginBottom: '20px'}}
             >
-                <h3>产品属性</h3>
-                <Form
-                    form={attrForm}
-                    style={{width: '100%'}}
-                    labelCol={{
-                        xs: {span: 24},
-                        sm: {span: 6}
-                    }}
-                    wrapperCol={{
-                        xs: {span: 24},
-                        sm: {span: 18},
-                    }}
-                    layout="horizontal"
-                    name={"spec"}
-                    onValuesChange={onAttrValueChange}
+                <Col
+                    style={{backgroundColor: '#eeeeee', padding: "10px 20px", border: '1'}}
+                    xs={{span: 24}} sm={{span: 14}}
                 >
-                    {
-                        productAttrs?.map(attr =>
-                            <Form.Item key={attr.id} name={attr.name} label={attr.name}
-                                initialValue={(productModel?.attrs||{})[attr.name]}
-                            >
-                                {attr.entryMethod === 'custom' ? <TextArea rows={4}/> :
-                                    <CheckboxGroup
-                                        options={ attr.values?.map(val =>
-                                        ({label: val.value, value: String(val.id)}))}   />
-                                }
-                            </Form.Item>
-                        )
-                    }
-                    <Form.Item wrapperCol={
-                        {
-                            xs: {
-                                span: 24,
-                                offset: 0
-                            },
-                            sm: {
-                                span: 20,
-                                offset: 6
-                            }
+                    <h3>产品属性</h3>
+                    <Form
+                        form={attrForm}
+                        style={{width: '100%'}}
+                        labelCol={{
+                            xs: {span: 24},
+                            sm: {span: 6}
                         }}
+                        wrapperCol={{
+                            xs: {span: 24},
+                            sm: {span: 18},
+                        }}
+                        layout="horizontal"
+                        name={"spec"}
+                        onValuesChange={onAttrValueChange}
                     >
-                        <Button onClick={onRefreshClick}>重绘列表
-                        </Button>
-                    </Form.Item>
-                </Form>
-            </Col>
+                        {
+                            productAttrs?.map(attr =>
+                                <Form.Item key={attr.id} name={attr.name} label={attr.name}
+                                           initialValue={(productModel?.attrs || {})[attr.name]}
+                                >
+                                    {attr.entryMethod === 'custom' ? <TextArea rows={4}/> :
+                                        <CheckboxGroup
+                                            options={attr.values?.map(val =>
+                                                ({label: val.value, value: String(val.id)}))}/>
+                                    }
+                                </Form.Item>
+                            )
+                        }
+                        <Form.Item wrapperCol={
+                            {
+                                xs: {
+                                    span: 24,
+                                    offset: 0
+                                },
+                                sm: {
+                                    span: 20,
+                                    offset: 6
+                                }
+                            }}
+                        >
+                            <Button onClick={onRefreshClick}>重绘列表
+                            </Button>
+                        </Form.Item>
+                    </Form>
+                </Col>
 
 
-        </Row>
+            </Row>
     );
 }
 

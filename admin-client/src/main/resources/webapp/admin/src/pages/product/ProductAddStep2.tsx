@@ -7,6 +7,7 @@ import {FormFinishInfo} from "rc-field-form/lib/FormContext";
 import {getProductAttrListAPI} from "../../api/ProductAttrAPI";
 import TextArea from "antd/es/input/TextArea";
 import AttrAddForm from "./AttrAddForm";
+import SpecAddForm from "./SpecAddForm";
 
 const formItemLayout = {
     labelCol: {
@@ -29,28 +30,6 @@ function ProductAddStep2(props: {
     const [categoryForm] = Form.useForm();
     const [specForm] = Form.useForm();
     const {productModel, setProductModel, categories} = props;
-    const [productSpecs, setProductSpecs] = useState<Array<ProductSpecModel>>();
-    const [productAttrs, setProductAttrs] = useState<Array<ProductAttrModel>>();
-    useEffect(() => {
-        getProductSpecListAPI({example: {categoryId: productModel?.category}}).then((result) => {
-            const items = result.result?.items?.map(item => ({
-                ...item, valueArray: Array.from(new Set(item.value?.split("\n")))
-            }));
-            setProductSpecs(items);
-        }).catch((error) => {
-            message.error(error.msgDetail, 3);
-        })
-    }, [setProductSpecs, productModel?.category]);
-
-    useEffect(() => {
-        getProductAttrListAPI({example: {categoryId: productModel?.category}}).then((result) => {
-            const items = result.result?.items;
-            setProductAttrs(items);
-        }).catch((error) => {
-            message.error(error.msgDetail, 3);
-        })
-    }, [setProductAttrs, productModel?.category]);
-
 
     function onPreviousClick() {
         props.onPreviousClick({
@@ -62,18 +41,11 @@ function ProductAddStep2(props: {
 
 
     function onCategoryChange(categoryId: number) {
-        console.log("onCategoryChange")
         setProductModel({...productModel, specs: undefined, category: categoryId});
     }
 
     function onFormFinish(name: string, info: FormFinishInfo) {
         console.log(name, info)
-    }
-
-    function onSpecValueChange(changedFields: any, allFields: { [key: string]: string | string[] }) {
-        console.log("onSpecValueChange", allFields)
-
-        setProductModel({...productModel, specs: allFields});
     }
 
     console.log(productModel)
@@ -88,13 +60,11 @@ function ProductAddStep2(props: {
             height: '100%',
             alignItems: 'center',
             width: '100%',
-
         }}>
             <Form.Provider
                 onFormFinish={onFormFinish}
                 // onFormChange={onSpecValueChange}
             >
-
                 <Form
                     name={"cateogry"}
                     form={categoryForm}
@@ -111,60 +81,9 @@ function ProductAddStep2(props: {
                         />
                     </Form.Item>
                 </Form>
-                {(productAttrs?.length || 0) > 0 &&
-                    <AttrAddForm productAttrs={productAttrs as Array<ProductAttrModel>} productModel={productModel} setProductModel={setProductModel}/>
-                }
+                <AttrAddForm productModel={productModel} setProductModel={setProductModel}/>
 
-                {(productSpecs?.length || 0) > 0 &&
-                (
-                    <Row
-                        justify={'center'}
-                        style={{width: '100%'}}
-                    >
-                        <Col
-
-                            style={{backgroundColor: '#eeeeee', padding: "10px 20px", border: '1'}}
-                            xs={{span: 24}} sm={{span: 14}}
-                        >
-                            <h3>产品规格</h3>
-                            <Form
-                                form={specForm}
-                                style={{width: '100%'}}
-                                labelCol={{
-                                    xs: {span: 24},
-                                    sm: {span: 6}
-                                }}
-                                wrapperCol={{
-                                    xs: {span: 24},
-                                    sm: {span: 18},
-                                }}
-                                layout="horizontal"
-                                name={"spec"}
-                                onValuesChange={onSpecValueChange}
-                            >
-                                {
-                                    productSpecs?.map(spec =>
-                                        <Form.Item key={spec.id} name={spec.name} label={spec.name}
-                                                   initialValue={(productModel?.specs || {})[spec.name]}
-                                        >
-                                            {spec.entryMethod === 'custom' ? <Input style={{flex: '1 0 0px'}}/> :
-                                                <Select
-                                                    showArrow
-                                                    allowClear={true}
-                                                    {...spec.selectType === 'multiple' ? {mode: 'multiple'} : {}}
-                                                    style={{flex: '1 0 0px'}} options={
-                                                    spec.valueArray?.map(val =>
-                                                        ({label: val, value: val}))}
-                                                />}
-                                        </Form.Item>
-                                    )
-                                }
-                            </Form>
-                        </Col>
-                    </Row>
-                )
-
-                }
+                <SpecAddForm productModel={productModel} setProductModel={setProductModel}/>
                 <Form
                     name={"submit"}
                     style={{marginTop: '20px'}}
