@@ -74,7 +74,7 @@ function ProductAttrAddOrUpdatePage() {
             promise = updateAttrAPI(model);
         } else {
             promise = AddAttrAPI(model).then(() => {
-                form.resetFields();
+                form.resetFields(["name","value","sort"]);
             })
         }
         promise.then(() => {

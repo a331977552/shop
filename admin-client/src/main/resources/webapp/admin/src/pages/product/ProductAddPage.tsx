@@ -62,6 +62,7 @@ function ProductAddPage() {
         setProductModel(product);
     }
 
+    console.log("parent render:",productModel)
     return (
         <div style={{width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
             <div style={{width: '400px', marginTop: '20px'}}>

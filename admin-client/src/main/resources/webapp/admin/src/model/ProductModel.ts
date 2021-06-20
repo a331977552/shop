@@ -1,5 +1,3 @@
-import {Simulate} from "react-dom/test-utils";
-import keyUp = Simulate.keyUp;
 
 export interface ProductModel {
     id: string;
@@ -34,7 +32,9 @@ export interface ProductModel {
 
     suffix?:string //计量单位
 
-    specs?:{[key:string]:string}
+    specs?:{[key:string]:string|Array<string>}
+    attrs?:{[key:string]:Array<string>}
+
     // attributes:Array<KeyValueModel>
 
 }

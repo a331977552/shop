@@ -58,7 +58,7 @@ function ProductAddStep1(props: {
     }, [dispatch, brandState.data]);
 
     function onFinish(value: ProductModel) {
-        props.onNextClick({...value, standardImg: productModel.standardImg});
+        props.onNextClick({...productModel, ...value,standardImg: productModel.standardImg});
     }
 
     function beforeUpload(file: RcFile) {
@@ -94,7 +94,11 @@ function ProductAddStep1(props: {
     }
 
     function onValuesChange(changedFields: ProductModel, allFields: ProductModel) {
-        setProductModel({...productModel, ...allFields});
+        console.log("onValuesChange", (changedFields.category !== productModel.category))
+        setProductModel({
+            ...productModel, ...allFields,
+            specs: (changedFields.category !== productModel.category) ? undefined : productModel.specs
+        });
     }
 
 

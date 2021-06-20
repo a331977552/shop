@@ -1,9 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {ProductModel, ProductSpecModel} from "../../model";
+import {ProductAttrModel, ProductModel, ProductSpecModel} from "../../model";
 import {CategoryTree} from "../category/CategoryConvertor";
 import {Button, Col, Form, Input, message, Row, Select, Space, TreeSelect} from "antd";
 import {getProductSpecListAPI} from "../../api/ProductSpecAPI";
 import {FormFinishInfo} from "rc-field-form/lib/FormContext";
+import {getProductAttrListAPI} from "../../api/ProductAttrAPI";
+import TextArea from "antd/es/input/TextArea";
+import AttrAddForm from "./AttrAddForm";
 
 const formItemLayout = {
     labelCol: {
@@ -15,18 +18,6 @@ const formItemLayout = {
         sm: {span: 16},
     },
 };
-const tailFormItemLayout = {
-    wrapperCol: {
-        xs: {
-            span: 24,
-            offset: 0,
-        },
-        sm: {
-            span: 20,
-            offset: 5,
-        },
-    },
-};
 
 function ProductAddStep2(props: {
     productModel: ProductModel,
@@ -35,9 +26,11 @@ function ProductAddStep2(props: {
     categories: CategoryTree[],
     setProductModel: (productModel: ProductModel | undefined) => void
 }) {
-    const [form] = Form.useForm();
+    const [categoryForm] = Form.useForm();
+    const [specForm] = Form.useForm();
     const {productModel, setProductModel, categories} = props;
     const [productSpecs, setProductSpecs] = useState<Array<ProductSpecModel>>();
+    const [productAttrs, setProductAttrs] = useState<Array<ProductAttrModel>>();
     useEffect(() => {
         getProductSpecListAPI({example: {categoryId: productModel?.category}}).then((result) => {
             const items = result.result?.items?.map(item => ({
@@ -45,33 +38,46 @@ function ProductAddStep2(props: {
             }));
             setProductSpecs(items);
         }).catch((error) => {
-            message.error(error.msgDetail);
+            message.error(error.msgDetail, 3);
         })
-    }, [setProductSpecs, productModel]);
+    }, [setProductSpecs, productModel?.category]);
+
+    useEffect(() => {
+        getProductAttrListAPI({example: {categoryId: productModel?.category}}).then((result) => {
+            const items = result.result?.items;
+            setProductAttrs(items);
+        }).catch((error) => {
+            message.error(error.msgDetail, 3);
+        })
+    }, [setProductAttrs, productModel?.category]);
 
 
     function onPreviousClick() {
-        console.log({...productModel, ...form.getFieldsValue()})
-        props.onPreviousClick({...productModel, ...form.getFieldsValue()});
+        props.onPreviousClick({
+            ...productModel,
+            ...categoryForm.getFieldsValue(),
+            specs: specForm.getFieldsValue()
+        });
     }
 
-    function onFinish(value: any) {
-        console.log(value)
-        const newProduct = {...productModel, ...form.getFieldsValue()}
-    }
 
     function onCategoryChange(categoryId: number) {
-        setProductModel({...productModel,specs:undefined, category: categoryId});
+        console.log("onCategoryChange")
+        setProductModel({...productModel, specs: undefined, category: categoryId});
     }
 
     function onFormFinish(name: string, info: FormFinishInfo) {
         console.log(name, info)
     }
 
-    function onSpecValueChange(changedFields: any, allFields:{[key:string]:string}) {
-        console.log(allFields);
-        setProductModel({...productModel,specs:allFields});
+    function onSpecValueChange(changedFields: any, allFields: { [key: string]: string | string[] }) {
+        console.log("onSpecValueChange", allFields)
+
+        setProductModel({...productModel, specs: allFields});
     }
+
+    console.log(productModel)
+
 
     return (
         <div style={{
@@ -91,7 +97,7 @@ function ProductAddStep2(props: {
 
                 <Form
                     name={"cateogry"}
-                    form={form}
+                    form={categoryForm}
                     style={{width: '100%'}}
                     {...formItemLayout}
                     layout="horizontal"
@@ -105,6 +111,9 @@ function ProductAddStep2(props: {
                         />
                     </Form.Item>
                 </Form>
+                {(productAttrs?.length || 0) > 0 &&
+                    <AttrAddForm productAttrs={productAttrs as Array<ProductAttrModel>} productModel={productModel} setProductModel={setProductModel}/>
+                }
 
                 {(productSpecs?.length || 0) > 0 &&
                 (
@@ -114,38 +123,43 @@ function ProductAddStep2(props: {
                     >
                         <Col
 
-                            style={{backgroundColor:'#eeeeee', padding:"10px 20px", border:'1'}}
-                        xs={{span:24}} sm={{span:14}}
+                            style={{backgroundColor: '#eeeeee', padding: "10px 20px", border: '1'}}
+                            xs={{span: 24}} sm={{span: 14}}
                         >
-                                <h3>产品规格</h3>
-                        <Form
-                            style={{width: '100%'}}
-                            labelCol={{
-                                xs: {span: 24},
-                                sm: {span: 6}
-                            }}
-                            wrapperCol={{
-                                xs: {span: 24},
-                                sm: {span: 18},
-                            }}
-                            layout="horizontal"
-                            name={"spec"}
-                            onValuesChange={onSpecValueChange}
-                        >
-                            {
-                                productSpecs?.map(spec =>
-                                    <Form.Item key={spec.id} name={spec.name} label={spec.name}
-                                    >
-                                        {spec.entryMethod === 'custom' ? <Input style={{flex: '1 0 0px'}}/> :
-                                            <Select
-                                                style={{flex: '1 0 0px'}} options={
-                                                spec.valueArray?.map(val =>
-                                                    ({label: val, value: val}))}
-                                            />}
-                                    </Form.Item>
-                                )
-                            }
-                        </Form>
+                            <h3>产品规格</h3>
+                            <Form
+                                form={specForm}
+                                style={{width: '100%'}}
+                                labelCol={{
+                                    xs: {span: 24},
+                                    sm: {span: 6}
+                                }}
+                                wrapperCol={{
+                                    xs: {span: 24},
+                                    sm: {span: 18},
+                                }}
+                                layout="horizontal"
+                                name={"spec"}
+                                onValuesChange={onSpecValueChange}
+                            >
+                                {
+                                    productSpecs?.map(spec =>
+                                        <Form.Item key={spec.id} name={spec.name} label={spec.name}
+                                                   initialValue={(productModel?.specs || {})[spec.name]}
+                                        >
+                                            {spec.entryMethod === 'custom' ? <Input style={{flex: '1 0 0px'}}/> :
+                                                <Select
+                                                    showArrow
+                                                    allowClear={true}
+                                                    {...spec.selectType === 'multiple' ? {mode: 'multiple'} : {}}
+                                                    style={{flex: '1 0 0px'}} options={
+                                                    spec.valueArray?.map(val =>
+                                                        ({label: val, value: val}))}
+                                                />}
+                                        </Form.Item>
+                                    )
+                                }
+                            </Form>
                         </Col>
                     </Row>
                 )
@@ -153,8 +167,9 @@ function ProductAddStep2(props: {
                 }
                 <Form
                     name={"submit"}
+                    style={{marginTop: '20px'}}
                 >
-                    <Form.Item  {...tailFormItemLayout}>
+                    <Form.Item>
                         <Space>
                             <Button type="primary" htmlType="submit">
                                 提交

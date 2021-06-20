@@ -50,8 +50,8 @@ const columns = [
         title: '值',
         dataIndex: 'value',
         key: 'value',
-        render: (text: string, record: ProductAttrModel) => {
-            return  record.values.map(value => <Tag>{value.value}</Tag>)
+        render: (text: string, record: ProductAttrModel,index:number) => {
+            return  record.values.map(value => <Tag key={value.value}>{value.value}</Tag>)
 
         }
     },
@@ -65,7 +65,7 @@ const columns = [
     },
     {
         title: '操作',
-        dataIndex: '',
+        dataIndex: 'x',
         key: 'x',
         render: (text: string, record: ProductAttrModel) => {
             return <ProductSpecOperation record={record}/>
@@ -110,7 +110,7 @@ function ProductAttrPage() {
                     所在分类:<b>{category?.name}</b>
                 </div>
                 <div style={{width: '100%', flex: '1 0 0px', overflow: 'auto', marginTop: '10px'}}>
-                    <Table childrenColumnName={"null"} loading={status === 'loading'} rowKey={"id"}
+                    <Table  loading={status === 'loading'} rowKey={"id"}
                            dataSource={data?.items}
                            columns={columns}
                            pagination={{defaultPageSize: 20, total: data?.totalElements}}

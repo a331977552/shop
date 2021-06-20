@@ -70,7 +70,7 @@ function ProductSpecAddOrUpdatePage() {
             promise = updateSpecAPI(value);
         } else {
             promise = AddSpecAPI(value).then(() => {
-                form.resetFields();
+                form.resetFields(["name","value","sort"]);
             })
         }
         promise.then(() => {
