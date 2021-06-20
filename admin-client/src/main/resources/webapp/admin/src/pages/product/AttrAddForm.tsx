@@ -5,7 +5,21 @@ import {ProductAttrModel, ProductModel} from "../../model";
 import {getProductAttrListAPI} from "../../api/ProductAttrAPI";
 
 const CheckboxGroup = Checkbox.Group;
-const columnsPart2 =
+
+interface row {
+    title: string,
+    dataIndex: string,
+    key: string,
+    render?: (text: any, record: any, index: number) => any;
+};
+
+const columnSequenceNumber: row[] = [{
+    title: '序号',
+    dataIndex: 'x',
+    key: 'x',
+    render: (text: any, record: any, index: number) => index
+}]
+const columnsPart2: row[] =
     [
         {
             title: '价格',
@@ -23,14 +37,15 @@ const columnsPart2 =
             key: 'img'
         }
     ]
+
 function AttrAddForm(props: {
     setProductModel: (productModel: ProductModel | undefined) => void,
     productModel: ProductModel
 }) {
     const {setProductModel, productModel} = props;
     const [productAttrs, setProductAttrs] = useState<Array<ProductAttrModel>>();
-    const [columns,setColumns] = useState<Array<any>>();
-    const [dataSource,setDataSource] = useState<Array<any>>();
+    const [columns, setColumns] = useState<Array<any>>();
+    const [dataSource, setDataSource] = useState<Array<any>>();
     const [form] = Form.useForm();
 
     useEffect(() => {
@@ -45,21 +60,43 @@ function AttrAddForm(props: {
     }, [setProductAttrs, productModel?.category]);
 
 
-
     function onAttrValueChange(changedFields: any, allFields: { [key: string]: string[] }) {
+        console.log(allFields)
         setProductModel({...productModel, attrs: allFields})
     }
 
-    function onRefreshClick() {
-        form.validateFields().then((fieldsValue:Array<{[key:string]:string[]|string}>)=>{
-            const columnsPart1 = Object.keys(fieldsValue).map(key=>({title:key, dataIndex:key,key:key}))
-            setColumns(columnsPart1.concat(columnsPart2));
-            Object.keys(fieldsValue).map(key=>{
+    function generateData(valueMap: { [key: string]: string[] | string }): any {
+        const data = [] as any[];
+        if (Object.keys(valueMap).length === 0)
+            return data;
 
+        function _generateData(keys: string[], valueMap: { [key: string]: string[] | string }, obj: any = {}) {
+            const key = keys[0];
+            let valArrayOfKey = valueMap[key];
+            if (typeof valArrayOfKey === 'string') {
+                valArrayOfKey = valArrayOfKey.split("\n");
+            }
+
+            valArrayOfKey.forEach(val => {
+                if (keys.length === 1) {
+                    data.push({...obj, [key]: val});
+                } else {
+                    _generateData(keys.slice(1), valueMap, {...obj, [key]: val})
+                }
             });
-            const localeValues= Object.values(fieldsValue);
 
-            console.log(fieldsValue,localeValues)
+        }
+
+        _generateData(Object.keys(valueMap), valueMap, {});
+        return data;
+    }
+
+    function onRefreshClick() {
+        form.validateFields().then((fieldsValue: { [key: string]: string[] | string }) => {
+            const columnsPart1 = Object.keys(fieldsValue).map(key => ({title: key, dataIndex: key, key: key}))
+            setColumns(columnSequenceNumber.concat(columnsPart1).concat(columnsPart2));
+            let dataSource = generateData(fieldsValue);
+            setDataSource(dataSource);
         })
     }
 
@@ -69,7 +106,7 @@ function AttrAddForm(props: {
             >
                 <Col
                     style={{backgroundColor: '#eeeeee', padding: "10px 20px", border: '1'}}
-                    xs={{span: 24}} sm={{span: 14}}
+                    xs={{span: 24}} sm={{span: 24}}
                 >
                     <h3>产品属性</h3>
                     <Form
@@ -90,10 +127,10 @@ function AttrAddForm(props: {
                         {
                             productAttrs?.map(attr =>
                                 <Form.Item key={attr.id} name={attr.name} label={attr.name}
-                                           rules={[{required:true,message:attr.name+" 不能为空"}]}
+                                           rules={[{required: true, message: attr.name + " 不能为空"}]}
                                            initialValue={(productModel?.attrs || {})[attr.name]}
                                 >
-                                    {attr.entryMethod === 'custom' ? <TextArea  rows={4}/> :
+                                    {attr.entryMethod === 'custom' ? <TextArea rows={4}/> :
                                         <CheckboxGroup
                                             options={attr.values?.map(val =>
                                                 ({label: val.value, value: String(val.id)}))}/>
@@ -102,8 +139,8 @@ function AttrAddForm(props: {
                             )
                         }
                         {
-                            columns && <Table style={{width:'100%'}}  size="middle" rowKey={'id'} columns={columns}
-                                              // dataSource={attrDataSource}
+                            columns && <Table style={{width: '100%'}} size="middle" columns={columns}
+                                              dataSource={dataSource}
                             />
                         }
                         <Form.Item wrapperCol={
