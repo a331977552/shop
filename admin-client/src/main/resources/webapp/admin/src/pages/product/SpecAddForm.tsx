@@ -9,7 +9,6 @@ function SpecAddForm(
         productModel: ProductModel
     }
 ) {
-    const [specForm] = Form.useForm();
     const {setProductModel, productModel} = props;
     const [productSpecs, setProductSpecs] = useState<Array<ProductSpecModel>>();
     useEffect(() => {
@@ -28,7 +27,7 @@ function SpecAddForm(
     }
 
     return (
-        ((productSpecs?.length || 0) == 0) ?null: <Row
+        ((productSpecs?.length || 0) === 0) ?null: <Row
             justify={'center'}
             style={{width: '100%'}}>
             <Col
@@ -37,7 +36,6 @@ function SpecAddForm(
             >
                 <h3>产品规格</h3>
                 <Form
-                    form={specForm}
                     style={{width: '100%'}}
                     labelCol={{
                         xs: {span: 24},

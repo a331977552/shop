@@ -1,29 +1,49 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Col, Form, Row, Checkbox, message} from "antd";
+import {Button, Col, Form, Row, Checkbox, message, Table} from "antd";
 import TextArea from "antd/es/input/TextArea";
 import {ProductAttrModel, ProductModel} from "../../model";
 import {getProductAttrListAPI} from "../../api/ProductAttrAPI";
 
 const CheckboxGroup = Checkbox.Group;
-
-
+const columnsPart2 =
+    [
+        {
+            title: '价格',
+            dataIndex: 'price',
+            key: 'price',
+        },
+        {
+            title: '库存',
+            dataIndex: 'stock',
+            key: 'stock',
+        },
+        {
+            title: '图片',
+            dataIndex: 'img',
+            key: 'img'
+        }
+    ]
 function AttrAddForm(props: {
     setProductModel: (productModel: ProductModel | undefined) => void,
     productModel: ProductModel
 }) {
-    const [attrForm] = Form.useForm();
     const {setProductModel, productModel} = props;
     const [productAttrs, setProductAttrs] = useState<Array<ProductAttrModel>>();
-
+    const [columns,setColumns] = useState<Array<any>>();
+    const [dataSource,setDataSource] = useState<Array<any>>();
+    const [form] = Form.useForm();
 
     useEffect(() => {
+        setColumns(undefined);
         getProductAttrListAPI({example: {categoryId: productModel?.category}}).then((result) => {
             const items = result.result?.items;
             setProductAttrs(items);
+
         }).catch((error) => {
             message.error(error.msgDetail, 3);
         })
     }, [setProductAttrs, productModel?.category]);
+
 
 
     function onAttrValueChange(changedFields: any, allFields: { [key: string]: string[] }) {
@@ -31,10 +51,19 @@ function AttrAddForm(props: {
     }
 
     function onRefreshClick() {
+        form.validateFields().then((fieldsValue:Array<{[key:string]:string[]|string}>)=>{
+            const columnsPart1 = Object.keys(fieldsValue).map(key=>({title:key, dataIndex:key,key:key}))
+            setColumns(columnsPart1.concat(columnsPart2));
+            Object.keys(fieldsValue).map(key=>{
 
+            });
+            const localeValues= Object.values(fieldsValue);
+
+            console.log(fieldsValue,localeValues)
+        })
     }
 
-    return (((productAttrs?.length || 0) == 0) ? null :
+    return (((productAttrs?.length || 0) === 0) ? null :
             <Row justify={'center'}
                  style={{width: "100%", marginBottom: '20px'}}
             >
@@ -44,7 +73,7 @@ function AttrAddForm(props: {
                 >
                     <h3>产品属性</h3>
                     <Form
-                        form={attrForm}
+                        form={form}
                         style={{width: '100%'}}
                         labelCol={{
                             xs: {span: 24},
@@ -61,15 +90,21 @@ function AttrAddForm(props: {
                         {
                             productAttrs?.map(attr =>
                                 <Form.Item key={attr.id} name={attr.name} label={attr.name}
+                                           rules={[{required:true,message:attr.name+" 不能为空"}]}
                                            initialValue={(productModel?.attrs || {})[attr.name]}
                                 >
-                                    {attr.entryMethod === 'custom' ? <TextArea rows={4}/> :
+                                    {attr.entryMethod === 'custom' ? <TextArea  rows={4}/> :
                                         <CheckboxGroup
                                             options={attr.values?.map(val =>
                                                 ({label: val.value, value: String(val.id)}))}/>
                                     }
                                 </Form.Item>
                             )
+                        }
+                        {
+                            columns && <Table style={{width:'100%'}}  size="middle" rowKey={'id'} columns={columns}
+                                              // dataSource={attrDataSource}
+                            />
                         }
                         <Form.Item wrapperCol={
                             {
@@ -88,8 +123,6 @@ function AttrAddForm(props: {
                         </Form.Item>
                     </Form>
                 </Col>
-
-
             </Row>
     );
 }

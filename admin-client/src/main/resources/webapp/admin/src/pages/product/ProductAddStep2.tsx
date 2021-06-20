@@ -1,11 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import {ProductAttrModel, ProductModel, ProductSpecModel} from "../../model";
+import React, {} from 'react';
+import { ProductModel} from "../../model";
 import {CategoryTree} from "../category/CategoryConvertor";
-import {Button, Col, Form, Input, message, Row, Select, Space, TreeSelect} from "antd";
-import {getProductSpecListAPI} from "../../api/ProductSpecAPI";
+import {Button, Form, Space, TreeSelect} from "antd";
 import {FormFinishInfo} from "rc-field-form/lib/FormContext";
-import {getProductAttrListAPI} from "../../api/ProductAttrAPI";
-import TextArea from "antd/es/input/TextArea";
 import AttrAddForm from "./AttrAddForm";
 import SpecAddForm from "./SpecAddForm";
 
@@ -41,7 +38,7 @@ function ProductAddStep2(props: {
 
 
     function onCategoryChange(categoryId: number) {
-        setProductModel({...productModel, specs: undefined, category: categoryId});
+        setProductModel({...productModel, specs: undefined,attrs:undefined, category: categoryId});
     }
 
     function onFormFinish(name: string, info: FormFinishInfo) {
