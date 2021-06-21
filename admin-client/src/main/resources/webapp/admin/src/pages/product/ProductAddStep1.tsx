@@ -103,7 +103,6 @@ function ProductAddStep1(props: {
 
     return (
         <div style={{
-            marginTop: '50px',
             display: 'flex',
             flexDirection: 'column',
             overflow: 'auto',
@@ -126,6 +125,7 @@ function ProductAddStep1(props: {
                 <Form.Item label="标题" name="name"
                            rules={[{message: "商品标题不能为空", required: true}]}
                            initialValue={productModel?.name}
+                           hasFeedback={true}
                 >
                     <Input/>
                 </Form.Item>
@@ -133,6 +133,7 @@ function ProductAddStep1(props: {
                 <Form.Item label="副标题" name="subtitle"
                            rules={[{message: "商品副标题不能为空", required: true}]}
                            initialValue={productModel?.subtitle}
+                           hasFeedback={true}
                 >
                     <Input
                     />
@@ -141,7 +142,7 @@ function ProductAddStep1(props: {
                            name="category"
                            rules={[{required: true, message: '必须设置种类所属'}]}
                            initialValue={productModel?.category}
-
+                           hasFeedback={true}
                 >
                     <TreeSelect notFoundContent={<div>数据加载错误,请检查网络</div>}
                                 treeData={props.categories}
@@ -150,6 +151,7 @@ function ProductAddStep1(props: {
                 <Form.Item label="品牌" name={"brand"}
                            rules={[{required: true, message: '必须选择品牌'}]}
                            initialValue={productModel?.brand}
+                           hasFeedback={true}
 
                 >
                     <Select
@@ -162,22 +164,26 @@ function ProductAddStep1(props: {
                 </Form.Item>
                 <Form.Item label="货号" name={"itemNo"}
                            initialValue={productModel?.itemNo}
+                           hasFeedback={true}
                 >
                     <Input maxLength={32}/>
                 </Form.Item>
                 <Form.Item label="计量单位" name={"suffix"}
                            initialValue={productModel?.itemNo}
+                           hasFeedback={true}
                 >
                     <Input max={10}/>
                 </Form.Item>
 
                 <Form.Item label="描述" name={"description"}
                            initialValue={productModel?.description}
+                           hasFeedback={true}
                 >
                     <Input/>
                 </Form.Item>
                 <Form.Item label="上架状态" name={"status"}
                            initialValue={productModel?.status || "ON_SALE"}
+                           hasFeedback={true}
                 >
                     <Radio.Group>
                         <Radio.Button value={"ON_SALE"}>上架中</Radio.Button>
@@ -211,6 +217,7 @@ function ProductAddStep1(props: {
 
                 <Form.Item label="排序" name={"priority"}
                            initialValue={productModel?.priority}
+                           hasFeedback={true}
                 >
                     <InputNumber min={0} max={9999}/>
                 </Form.Item>
@@ -218,18 +225,21 @@ function ProductAddStep1(props: {
 
                 <Form.Item label="重量" name={"weight"}
                            initialValue={productModel?.weight}
+                           hasFeedback={true}
                 >
                     <InputNumber min={0} max={999999999}/>
                 </Form.Item>
 
                 <Form.Item label="价格" name={"price"}
                            initialValue={productModel?.price}
+                           hasFeedback={true}
                 >
                     <InputNumber min={0} max={999999999}/>
                 </Form.Item>
 
                 <Form.Item label="市场价格" name={"marketPrice"}
                            initialValue={productModel?.marketPrice}
+                           hasFeedback={true}
                 >
                     <InputNumber min={0} max={999999999}/>
                 </Form.Item>

@@ -42,7 +42,6 @@ function ProductAddPage() {
 
     function onNextClick(product: ProductModel) {
         setProductModel(product);
-
         saveProduct(currentStep + 1, product)
         setCurrentStep(currentStep + 1);
     }
@@ -77,7 +76,7 @@ return (
                 <Step title="商品SKU录入"/>
             </Steps>
         </div>
-        <Row justify={"center"} style={{width: '100%'}}>
+        <Row justify={"center"} style={{width: '100%', marginTop: '50px'}}>
             <Col
                 xs={{span: 24}}
                 sm={{span: 20}}
@@ -91,7 +90,8 @@ return (
                                      productModel={productModel as ProductModel} onNextClick={onNextClick}/>
                 }
                 {
-                    currentStep === 1 && <ProductAddStep2 setProductModel={updateProduct} categories={categories}
+                    currentStep === 1 &&
+                    <ProductAddStep2 setProductModel={updateProduct} categories={categories}
                                                           productModel={productModel as ProductModel}
                                                           onPreviousClick={onPreviousClick} onSubmit={onSubmit}/>
                 }
