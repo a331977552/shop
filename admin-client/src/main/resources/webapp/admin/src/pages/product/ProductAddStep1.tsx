@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {ProductModel} from "../../model";
-import {Button, Form, Input, InputNumber, message, Radio, Select, TreeSelect, Upload} from "antd";
+import {Button, Form, FormInstance, Input, InputNumber, message, Radio, Select, TreeSelect, Upload} from "antd";
 import {LoadingOutlined, PlusOutlined} from '@ant-design/icons';
 
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
@@ -35,14 +35,14 @@ const tailFormItemLayout = {
 };
 
 function ProductAddStep1(props: {
+                             form:FormInstance,
                              productModel: ProductModel,
                              onNextClick: (productModel: ProductModel) => void,
                              setProductModel: (productModel: ProductModel | undefined) => void,
                              categories: CategoryTree[]
                          }
 ) {
-    const [form] = Form.useForm();
-    const {productModel, setProductModel} = props;
+    const {productModel, setProductModel,form} = props;
     const [imgUploading, setImgUploading] = useState(false);
 
     const dispatch = useAppDispatch();
@@ -77,7 +77,6 @@ function ProductAddStep1(props: {
         setImgUploading(info.file.status === 'uploading');
         if (info.file.status === 'done') {
             setProductModel({...productModel, standardImg: info.file.response.result.id});
-            // setImage(info.file.response.result as ImgModel);
         } else if (info.file.status === 'error') {
             message.error(info.file.response.msgDetail, 3)
         }
@@ -134,7 +133,6 @@ function ProductAddStep1(props: {
                 <Form.Item label="副标题" name="subtitle"
                            rules={[{message: "商品副标题不能为空", required: true}]}
                            initialValue={productModel?.subtitle}
-
                 >
                     <Input
                     />

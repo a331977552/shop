@@ -25,14 +25,12 @@ function ProductAddStep2(props: {
     setProductModel: (productModel: ProductModel | undefined) => void
 }) {
     const [categoryForm] = Form.useForm();
-    const [specForm] = Form.useForm();
     const {productModel, setProductModel, categories} = props;
 
     function onPreviousClick() {
         props.onPreviousClick({
             ...productModel,
-            ...categoryForm.getFieldsValue(),
-            specs: specForm.getFieldsValue()
+            ...categoryForm.getFieldsValue()
         });
     }
 
@@ -44,9 +42,6 @@ function ProductAddStep2(props: {
     function onFormFinish(name: string, info: FormFinishInfo) {
         console.log(name, info)
     }
-
-    console.log(productModel)
-
 
     return (
         <div style={{
