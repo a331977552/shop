@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {KeyVal, ProductModel} from "../../model";
+import {ProductModel, SkuKeyVal} from "../../model";
 import {CategoryTree} from "../category/CategoryConvertor";
 import {Button, Form, message, Space, TreeSelect} from "antd";
 import {FormFinishInfo} from "rc-field-form/lib/FormContext";
@@ -30,7 +30,7 @@ function ProductAddStep2(props: {
     updateProduct: (productModel: ProductModel) => void
 }) {
     const [categoryForm] = Form.useForm();
-    const [skuList, setSkuList] = useState<Array<KeyVal>>();
+    const [skuList, setSkuList] = useState<Array<SkuKeyVal>>();
     const [editorState, setEditorState] = useState(()=>{
         const html = loadItem("product_adding_detail") || "";
         console.log("init detail from cache")
@@ -57,7 +57,7 @@ function ProductAddStep2(props: {
     }
 
     function onFormFinish(name: string, info: FormFinishInfo) {
-        let emptyPriceOrStock = (skuList || []).some(row => !((row["price"] || "").trim()) || !((row["stock"] || "").trim()));
+        let emptyPriceOrStock = (skuList || []).some(row => !((row["price"] as string || "").trim()) || !((row["stock"] as string || "").trim()));
         if (emptyPriceOrStock) {
             message.error("sku列表不能为空!", 3);
             return;
@@ -66,7 +66,7 @@ function ProductAddStep2(props: {
         console.log(name, info, skuList, html);
     }
 
-    function _setSkuList(data: Array<KeyVal> | undefined) {
+    function _setSkuList(data: Array<SkuKeyVal> | undefined) {
         setSkuList(data);
     }
 

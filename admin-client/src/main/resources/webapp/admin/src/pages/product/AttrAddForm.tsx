@@ -1,11 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Form, Checkbox, message, Input, Space, Popconfirm} from "antd";
+import {Button, Form, Checkbox, message, Input, Space, Popconfirm, Upload} from "antd";
 import TextArea from "antd/es/input/TextArea";
-import {KeyVal, KeyValMix, KeyVals, ProductAttrModel, ProductModel} from "../../model";
+import {KeyVal, KeyValMix, KeyVals, ProductAttrModel, SkuKeyVal, SkuObject, SkuVal} from "../../model";
 import {getProductAttrListAPI} from "../../api/ProductAttrAPI";
 import styled from "styled-components";
 import {loadItem, removeItem, saveItem} from "../../services";
-
+import {getTokenFromStorage} from "../../store/TokenConfig";
+import {LoadingOutlined, PlusOutlined} from "@ant-design/icons";
+import {beforeImageUpload} from "../../util/UploadConfig";
+import {UploadChangeParam} from "antd/lib/upload/interface";
+import './attr.css'
 const CheckboxGroup = Checkbox.Group;
 const StyledTd = styled.td`
   border: 1px solid #dddddd;
@@ -17,6 +21,8 @@ const StyledTh = styled.th`
   text-align: left;
   padding: 4px;
 `
+
+
 const tailForm =
     {
         wrapperCol: {
@@ -82,20 +88,20 @@ function saveAttrs(attrs: KeyVals) {
 function loadAttrs() {
     return loadItem("product_adding_attrs");
 }
+
 function removeAttrsFromCache() {
     return removeItem("product_adding_attrs");
 }
 
 
-
 function AttrAddForm(props: {
-    dataSource: KeyVal[] | undefined,
-    setDataSource: (dataSource: KeyVal[] | undefined) => void
+    dataSource: SkuKeyVal[] | undefined,
+    setDataSource: (dataSource: SkuKeyVal[] | undefined) => void
     category?: number
 }) {
     const {setDataSource, dataSource, category} = props;
     const [productAttrs, setProductAttrs] = useState<Array<ProductAttrModel>>();
-    const [attrValues, setAttrValues] = useState<KeyVals>(()=>{
+    const [attrValues, setAttrValues] = useState<KeyVals>(() => {
         console.log("attr init from cache");
         const attrs = loadAttrs();
         return attrs ? JSON.parse(attrs) : {};
@@ -105,8 +111,8 @@ function AttrAddForm(props: {
     const [attrForm] = Form.useForm();
 
     useEffect(() => {
-        if (category){
-            if (productAttrs){
+        if (category) {
+            if (productAttrs) {
                 console.log("reset attr cache")
                 setAttrValues({});
                 removeAttrsFromCache();
@@ -120,7 +126,7 @@ function AttrAddForm(props: {
                 message.error(error.msgDetail, 3);
             })
         }
-    }, [setProductAttrs, category,setAttrValues]);
+    }, [setProductAttrs, category, setAttrValues]);
 
     if ((productAttrs?.length || 0) === 0)
         return null;
@@ -138,8 +144,8 @@ function AttrAddForm(props: {
         })
     }
 
-    function onRecordChange(row: KeyVal, index: number, key: string, val: string) {
-        const newData = [...(dataSource as Array<KeyVal>)];
+    function onRecordChange(row: SkuKeyVal, index: number, key: string, val: SkuVal) {
+        const newData = [...(dataSource as Array<SkuKeyVal>)];
         newData[index][key] = val;
         setDataSource(newData);
     }
@@ -148,6 +154,7 @@ function AttrAddForm(props: {
         let newData = [...(dataSource as Array<KeyVal>)];
         setDataSource(newData.map(data => ({...data, [dataIndex]: newData[0][dataIndex]})));
     }
+
 
     if (!attrValues)
         return null;
@@ -180,8 +187,8 @@ function AttrAddForm(props: {
                 onValuesChange={onAttrValueChange}
             >
                 {
-                    productAttrs?.map((attr,index) =>
-                        <Form.Item key={attr.id+index} name={attr.name} label={attr.name}
+                    productAttrs?.map((attr, index) =>
+                        <Form.Item key={attr.id + index} name={attr.name} label={attr.name}
                                    rules={[{required: true, message: attr.name + " 不能为空"}]}
                                    initialValue={(attrValues || {})[attr.name]}
                                    preserve={false}
@@ -213,13 +220,43 @@ function AttrAddForm(props: {
                             {(key === 'price' || key === 'stock') ?
                                 <div><span style={{color: 'red', marginRight: '3px'}}>*</span>
                                     <Input
-                                        value={row[key]}
+                                        value={row[key] as string}
                                         style={{width: '70px', margin: '0px', padding: '0px 0px'}}
                                         type={'number'} min={0} step={key === 'price' ? 0.01 : 1}
                                         onChange={(val) => {
                                             onRecordChange(row, index, key, val.target.value);
                                         }}
-                                    /></div> : row[key]
+                                    /></div> : (key === 'img' ?
+                                    <Upload
+                                        listType="picture-card"
+                                        className="attr-uploader"
+                                        showUploadList={false}
+                                        headers={{
+                                            "Authorization": "Bearer " + getTokenFromStorage()
+                                        }}
+                                        action="/api-gateway/img-service/api/img"
+                                        beforeUpload={beforeImageUpload}
+                                        onChange={(info: UploadChangeParam) => {
+                                            onRecordChange(row, index, key, {loading:info.file.status === 'uploading'});
+                                            if (info.file.status === 'done') {
+                                                onRecordChange(row, index, key, {id:info.file.response.result.id,loading:false});
+                                            } else if (info.file.status === 'error') {
+                                                message.error(info.file.response.msgDetail, 3)
+                                            }
+                                        }
+                                        }
+                                    >
+                                        {((row[key]||{}) as SkuObject).id?
+                                            <img src={"/api-gateway/img-service/api/img/" +(row[key]as SkuObject).id}
+                                                 alt="avatar"
+                                                 style={{width: '100%'}}/> :
+                                            <div>
+                                                {((row[key]||{}) as SkuObject).loading  ? <LoadingOutlined/> : <PlusOutlined/>}
+                                                <div style={{marginTop: 8}}>Upload</div>
+                                            </div>
+                                        }
+                                    </Upload>
+                                    : row[key])
                             }
                         </StyledTd>)}
                     </tr>

@@ -9,6 +9,7 @@ import {getBrandList, selectBrandReducer} from "../../store/slices/brandSlice";
 import {RcFile, UploadChangeParam} from "antd/lib/upload/interface";
 import {getTokenFromStorage} from "../../store/TokenConfig";
 import {log} from "../../services";
+import {beforeImageUpload} from "../../util/UploadConfig";
 
 
 const formItemLayout = {
@@ -33,18 +34,6 @@ const tailFormItemLayout = {
         },
     },
 };
-
-function beforeUpload(file: RcFile) {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-        message.error('You can only upload JPG/PNG file!');
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-        message.error('Image must smaller than 2MB!');
-    }
-    return isJpgOrPng && isLt2M;
-}
 
 function ProductAddStep1(props: {
                              form:FormInstance,
@@ -189,7 +178,7 @@ function ProductAddStep1(props: {
                             "Authorization": "Bearer " + getTokenFromStorage()
                         }}
                         action="/api-gateway/img-service/api/img"
-                        beforeUpload={beforeUpload}
+                        beforeUpload={beforeImageUpload}
                         onChange={onFileUploading}
                     >
                         {(productModel?.standardImg) ?
