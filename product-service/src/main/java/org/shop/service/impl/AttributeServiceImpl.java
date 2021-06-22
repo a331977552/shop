@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AttributeServiceImpl implements AttributeService {
@@ -49,7 +50,10 @@ public class AttributeServiceImpl implements AttributeService {
 		final AttributeReturnVO attributeReturnVO = BeanConvertor.convert(attrKeyDAO, AttributeReturnVO.class);
 		if (attrKeyDAO.getEntryMethod().equals("selection")) {
 			final List<AttributeValueReturnVO> attributeValueReturnVOS = new ArrayList<>();
-			for (AttributeValueAddVO vo : attrVO.getValues()) {
+			final List<AttributeValueAddVO> values = attrVO.getValues().stream().
+					map(AttributeValueAddVO::getValue).distinct().
+					map(AttributeValueAddVO::new).collect(Collectors.toList());
+			for (AttributeValueAddVO vo : values) {
 				vo.setAttrKey(attrKeyDAO.getId());
 				attributeValueReturnVOS.add(this.addAttrValue(vo));
 			}
@@ -134,7 +138,9 @@ public class AttributeServiceImpl implements AttributeService {
 		valuesByKeyID.forEach(va -> valueMapper.deleteByPrimaryKey(va.getId()));
 
 		if ("selection".equals(vo.getEntryMethod())) {
-			final List<AttributeValueReturnVO> values = vo.getValues();
+			final List<AttributeValueReturnVO> values = vo.getValues().stream().
+					map(AttributeValueReturnVO::getValue).distinct().
+					map(AttributeValueReturnVO::new).collect(Collectors.toList());
 			final List<AttrValueDAO> valDaos = BeanConvertor.convert(values, AttrValueDAO.class);
 			valDaos.forEach((valDao) -> {
 				valDao.setUpdatedTime(LocalDateTime.now());

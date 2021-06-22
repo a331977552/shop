@@ -34,17 +34,28 @@ const tailFormItemLayout = {
     },
 };
 
+function beforeUpload(file: RcFile) {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    if (!isJpgOrPng) {
+        message.error('You can only upload JPG/PNG file!');
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+        message.error('Image must smaller than 2MB!');
+    }
+    return isJpgOrPng && isLt2M;
+}
+
 function ProductAddStep1(props: {
                              form:FormInstance,
                              productModel: ProductModel,
                              onNextClick: (productModel: ProductModel) => void,
-                             setProductModel: (productModel: ProductModel | undefined) => void,
+    updateProduct: (productModel: ProductModel | undefined) => void,
                              categories: CategoryTree[]
                          }
 ) {
-    const {productModel, setProductModel,form} = props;
+    const {productModel, updateProduct,form} = props;
     const [imgUploading, setImgUploading] = useState(false);
-
     const dispatch = useAppDispatch();
     let brandState = useAppSelector(selectBrandReducer);
     const brandOptions = brandState.data?.items.map((item) => ({
@@ -61,22 +72,10 @@ function ProductAddStep1(props: {
         props.onNextClick({...productModel, ...value,standardImg: productModel.standardImg});
     }
 
-    function beforeUpload(file: RcFile) {
-        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-        if (!isJpgOrPng) {
-            message.error('You can only upload JPG/PNG file!');
-        }
-        const isLt2M = file.size / 1024 / 1024 < 2;
-        if (!isLt2M) {
-            message.error('Image must smaller than 2MB!');
-        }
-        return isJpgOrPng && isLt2M;
-    }
-
-    const handleChange = (info: UploadChangeParam) => {
+    const onFileUploading = (info: UploadChangeParam) => {
         setImgUploading(info.file.status === 'uploading');
         if (info.file.status === 'done') {
-            setProductModel({...productModel, standardImg: info.file.response.result.id});
+            updateProduct({...productModel, standardImg: info.file.response.result.id});
         } else if (info.file.status === 'error') {
             message.error(info.file.response.msgDetail, 3)
         }
@@ -89,14 +88,12 @@ function ProductAddStep1(props: {
     }, [productModel, form]);
 
     function onReset() {
-        setProductModel(undefined);
+        updateProduct(undefined);
     }
 
     function onValuesChange(changedFields: ProductModel, allFields: ProductModel) {
-        console.log("onValuesChange", (changedFields.category !== productModel.category))
-        setProductModel({
-            ...productModel, ...allFields,
-            specs: (changedFields.category !== productModel.category) ? undefined : productModel.specs
+        updateProduct({
+            ...productModel, ...allFields
         });
     }
 
@@ -120,6 +117,7 @@ function ProductAddStep1(props: {
                 onReset={onReset}
                 onValuesChange={onValuesChange}
                 scrollToFirstError={true}
+                preserve={false}
             >
 
                 <Form.Item label="标题" name="name"
@@ -138,16 +136,7 @@ function ProductAddStep1(props: {
                     <Input
                     />
                 </Form.Item>
-                <Form.Item label="商品分类"
-                           name="category"
-                           rules={[{required: true, message: '必须设置种类所属'}]}
-                           initialValue={productModel?.category}
-                           hasFeedback={true}
-                >
-                    <TreeSelect notFoundContent={<div>数据加载错误,请检查网络</div>}
-                                treeData={props.categories}
-                    />
-                </Form.Item>
+
                 <Form.Item label="品牌" name={"brand"}
                            rules={[{required: true, message: '必须选择品牌'}]}
                            initialValue={productModel?.brand}
@@ -201,7 +190,7 @@ function ProductAddStep1(props: {
                         }}
                         action="/api-gateway/img-service/api/img"
                         beforeUpload={beforeUpload}
-                        onChange={handleChange}
+                        onChange={onFileUploading}
                     >
                         {(productModel?.standardImg) ?
                             <img src={"/api-gateway/img-service/api/img/" + productModel.standardImg} alt="avatar"
@@ -221,7 +210,6 @@ function ProductAddStep1(props: {
                 >
                     <InputNumber min={0} max={9999}/>
                 </Form.Item>
-
 
                 <Form.Item label="重量" name={"weight"}
                            initialValue={productModel?.weight}

@@ -12,4 +12,11 @@ public class AttributeValueAddVO {
 	@NotBlank
 	private String value;
 
+	public AttributeValueAddVO(){
+
+	}
+	public AttributeValueAddVO(String value){
+		this.value = value;
+	}
+
 }

@@ -24,22 +24,23 @@ class ProductSpecControllerTest extends BaseControllerTest<ProductSpecReturnVO> 
 	void addSpec() {
 
 		ProductSpecAddVO addVO = new ProductSpecAddVO();
-		addVO.setName("测试");
-		addVO.setCategoryId(7);
+		addVO.setName("网络制式");
+		addVO.setCategoryId(120);
 		addVO.setSearchable(true);
 		addVO.setEntryMethod("selection");
 		addVO.setSelectType("multiple");
-		addVO.setValue("3G,4G,5G");
+		addVO.setValue("3G\n4G\n5G\n4G");
 
 		final String token = getToken();
 		final ResponseEntity<Result<ProductSpecReturnVO>> post = helper.
 				setUIPath("/api/product/spec").setPort(port).
 				builder().withToken(token).build().post(addVO, resVOReturnRef);
-		System.out.println(post);
+		prettyPrint(post);
 		Assertions.assertEquals(200,post.getStatusCodeValue());
 		final ProductSpecReturnVO result = Objects.requireNonNull(post.getBody()).getResult();
 		final Integer id = result.getId();
 		Assertions.assertNotNull(id);
+		Assertions.assertEquals("3G\n4G\n5G",result.getValue());
 
 		this.deleteSpec(id,token);
 

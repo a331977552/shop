@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Col, Form, Row, Steps} from "antd";
 import ProductAddStep1 from "./ProductAddStep1";
 import ProductAddStep2 from "./ProductAddStep2";
@@ -11,34 +11,36 @@ import {debounce} from "../../util/TimerUtils";
 
 const {Step} = Steps;
 
-function ProductAddPage() {
-
-    const storageProductItem = loadItem("product_adding");
-    const [productForm] = Form.useForm();
-
+function saveProduct(currentStep: number, product: ProductModel | undefined) {
+    debounce(() => {
+        if (product) {
+            saveItem("product_adding_product", JSON.stringify({
+                currentStep,
+                product
+            }));
+        } else {
+            removeItem("product_adding_product")
+        }
+    }, 2000);
+}
+function loadProduct(){
+    const storageProductItem = loadItem("product_adding_product");
     const productStep: { currentStep: number, product?: ProductModel } = storageProductItem ? (JSON.parse(storageProductItem)) : {
         currentStep: 0,
         product: {status: 'ON_SALE'}
     };
+    return productStep;
+}
+function ProductAddPage() {
 
-    const [currentStep, setCurrentStep] = useState(productStep.currentStep || 0);
-    const [productModel, setProductModel] = useState<ProductModel | undefined>(productStep.product);
-
-    let categories = (useAppSelector(selectUITree) as CategoryTree[]).slice(1);
-
-    function saveProduct(currentStep: number, product: ProductModel | undefined) {
-        debounce(() => {
-            if (product) {
-                saveItem("product_adding", JSON.stringify({
-                    currentStep,
-                    product
-                }));
-            } else {
-                removeItem("product_adding")
-            }
-        }, 2000);
-
-    }
+    const [productForm] = Form.useForm();
+    const [currentStep, setCurrentStep] = useState(()=>{
+        return loadProduct().currentStep;
+    });
+    const [productModel, setProductModel] = useState<ProductModel | undefined>(()=>{
+        return loadProduct().product;
+    });
+    const categories = (useAppSelector(selectUITree) as CategoryTree[]).slice(1);
 
     function onNextClick(product: ProductModel) {
         setProductModel(product);
@@ -52,53 +54,45 @@ function ProductAddPage() {
         setCurrentStep(currentStep - 1);
     }
 
-    function onSubmit(productModel: ProductModel) {
-        setProductModel(productModel);
-        // if (success){
-        //     removeItem("product_adding");
-        // }
-        console.log("onSubmit")
-    }
-
     function updateProduct(product: ProductModel | undefined) {
+        console.log(product,currentStep)
         saveProduct(currentStep, product)
         setProductModel(product);
     }
 
-
-return (
-    <div style={{width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-        <div style={{width: '400px', marginTop: '20px'}}>
-            <Steps
-                // onChange={onStepChange}
-                current={currentStep}>
-                <Step title="商品信息录入"/>
-                <Step title="商品SKU录入"/>
-            </Steps>
+    return (
+        <div style={{width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <div style={{width: '400px', marginTop: '20px'}}>
+                <Steps
+                    current={currentStep}>
+                    <Step title="商品信息录入"/>
+                    <Step title="商品SKU录入"/>
+                </Steps>
+            </div>
+            <Row justify={"center"} style={{width: '100%', marginTop: '50px'}}>
+                <Col
+                    xs={{span: 24}}
+                    sm={{span: 20}}
+                    md={{span: 20}}
+                    lg={{span: 14}}
+                >
+                    {
+                        currentStep === 0 &&
+                        <ProductAddStep1 form={productForm} categories={categories}
+                                         updateProduct={updateProduct}
+                                         productModel={productModel as ProductModel} onNextClick={onNextClick}/>
+                    }
+                    {
+                        currentStep === 1 &&
+                        <ProductAddStep2  categories={categories}
+                                          updateProduct={updateProduct}
+                                          productModel={productModel as ProductModel}
+                                         onPreviousClick={onPreviousClick} />
+                    }
+                </Col>
+            </Row>
         </div>
-        <Row justify={"center"} style={{width: '100%', marginTop: '50px'}}>
-            <Col
-                xs={{span: 24}}
-                sm={{span: 20}}
-                md={{span: 20}}
-                lg={{span: 14}}
-            >
-                {
-                    currentStep === 0 &&
-                    <ProductAddStep1 form={productForm} categories={categories}
-                                     setProductModel={updateProduct}
-                                     productModel={productModel as ProductModel} onNextClick={onNextClick}/>
-                }
-                {
-                    currentStep === 1 &&
-                    <ProductAddStep2 setProductModel={updateProduct} categories={categories}
-                                                          productModel={productModel as ProductModel}
-                                                          onPreviousClick={onPreviousClick} onSubmit={onSubmit}/>
-                }
-            </Col>
-        </Row>
-    </div>
-);
+    );
 }
 
 export default ProductAddPage;

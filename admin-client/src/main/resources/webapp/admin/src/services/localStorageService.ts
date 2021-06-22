@@ -1,5 +1,5 @@
-const version = process.env.APP_VERSION;
-const STORAGE_KEY = `__SERIALIZED_v${version}__`;
+const version = process.env.REACT_APP_VERSION;
+const STORAGE_KEY = `${version}_`;
 
 export function saveItem(key: string, value: string): boolean {
     if (!localStorage) {

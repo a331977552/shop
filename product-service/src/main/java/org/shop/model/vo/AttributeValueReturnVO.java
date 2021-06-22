@@ -12,4 +12,10 @@ public class AttributeValueReturnVO {
 
 	private String value;
 
+	public AttributeValueReturnVO(String value) {
+		this.value = value;
+	}
+
+	public AttributeValueReturnVO() {
+	}
 }

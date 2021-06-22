@@ -1,33 +1,62 @@
 import React, {useEffect, useState} from 'react';
-import {ProductModel, ProductSpecModel} from "../../model";
-import {Col, Form, Input, message, Row, Select} from "antd";
+import {KeyVals, ProductSpecModel} from "../../model";
+import {Form, Input, message, Select} from "antd";
 import {getProductSpecListAPI} from "../../api/ProductSpecAPI";
+import {loadItem, removeItem, saveItem} from "../../services";
+
+function saveSpecs(attrs: KeyVals) {
+    saveItem("product_adding_specs", JSON.stringify(attrs));
+}
+
+function loadSpecs() {
+    return loadItem("product_adding_specs");
+}
+
+function removeSpecsFromCache() {
+    return removeItem("product_adding_specs");
+}
+
 
 function SpecAddForm(
     props: {
-        setProductModel: (productModel: ProductModel | undefined) => void,
-        productModel: ProductModel
+        category?: number
     }
 ) {
-    const {setProductModel, productModel} = props;
+    const {category} = props;
+    const [specs, setSpecs] = useState<KeyVals>(() => {
+        console.log("specs init from cache");
+        const specs = loadSpecs();
+        return specs ? JSON.parse(specs) : {};
+    });
     const [productSpecs, setProductSpecs] = useState<Array<ProductSpecModel>>();
+
+
     useEffect(() => {
-        getProductSpecListAPI({example: {categoryId: productModel?.category}}).then((result) => {
-            const items = result.result?.items?.map(item => ({
-                ...item, valueArray: Array.from(new Set(item.value?.split("\n")))
-            }));
-            setProductSpecs(items);
-        }).catch((error) => {
-            message.error(error.msgDetail, 3);
-        })
-    }, [setProductSpecs, productModel?.category]);
+        if (category) {
+            if (productSpecs){
+                console.log("reset spec cache")
+                setSpecs({});
+                removeSpecsFromCache();
+            }
+            getProductSpecListAPI({example: {categoryId: category}}).then((result) => {
+                const items = result.result?.items?.map(item => ({
+                    ...item, valueArray: Array.from(new Set(item.value?.split("\n")))
+                }));
+                console.log("load spec")
+                setProductSpecs(items);
+            }).catch((error) => {
+                message.error(error.msgDetail, 3);
+            })
+        }
+    }, [setProductSpecs, category,setSpecs]);
 
 
     function onSpecValueChange(changedFields: any, allFields: { [key: string]: string[] }) {
-        setProductModel({...productModel, specs: allFields});
+        saveSpecs(allFields);
+        setSpecs(allFields);
     }
 
-    if ((productSpecs?.length || 0) === 0)
+    if ((productSpecs?.length || 0) === 0 || !specs)
         return null;
 
     return (<div
@@ -53,12 +82,13 @@ function SpecAddForm(
                 }}
                 layout="horizontal"
                 name={"spec"}
+                preserve={false}
                 onValuesChange={onSpecValueChange}
             >
                 {
                     productSpecs?.map(spec =>
                         <Form.Item key={spec.id} name={spec.name} label={spec.name}
-                                   initialValue={(productModel?.specs || {})[spec.name]}
+                                   initialValue={(specs || {})[spec.name]}
                         >
                             {spec.entryMethod === 'custom' ? <Input style={{flex: '1 0 0px'}}/> :
                                 <Select

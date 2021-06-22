@@ -6,6 +6,11 @@ import {FormFinishInfo} from "rc-field-form/lib/FormContext";
 import AttrAddForm from "./AttrAddForm";
 import SpecAddForm from "./SpecAddForm";
 import DetailEditor from "./DetailEditor";
+import {ContentState, convertToRaw, EditorState} from "draft-js";
+import draftToHtml from "draftjs-to-html";
+import {loadItem, saveItem} from "../../services";
+import htmlToDraft from "html-to-draftjs";
+import {debounce} from "../../util/TimerUtils";
 
 const formItemLayout = {
     labelCol: {
@@ -19,15 +24,25 @@ const formItemLayout = {
 };
 
 function ProductAddStep2(props: {
-    productModel: ProductModel,
     onPreviousClick: (productModel: ProductModel) => void,
-    onSubmit: (productModel: ProductModel) => void,
     categories: CategoryTree[],
-    setProductModel: (productModel: ProductModel | undefined) => void
+    productModel: ProductModel,
+    updateProduct: (productModel: ProductModel) => void
 }) {
     const [categoryForm] = Form.useForm();
-    const [dataSource, setDataSource] = useState<Array<KeyVal>>();
-    const {productModel, setProductModel, categories} = props;
+    const [skuList, setSkuList] = useState<Array<KeyVal>>();
+    const [editorState, setEditorState] = useState(()=>{
+        const html = loadItem("product_adding_detail") || "";
+        console.log("init detail from cache")
+        const contentBlock = htmlToDraft(html);
+        if (contentBlock) {
+            const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+            return EditorState.createWithContent(contentState);
+        }
+        return EditorState.createEmpty()
+    });
+    const {categories, updateProduct, productModel} = props;
+    const {category} = productModel;
 
     function onPreviousClick() {
         props.onPreviousClick({
@@ -38,21 +53,29 @@ function ProductAddStep2(props: {
 
 
     function onCategoryChange(categoryId: number) {
-        setProductModel({...productModel, specs: undefined,attrs:undefined, category: categoryId});
+        updateProduct({...productModel, category: categoryId});
     }
 
     function onFormFinish(name: string, info: FormFinishInfo) {
-        let emptyPriceOrStockExist = (dataSource||[]).some(row=> !((row["price"]||"").trim()) ||  !((row["stock"]||"").trim()));
-        if(emptyPriceOrStockExist){
-            message.error("sku列表不能为空!",3);
+        let emptyPriceOrStock = (skuList || []).some(row => !((row["price"] || "").trim()) || !((row["stock"] || "").trim()));
+        if (emptyPriceOrStock) {
+            message.error("sku列表不能为空!", 3);
             return;
         }
-        console.log(name, info,dataSource);
-
+        let html = draftToHtml(convertToRaw(editorState.getCurrentContent()));
+        console.log(name, info, skuList, html);
     }
-    function _setDataSource(data:Array<KeyVal>|undefined){
-        console.log(data);
-        setDataSource(data);
+
+    function _setSkuList(data: Array<KeyVal> | undefined) {
+        setSkuList(data);
+    }
+
+    function _setEditorState(editorState: EditorState) {
+        debounce(()=>{
+            let html = draftToHtml(convertToRaw(editorState.getCurrentContent()));
+            saveItem("product_adding_detail",html);
+        },2000);
+        setEditorState(editorState);
     }
 
     return (
@@ -74,8 +97,9 @@ function ProductAddStep2(props: {
                     style={{width: '100%'}}
                     {...formItemLayout}
                     layout="horizontal"
+                    preserve={false}
                 >
-                    <Form.Item label="商品分类" initialValue={productModel ? (productModel.category + "") : "0"}
+                    <Form.Item label="商品分类" initialValue={category}
                                name="category"
                                rules={[{required: true, message: '必须设置种类所属'}]}>
                         <TreeSelect notFoundContent={<div>数据加载错误,请检查网络</div>}
@@ -84,17 +108,20 @@ function ProductAddStep2(props: {
                         />
                     </Form.Item>
                 </Form>
-                <AttrAddForm productModel={productModel}
-                             dataSource={dataSource}
-                             setDataSource={_setDataSource}
-                             setProductModel={setProductModel}/>
-
-                <SpecAddForm productModel={productModel} setProductModel={setProductModel}/>
-                <DetailEditor/>
-
+                <AttrAddForm
+                    dataSource={skuList}
+                    setDataSource={_setSkuList}
+                    category={category}
+                />
+                <SpecAddForm category={category}/>
+                <DetailEditor
+                    editorState={editorState}
+                    setEditorState={_setEditorState}
+                />
                 <Form
                     name={"submit"}
                     style={{marginTop: '20px'}}
+                    preserve={false}
                 >
                     <Form.Item>
                         <Space>

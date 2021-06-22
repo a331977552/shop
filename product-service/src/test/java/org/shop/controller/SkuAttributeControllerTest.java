@@ -31,19 +31,19 @@ class SkuAttributeControllerTest extends BaseControllerTest<AttributeReturnVO> {
 	void addAttribute() {
 
 		AttributeAddVO addVO = new AttributeAddVO();
-		addVO.setName("颜色");
-		addVO.setCategoryId(7);
+		addVO.setName("品质");
+		addVO.setCategoryId(120);
 		addVO.setSearchable(true);
 		addVO.setEntryMethod("selection");
 		addVO.setSelectType("single");
 		addVO.setSearchtype("color");
 		java.util.List<AttributeValueAddVO> list = new ArrayList<>();
 		AttributeValueAddVO vo = new AttributeValueAddVO();
-		vo.setValue("红色");
+		vo.setValue("低档");
 		AttributeValueAddVO vo2 = new AttributeValueAddVO();
-		vo2.setValue("紫色");
+		vo2.setValue("高档");
 		AttributeValueAddVO vo3 = new AttributeValueAddVO();
-		vo3.setValue("黑色");
+		vo3.setValue("高档");
 
 		list.add(vo);
 		list.add(vo2);
@@ -54,7 +54,7 @@ class SkuAttributeControllerTest extends BaseControllerTest<AttributeReturnVO> {
 		final ResponseEntity<Result<AttributeReturnVO>> post = helper.
 				setUIPath("/api/category/attr").setPort(port).
 				builder().withToken(token).build().post(addVO, resVOReturnRef);
-		System.out.println(post);
+		prettyPrint(post);
 		final AttributeReturnVO result = Objects.requireNonNull(post.getBody()).getResult();
 		Assertions.assertEquals(200,post.getStatusCodeValue());
 		final Integer id = result.getId();
@@ -64,7 +64,7 @@ class SkuAttributeControllerTest extends BaseControllerTest<AttributeReturnVO> {
 			Assertions.assertNotNull(value.getId());
 		}
 
-		this.deleteAttr(id,token);
+//		this.deleteAttr(id,token);
 
 	}
 
@@ -90,8 +90,12 @@ class SkuAttributeControllerTest extends BaseControllerTest<AttributeReturnVO> {
 		convert.setEntryMethod("selection");
 		List<AttributeValueReturnVO> v=new ArrayList<>();
 		AttributeValueReturnVO e=new AttributeValueReturnVO();
+		AttributeValueReturnVO e2=new AttributeValueReturnVO();
 		e.setValue("小明");
+		e2.setValue("小明");
+
 		v.add(e);
+		v.add(e2);
 		convert.setValues(v);
 		final AttributeReturnVO attributeReturnVO = service.updateAttribute(convert);
 		prettyPrint(attributeReturnVO);

@@ -4,6 +4,7 @@ import TextArea from "antd/es/input/TextArea";
 import {KeyVal, KeyValMix, KeyVals, ProductAttrModel, ProductModel} from "../../model";
 import {getProductAttrListAPI} from "../../api/ProductAttrAPI";
 import styled from "styled-components";
+import {loadItem, removeItem, saveItem} from "../../services";
 
 const CheckboxGroup = Checkbox.Group;
 const StyledTd = styled.td`
@@ -74,34 +75,59 @@ function generateData(valueMap: KeyValMix): Array<KeyVal> {
     return data;
 }
 
+function saveAttrs(attrs: KeyVals) {
+    saveItem("product_adding_attrs", JSON.stringify(attrs));
+}
+
+function loadAttrs() {
+    return loadItem("product_adding_attrs");
+}
+function removeAttrsFromCache() {
+    return removeItem("product_adding_attrs");
+}
+
+
 
 function AttrAddForm(props: {
-    setProductModel: (productModel: ProductModel | undefined) => void,
-    productModel: ProductModel,
     dataSource: KeyVal[] | undefined,
     setDataSource: (dataSource: KeyVal[] | undefined) => void
+    category?: number
 }) {
-    const {setProductModel, productModel, setDataSource, dataSource} = props;
+    const {setDataSource, dataSource, category} = props;
     const [productAttrs, setProductAttrs] = useState<Array<ProductAttrModel>>();
+    const [attrValues, setAttrValues] = useState<KeyVals>(()=>{
+        console.log("attr init from cache");
+        const attrs = loadAttrs();
+        return attrs ? JSON.parse(attrs) : {};
+    });
+
     const [columns, setColumns] = useState<Array<TableItem>>();
     const [attrForm] = Form.useForm();
 
     useEffect(() => {
-        setColumns(undefined);
-        setDataSource(undefined);
-        getProductAttrListAPI({example: {categoryId: productModel?.category}}).then((result) => {
-            const items = result.result?.items;
-            setProductAttrs(items);
-        }).catch((error) => {
-            message.error(error.msgDetail, 3);
-        })
-    }, [setProductAttrs, productModel?.category]);
+        if (category){
+            if (productAttrs){
+                console.log("reset attr cache")
+                setAttrValues({});
+                removeAttrsFromCache();
+                setColumns(undefined);
+                setDataSource(undefined);
+            }
+            getProductAttrListAPI({example: {categoryId: category}}).then((result) => {
+                const items = result.result?.items;
+                setProductAttrs(items);
+            }).catch((error) => {
+                message.error(error.msgDetail, 3);
+            })
+        }
+    }, [setProductAttrs, category,setAttrValues]);
 
     if ((productAttrs?.length || 0) === 0)
         return null;
 
     function onAttrValueChange(changedFields: any, allFields: KeyVals) {
-        setProductModel({...productModel, attrs: allFields})
+        saveAttrs(allFields);
+        setAttrValues(allFields);
     }
 
     function onRefreshClick() {
@@ -123,7 +149,8 @@ function AttrAddForm(props: {
         setDataSource(newData.map(data => ({...data, [dataIndex]: newData[0][dataIndex]})));
     }
 
-
+    if (!attrValues)
+        return null;
     return (
         <div
             style={{
@@ -153,16 +180,16 @@ function AttrAddForm(props: {
                 onValuesChange={onAttrValueChange}
             >
                 {
-                    productAttrs?.map(attr =>
-                        <Form.Item key={attr.id} name={attr.name} label={attr.name}
+                    productAttrs?.map((attr,index) =>
+                        <Form.Item key={attr.id+index} name={attr.name} label={attr.name}
                                    rules={[{required: true, message: attr.name + " 不能为空"}]}
-                                   initialValue={(productModel?.attrs || {})[attr.name]}
+                                   initialValue={(attrValues || {})[attr.name]}
                                    preserve={false}
                                    hasFeedback={true}
                         >
                             {attr.entryMethod === 'custom' ? <TextArea rows={4}/> :
                                 <CheckboxGroup
-                                    options={attr.values?.map(val =>
+                                    options={attr.values?.map((val) =>
                                         ({label: val.value, value: val.value}))}/>
                             }
                         </Form.Item>
@@ -210,7 +237,7 @@ function AttrAddForm(props: {
                                                         onSyncAttrClick(col.dataIndex);
                                                     }}
                                         >
-                                            <Button  style={{width: '70px'}}
+                                            <Button style={{width: '70px'}}
                                                     size={"small"}>同步{col.title}</Button></Popconfirm> :
                                         <Button style={{width: '70px'}} onClick={() => {
                                             onSyncAttrClick(col.dataIndex);
@@ -223,7 +250,7 @@ function AttrAddForm(props: {
             </table>
             }
             <Form.Item
-                style={{marginTop: '10px',marginBottom:'0px'}}
+                style={{marginTop: '10px', marginBottom: '0px'}}
                 {...tailForm}
             >
                 <Space>
