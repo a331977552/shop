@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Form, Checkbox, message, Input, Space, Popconfirm, Upload} from "antd";
 import TextArea from "antd/es/input/TextArea";
-import {KeyVal, KeyValMix, KeyVals, ProductAttrModel, SkuKeyVal, SkuObject, SkuVal} from "../../model";
+import {KeyValMix, KeyVals, ProductAttrModel, SkuKeyVal, SkuObject, SkuVal} from "../../model";
 import {getProductAttrListAPI} from "../../api/ProductAttrAPI";
 import styled from "styled-components";
 import {loadItem, removeItem, saveItem} from "../../services";
@@ -10,6 +10,7 @@ import {LoadingOutlined, PlusOutlined} from "@ant-design/icons";
 import {beforeImageUpload} from "../../util/UploadConfig";
 import {UploadChangeParam} from "antd/lib/upload/interface";
 import './attr.css'
+
 const CheckboxGroup = Checkbox.Group;
 const StyledTd = styled.td`
   border: 1px solid #dddddd;
@@ -37,7 +38,7 @@ const tailForm =
         }
     }
 
-declare type  TableItem = {
+type  TableItem = {
     title: string,
     dataIndex: string
 };
@@ -57,8 +58,8 @@ const columnsPart2: TableItem[] =
         }
     ]
 
-function generateData(valueMap: KeyValMix): Array<KeyVal> {
-    const data = [] as Array<{ [key: string]: string }>;
+function generateData(valueMap: KeyValMix): Array<SkuKeyVal> {
+    const data: SkuKeyVal[] = [];
     if (Object.keys(valueMap).length === 0)
         return data;
 
@@ -70,7 +71,7 @@ function generateData(valueMap: KeyValMix): Array<KeyVal> {
         }
         valArrayOfKey.forEach(val => {
             if (keys.length === 1) {
-                data.push({...obj, [key]: val, price: '', stock: '', img: ''});
+                data.push({...obj, [key]: val, price: '', stock: '', img: {}});
             } else {
                 _generateData(keys.slice(1), valueMap, {...obj, [key]: val})
             }
@@ -96,10 +97,11 @@ function removeAttrsFromCache() {
 
 function AttrAddForm(props: {
     dataSource: SkuKeyVal[] | undefined,
-    setDataSource: (dataSource: SkuKeyVal[] | undefined) => void
+    setDataSource: (dataSource: SkuKeyVal[] | undefined) => void,
+    onCategoryChangeRef:(onCategoryChange:()=>void)=>void,
     category?: number
 }) {
-    const {setDataSource, dataSource, category} = props;
+    const {setDataSource, dataSource, category,onCategoryChangeRef} = props;
     const [productAttrs, setProductAttrs] = useState<Array<ProductAttrModel>>();
     const [attrValues, setAttrValues] = useState<KeyVals>(() => {
         console.log("attr init from cache");
@@ -107,26 +109,29 @@ function AttrAddForm(props: {
         return attrs ? JSON.parse(attrs) : {};
     });
 
+    //reset cache and data when category changed manually
+    onCategoryChangeRef(()=>{
+            console.log("reset attr cache")
+            setAttrValues({});
+            removeAttrsFromCache();
+            setColumns(undefined);
+            setDataSource(undefined);
+    });
     const [columns, setColumns] = useState<Array<TableItem>>();
     const [attrForm] = Form.useForm();
 
+    //load attrs from server once category is changed
     useEffect(() => {
         if (category) {
-            if (productAttrs) {
-                console.log("reset attr cache")
-                setAttrValues({});
-                removeAttrsFromCache();
-                setColumns(undefined);
-                setDataSource(undefined);
-            }
             getProductAttrListAPI({example: {categoryId: category}}).then((result) => {
+                console.log("load attrs")
                 const items = result.result?.items;
                 setProductAttrs(items);
             }).catch((error) => {
                 message.error(error.msgDetail, 3);
             })
         }
-    }, [setProductAttrs, category, setAttrValues]);
+    }, [setProductAttrs, category]);
 
     if ((productAttrs?.length || 0) === 0)
         return null;
@@ -136,11 +141,21 @@ function AttrAddForm(props: {
         setAttrValues(allFields);
     }
 
-    function onRefreshClick() {
+    function onGenerateSkuListClick() {
         attrForm.validateFields().then((fieldsValue: { [key: string]: string[] | string }) => {
-            const columnsPart1 = Object.keys(fieldsValue).map(key => ({title: key, dataIndex: key}))
+            const filteredKeys = Object.keys(fieldsValue).filter(
+                key => Array.isArray(fieldsValue[key])? fieldsValue[key].length > 0:(!!fieldsValue[key])
+            )
+            if (filteredKeys.length === 0) {
+                setColumns(undefined);
+                setDataSource(undefined);
+                return;
+            }
+            const columnsPart1 = filteredKeys.map(key => ({title: key, dataIndex: key}))
             setColumns(columnsPart1.concat(columnsPart2));
-            setDataSource(generateData(fieldsValue));
+            let filteredValues: KeyValMix = filteredKeys.reduce((values, key) =>
+                ({...values, [key]: fieldsValue[key]}), {});
+            setDataSource(generateData(filteredValues));
         })
     }
 
@@ -151,13 +166,10 @@ function AttrAddForm(props: {
     }
 
     function onSyncAttrClick(dataIndex: string) {
-        let newData = [...(dataSource as Array<KeyVal>)];
+        let newData = [...(dataSource as Array<SkuKeyVal>)];
         setDataSource(newData.map(data => ({...data, [dataIndex]: newData[0][dataIndex]})));
     }
 
-
-    if (!attrValues)
-        return null;
     return (
         <div
             style={{
@@ -184,15 +196,14 @@ function AttrAddForm(props: {
                 }}
                 layout="horizontal"
                 name={"attr"}
+                scrollToFirstError={true}
                 onValuesChange={onAttrValueChange}
             >
                 {
                     productAttrs?.map((attr, index) =>
                         <Form.Item key={attr.id + index} name={attr.name} label={attr.name}
-                                   rules={[{required: true, message: attr.name + " 不能为空"}]}
                                    initialValue={(attrValues || {})[attr.name]}
                                    preserve={false}
-                                   hasFeedback={true}
                         >
                             {attr.entryMethod === 'custom' ? <TextArea rows={4}/> :
                                 <CheckboxGroup
@@ -237,21 +248,25 @@ function AttrAddForm(props: {
                                         action="/api-gateway/img-service/api/img"
                                         beforeUpload={beforeImageUpload}
                                         onChange={(info: UploadChangeParam) => {
-                                            onRecordChange(row, index, key, {loading:info.file.status === 'uploading'});
+                                            onRecordChange(row, index, key, {loading: info.file.status === 'uploading'});
                                             if (info.file.status === 'done') {
-                                                onRecordChange(row, index, key, {id:info.file.response.result.id,loading:false});
+                                                onRecordChange(row, index, key, {
+                                                    id: info.file.response.result.id,
+                                                    loading: false
+                                                });
                                             } else if (info.file.status === 'error') {
                                                 message.error(info.file.response.msgDetail, 3)
                                             }
                                         }
                                         }
                                     >
-                                        {((row[key]||{}) as SkuObject).id?
-                                            <img src={"/api-gateway/img-service/api/img/" +(row[key]as SkuObject).id}
+                                        {((row[key] || {}) as SkuObject).id ?
+                                            <img src={"/api-gateway/img-service/api/img/" + (row[key] as SkuObject).id}
                                                  alt="avatar"
                                                  style={{width: '100%'}}/> :
                                             <div>
-                                                {((row[key]||{}) as SkuObject).loading  ? <LoadingOutlined/> : <PlusOutlined/>}
+                                                {((row[key] || {}) as SkuObject).loading ? <LoadingOutlined/> :
+                                                    <PlusOutlined/>}
                                                 <div style={{marginTop: 8}}>Upload</div>
                                             </div>
                                         }
@@ -267,7 +282,7 @@ function AttrAddForm(props: {
                     {columns.map(col => (
                         <StyledTd key={col.dataIndex}>
                             {(col.dataIndex === 'price'
-                                || col.dataIndex === 'stock') ?
+                                || col.dataIndex === 'stock' || col.dataIndex === 'img') ?
                                 ((dataSource.slice(1).filter(item => (!!item[col.dataIndex])).length > 0) ?
                                         <Popconfirm title={`同步将会丢失${col.title}数据,确定吗?`}
                                                     onConfirm={() => {
@@ -293,11 +308,11 @@ function AttrAddForm(props: {
                 <Space>
                     {(dataSource?.length || 0) > 0 ?
                         <Popconfirm title={"重新生成列表,会导致当前数据丢失!"}
-                                    onConfirm={onRefreshClick}
+                                    onConfirm={onGenerateSkuListClick}
                         >
                             <Button type={'primary'} danger>重新生成列表
                             </Button>
-                        </Popconfirm> : <Button type={'primary'} onClick={onRefreshClick}>生成列表
+                        </Popconfirm> : <Button type={'primary'} onClick={onGenerateSkuListClick}>生成列表
                         </Button>
                     }
                 </Space>

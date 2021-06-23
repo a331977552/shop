@@ -194,8 +194,9 @@ function ProductAddStep1(props: {
 
 
                 <Form.Item label="排序" name={"priority"}
-                           initialValue={productModel?.priority}
+                           initialValue={productModel?.priority||0}
                            hasFeedback={true}
+                           rules={[{required:true,message:"排序不能为空"}]}
                 >
                     <InputNumber min={0} max={9999}/>
                 </Form.Item>

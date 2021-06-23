@@ -19,15 +19,21 @@ public interface ProductDAOMapper {
 
     int insertSelective(ProductDAO record);
 
+    List<ProductDAO> selectByExampleWithBLOBs(ProductDAOExample example);
+
     List<ProductDAO> selectByExample(ProductDAOExample example);
 
     ProductDAO selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") ProductDAO record, @Param("example") ProductDAOExample example);
 
+    int updateByExampleWithBLOBs(@Param("record") ProductDAO record, @Param("example") ProductDAOExample example);
+
     int updateByExample(@Param("record") ProductDAO record, @Param("example") ProductDAOExample example);
 
     int updateByPrimaryKeySelective(ProductDAO record);
+
+    int updateByPrimaryKeyWithBLOBs(ProductDAO record);
 
     int updateByPrimaryKey(ProductDAO record);
 }

@@ -19,10 +19,11 @@ function removeSpecsFromCache() {
 
 function SpecAddForm(
     props: {
+        onCategoryChangeFuncSpecRef:(onCategoryChange:()=>void)=>void,
         category?: number
     }
 ) {
-    const {category} = props;
+    const {category,onCategoryChangeFuncSpecRef} = props;
     const [specs, setSpecs] = useState<KeyVals>(() => {
         console.log("specs init from cache");
         const specs = loadSpecs();
@@ -30,20 +31,19 @@ function SpecAddForm(
     });
     const [productSpecs, setProductSpecs] = useState<Array<ProductSpecModel>>();
 
-
+    onCategoryChangeFuncSpecRef(()=>{
+        console.log("reset spec cache")
+        setSpecs({});
+        removeSpecsFromCache();
+    });
     useEffect(() => {
         if (category) {
-            if (productSpecs){
-                console.log("reset spec cache")
-                setSpecs({});
-                removeSpecsFromCache();
-            }
             getProductSpecListAPI({example: {categoryId: category}}).then((result) => {
-                const items = result.result?.items?.map(item => ({
+                const specsForm = result.result?.items?.map(item => ({
                     ...item, valueArray: Array.from(new Set(item.value?.split("\n")))
                 }));
                 console.log("load spec")
-                setProductSpecs(items);
+                setProductSpecs(specsForm);
             }).catch((error) => {
                 message.error(error.msgDetail, 3);
             })
@@ -56,7 +56,7 @@ function SpecAddForm(
         setSpecs(allFields);
     }
 
-    if ((productSpecs?.length || 0) === 0 || !specs)
+    if ((productSpecs?.length || 0) === 0)
         return null;
 
     return (<div

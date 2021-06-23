@@ -27,7 +27,7 @@ function loadProduct(){
     const storageProductItem = loadItem("product_adding_product");
     const productStep: { currentStep: number, product?: ProductModel } = storageProductItem ? (JSON.parse(storageProductItem)) : {
         currentStep: 0,
-        product: {status: 'ON_SALE'}
+        product: {status: 'ON_SALE',priority:0}
     };
     return productStep;
 }

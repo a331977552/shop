@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {ProductModel, SkuKeyVal} from "../../model";
+import {ProductModel, SkuImg, SkuKeyVal} from "../../model";
 import {CategoryTree} from "../category/CategoryConvertor";
 import {Button, Form, message, Space, TreeSelect} from "antd";
 import {FormFinishInfo} from "rc-field-form/lib/FormContext";
@@ -11,6 +11,7 @@ import draftToHtml from "draftjs-to-html";
 import {loadItem, saveItem} from "../../services";
 import htmlToDraft from "html-to-draftjs";
 import {debounce} from "../../util/TimerUtils";
+import {ProductAddAPI} from "../../api";
 
 const formItemLayout = {
     labelCol: {
@@ -31,7 +32,9 @@ function ProductAddStep2(props: {
 }) {
     const [categoryForm] = Form.useForm();
     const [skuList, setSkuList] = useState<Array<SkuKeyVal>>();
-    const [editorState, setEditorState] = useState(()=>{
+    let onCategoryChangeFuncRef: () => void;
+    let onCategoryChangeFuncSpecRef: () => void;
+    const [editorState, setEditorState] = useState(() => {
         const html = loadItem("product_adding_detail") || "";
         console.log("init detail from cache")
         const contentBlock = htmlToDraft(html);
@@ -51,9 +54,10 @@ function ProductAddStep2(props: {
         });
     }
 
-
     function onCategoryChange(categoryId: number) {
         updateProduct({...productModel, category: categoryId});
+        onCategoryChangeFuncRef && onCategoryChangeFuncRef();
+        onCategoryChangeFuncSpecRef && onCategoryChangeFuncSpecRef();
     }
 
     function onFormFinish(name: string, info: FormFinishInfo) {
@@ -62,8 +66,30 @@ function ProductAddStep2(props: {
             message.error("sku列表不能为空!", 3);
             return;
         }
-        let html = draftToHtml(convertToRaw(editorState.getCurrentContent()));
-        console.log(name, info, skuList, html);
+        Promise.all([info.forms['category'].validateFields(), info.forms['attr'].validateFields()]).then(() => {
+            const detailHtml = draftToHtml(convertToRaw(editorState.getCurrentContent()));
+            const specsRequestData = info.forms["spec"].getFieldsValue();
+
+            const skuRequestData =(skuList || []).map(constSku=>{
+                let sku = {...constSku};
+                delete sku["stock"];
+                delete sku["price"];
+                delete sku["img"];
+                return {stock:String(constSku["stock"]),price:String(constSku["price"]),img:(constSku["img"]as SkuImg).id,attribute:JSON.stringify(sku)}
+            });
+
+            const key = "product_add_key_";
+            const requestData:ProductModel = {...productModel,detail:detailHtml,specs:JSON.stringify(specsRequestData),skuList:skuRequestData}
+            ProductAddAPI(requestData).then(() => {
+                message.success({content: false ? "更新成功" : "添加成功", key, duration: 1});
+            }).catch((err) => {
+                message.error({content: false ? "更新失败,原因" : "添加失败,原因:" + err.msgDetail?err.msgDetail:err, duration: 3, key});
+            })
+
+            console.log(requestData);
+        }).catch((error) => {
+            message.error(error, 3);
+        })
     }
 
     function _setSkuList(data: Array<SkuKeyVal> | undefined) {
@@ -71,10 +97,10 @@ function ProductAddStep2(props: {
     }
 
     function _setEditorState(editorState: EditorState) {
-        debounce(()=>{
+        debounce(() => {
             let html = draftToHtml(convertToRaw(editorState.getCurrentContent()));
-            saveItem("product_adding_detail",html);
-        },2000);
+            saveItem("product_adding_detail", html);
+        }, 2000);
         setEditorState(editorState);
     }
 
@@ -92,7 +118,7 @@ function ProductAddStep2(props: {
                 onFormFinish={onFormFinish}
             >
                 <Form
-                    name={"cateogry"}
+                    name={"category"}
                     form={categoryForm}
                     style={{width: '100%'}}
                     {...formItemLayout}
@@ -112,8 +138,16 @@ function ProductAddStep2(props: {
                     dataSource={skuList}
                     setDataSource={_setSkuList}
                     category={category}
+                    onCategoryChangeRef={(onCategoryChange: () => void) => {
+                        onCategoryChangeFuncRef = onCategoryChange;
+                    }}
                 />
-                <SpecAddForm category={category}/>
+                <SpecAddForm
+                    category={category}
+                    onCategoryChangeFuncSpecRef={(onCategoryChange: () => void) => {
+                        onCategoryChangeFuncSpecRef = onCategoryChange;
+                    }}
+                />
                 <DetailEditor
                     editorState={editorState}
                     setEditorState={_setEditorState}

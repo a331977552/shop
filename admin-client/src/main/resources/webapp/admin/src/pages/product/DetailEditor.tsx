@@ -1,20 +1,13 @@
-import React, {useEffect, useState} from 'react';
-import {ContentState, convertToRaw, EditorState, RichUtils} from "draft-js";
+import React from 'react';
+import {EditorState} from "draft-js";
 import {Editor} from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import htmlToDraft from 'html-to-draftjs';
-import draftToHtml from 'draftjs-to-html';
-import {saveItem} from "../../services";
-import {debounce} from "../../util/TimerUtils";
 
 
 function DetailEditor(props:{editorState: EditorState,
                       setEditorState:(editorState: EditorState)=>void}
                       ) {
     const {editorState,setEditorState}= props;
-    let editor = {};
-
-
 
     return (
         <div >
@@ -27,9 +20,6 @@ function DetailEditor(props:{editorState: EditorState,
                     borderStyle: 'solid',
                     borderColor: '#F1F1F1',
                     borderRadius: '2px'
-                }}
-                editorRef={(ref)=>{
-                    editor = ref;
                 }}
                 onEditorStateChange={setEditorState}
             />

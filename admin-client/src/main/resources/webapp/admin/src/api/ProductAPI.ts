@@ -1,5 +1,5 @@
 import {PageModel, PageQueryModel, ProductModel, ProductQueryModel} from "../model";
-import {get, httpDelete} from "../store/HttpClient";
+import {get, httpDelete, post} from "../store/HttpClient";
 
 
 export function getProductListAPI(pageQueryModel:PageQueryModel<ProductQueryModel>) {
@@ -10,5 +10,11 @@ export function getProductListAPI(pageQueryModel:PageQueryModel<ProductQueryMode
 export function deleteProductAPI(id:string) {
 
     return httpDelete<string>("/api-gateway/product-service/api/product/"+id)
+
+}
+
+export function ProductAddAPI(product:ProductModel) {
+
+    return post<ProductModel>("/api-gateway/product-service/api/product/",product)
 
 }

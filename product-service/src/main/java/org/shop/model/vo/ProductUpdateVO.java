@@ -39,6 +39,7 @@ public class ProductUpdateVO {
 	private String subtitle;
 
 
+	private String detail;
 
 
 	@Min(1)
@@ -54,6 +55,8 @@ public class ProductUpdateVO {
 	private BigDecimal marketPrice;
 
 	private String reviewStatus; //"PASSED", "FAILED", "REVIEWING"
+
+	private String specs;
 
 	private String suffix;
 

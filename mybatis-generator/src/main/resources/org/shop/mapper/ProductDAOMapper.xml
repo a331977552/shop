@@ -21,6 +21,10 @@
     <result column="market_price" jdbcType="DECIMAL" property="marketPrice" />
     <result column="review_status" jdbcType="CHAR" property="reviewStatus" />
     <result column="suffix" jdbcType="VARCHAR" property="suffix" />
+    <result column="specs" jdbcType="VARCHAR" property="specs" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="org.shop.model.dao.ProductDAO">
+    <result column="detail" jdbcType="LONGVARCHAR" property="detail" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -83,8 +87,27 @@
   <sql id="Base_Column_List">
     id, name, category, brand, weight, sales, status, priority, thumbnail_img, standard_img, 
     created_time, updated_time, subtitle, description, item_No, price, market_price, 
-    review_status, suffix
+    review_status, suffix, specs
   </sql>
+  <sql id="Blob_Column_List">
+    detail
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="org.shop.model.dao.ProductDAOExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from product
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByExample" parameterType="org.shop.model.dao.ProductDAOExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
@@ -99,9 +122,11 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from product
     where id = #{id,jdbcType=CHAR}
   </select>
@@ -122,14 +147,16 @@
       standard_img, created_time, updated_time, 
       subtitle, description, item_No, 
       price, market_price, review_status, 
-      suffix)
+      suffix, specs, detail
+      )
     values (#{id,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, #{category,jdbcType=INTEGER}, 
       #{brand,jdbcType=INTEGER}, #{weight,jdbcType=INTEGER}, #{sales,jdbcType=INTEGER}, 
       #{status,jdbcType=CHAR}, #{priority,jdbcType=INTEGER}, #{thumbnailImg,jdbcType=VARCHAR}, 
       #{standardImg,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, 
       #{subtitle,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{itemNo,jdbcType=VARCHAR}, 
       #{price,jdbcType=DECIMAL}, #{marketPrice,jdbcType=DECIMAL}, #{reviewStatus,jdbcType=CHAR}, 
-      #{suffix,jdbcType=VARCHAR})
+      #{suffix,jdbcType=VARCHAR}, #{specs,jdbcType=VARCHAR}, #{detail,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="org.shop.model.dao.ProductDAO">
     insert into product
@@ -191,6 +218,12 @@
       <if test="suffix != null">
         suffix,
       </if>
+      <if test="specs != null">
+        specs,
+      </if>
+      <if test="detail != null">
+        detail,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -249,6 +282,12 @@
       </if>
       <if test="suffix != null">
         #{suffix,jdbcType=VARCHAR},
+      </if>
+      <if test="specs != null">
+        #{specs,jdbcType=VARCHAR},
+      </if>
+      <if test="detail != null">
+        #{detail,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -318,7 +357,40 @@
       <if test="record.suffix != null">
         suffix = #{record.suffix,jdbcType=VARCHAR},
       </if>
+      <if test="record.specs != null">
+        specs = #{record.specs,jdbcType=VARCHAR},
+      </if>
+      <if test="record.detail != null">
+        detail = #{record.detail,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update product
+    set id = #{record.id,jdbcType=CHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      category = #{record.category,jdbcType=INTEGER},
+      brand = #{record.brand,jdbcType=INTEGER},
+      weight = #{record.weight,jdbcType=INTEGER},
+      sales = #{record.sales,jdbcType=INTEGER},
+      status = #{record.status,jdbcType=CHAR},
+      priority = #{record.priority,jdbcType=INTEGER},
+      thumbnail_img = #{record.thumbnailImg,jdbcType=VARCHAR},
+      standard_img = #{record.standardImg,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{record.updatedTime,jdbcType=TIMESTAMP},
+      subtitle = #{record.subtitle,jdbcType=VARCHAR},
+      description = #{record.description,jdbcType=VARCHAR},
+      item_No = #{record.itemNo,jdbcType=VARCHAR},
+      price = #{record.price,jdbcType=DECIMAL},
+      market_price = #{record.marketPrice,jdbcType=DECIMAL},
+      review_status = #{record.reviewStatus,jdbcType=CHAR},
+      suffix = #{record.suffix,jdbcType=VARCHAR},
+      specs = #{record.specs,jdbcType=VARCHAR},
+      detail = #{record.detail,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -343,7 +415,8 @@
       price = #{record.price,jdbcType=DECIMAL},
       market_price = #{record.marketPrice,jdbcType=DECIMAL},
       review_status = #{record.reviewStatus,jdbcType=CHAR},
-      suffix = #{record.suffix,jdbcType=VARCHAR}
+      suffix = #{record.suffix,jdbcType=VARCHAR},
+      specs = #{record.specs,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -405,7 +478,37 @@
       <if test="suffix != null">
         suffix = #{suffix,jdbcType=VARCHAR},
       </if>
+      <if test="specs != null">
+        specs = #{specs,jdbcType=VARCHAR},
+      </if>
+      <if test="detail != null">
+        detail = #{detail,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="org.shop.model.dao.ProductDAO">
+    update product
+    set name = #{name,jdbcType=VARCHAR},
+      category = #{category,jdbcType=INTEGER},
+      brand = #{brand,jdbcType=INTEGER},
+      weight = #{weight,jdbcType=INTEGER},
+      sales = #{sales,jdbcType=INTEGER},
+      status = #{status,jdbcType=CHAR},
+      priority = #{priority,jdbcType=INTEGER},
+      thumbnail_img = #{thumbnailImg,jdbcType=VARCHAR},
+      standard_img = #{standardImg,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      subtitle = #{subtitle,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      item_No = #{itemNo,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      market_price = #{marketPrice,jdbcType=DECIMAL},
+      review_status = #{reviewStatus,jdbcType=CHAR},
+      suffix = #{suffix,jdbcType=VARCHAR},
+      specs = #{specs,jdbcType=VARCHAR},
+      detail = #{detail,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=CHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="org.shop.model.dao.ProductDAO">
@@ -427,7 +530,8 @@
       price = #{price,jdbcType=DECIMAL},
       market_price = #{marketPrice,jdbcType=DECIMAL},
       review_status = #{reviewStatus,jdbcType=CHAR},
-      suffix = #{suffix,jdbcType=VARCHAR}
+      suffix = #{suffix,jdbcType=VARCHAR},
+      specs = #{specs,jdbcType=VARCHAR}
     where id = #{id,jdbcType=CHAR}
   </update>
 </mapper>

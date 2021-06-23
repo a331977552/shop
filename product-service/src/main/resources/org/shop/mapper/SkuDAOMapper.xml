@@ -103,10 +103,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="org.shop.model.dao.SkuDAO">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
+  <insert id="insert" parameterType="org.shop.model.dao.SkuDAO" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
     insert into sku (id, product_id, attribute, 
       stock, price, sales, 
       created_time, updated_time, img
@@ -116,10 +113,7 @@
       #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, #{img,jdbcType=CHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="org.shop.model.dao.SkuDAO">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
+  <insert id="insertSelective" parameterType="org.shop.model.dao.SkuDAO" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
     insert into sku
     <trim prefix="(" suffix=")" suffixOverrides=",">
       id,

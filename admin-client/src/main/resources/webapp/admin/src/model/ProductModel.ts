@@ -30,12 +30,12 @@ export interface ProductModel {
 
     marketPrice?:number;
 
+    detail?:string,
+
+    specs?:string,
+    skuList?: {stock: string, price: string, img: string | undefined, attribute: string}[]
+
     suffix?:string //计量单位
-
-    specs?:{[key:string]:string|Array<string>}
-    attrs?:{[key:string]:Array<string>}
-
-    // attributes:Array<KeyValueModel>
 
 }
 

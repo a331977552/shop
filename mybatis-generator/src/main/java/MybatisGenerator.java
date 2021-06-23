@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 public class MybatisGenerator {
@@ -31,16 +32,8 @@ public class MybatisGenerator {
 			MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, callback, warnings);
 			myBatisGenerator.generate(null);
 
-		} catch (IOException e) {
+		} catch (IOException | XMLParserException | InvalidConfigurationException | InterruptedException | SQLException e) {
 			e.printStackTrace();
-		} catch (XMLParserException e) {
-			e.printStackTrace();
-		} catch (InvalidConfigurationException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (SQLException throwables) {
-			throwables.printStackTrace();
 		}
 	}
 
@@ -52,10 +45,11 @@ public class MybatisGenerator {
 	private static void deleteEverythingInDir(String dir){
 		File file = new File(dir);
 		File[] files = file.listFiles();
-		Stream<File> fileStream = Arrays.stream(files).flatMap(file2 -> Arrays.stream(file2.listFiles()));
+		assert files != null;
+		Stream<File> fileStream = Arrays.stream(files).flatMap(file2 -> Arrays.stream(Objects.requireNonNull(file2.listFiles())));
 		fileStream.forEach((f) -> {
 			if (f.isDirectory()) {
-				for (File listFile : f.listFiles()) {
+				for (File listFile : Objects.requireNonNull(f.listFiles())) {
 					listFile.delete();
 				}
 			} else {

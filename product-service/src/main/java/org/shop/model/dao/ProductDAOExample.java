@@ -1345,6 +1345,76 @@ public class ProductDAOExample {
             addCriterion("suffix not between", value1, value2, "suffix");
             return (Criteria) this;
         }
+
+        public Criteria andSpecsIsNull() {
+            addCriterion("specs is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpecsIsNotNull() {
+            addCriterion("specs is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpecsEqualTo(String value) {
+            addCriterion("specs =", value, "specs");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpecsNotEqualTo(String value) {
+            addCriterion("specs <>", value, "specs");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpecsGreaterThan(String value) {
+            addCriterion("specs >", value, "specs");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpecsGreaterThanOrEqualTo(String value) {
+            addCriterion("specs >=", value, "specs");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpecsLessThan(String value) {
+            addCriterion("specs <", value, "specs");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpecsLessThanOrEqualTo(String value) {
+            addCriterion("specs <=", value, "specs");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpecsLike(String value) {
+            addCriterion("specs like", value, "specs");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpecsNotLike(String value) {
+            addCriterion("specs not like", value, "specs");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpecsIn(List<String> values) {
+            addCriterion("specs in", values, "specs");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpecsNotIn(List<String> values) {
+            addCriterion("specs not in", values, "specs");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpecsBetween(String value1, String value2) {
+            addCriterion("specs between", value1, value2, "specs");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpecsNotBetween(String value1, String value2) {
+            addCriterion("specs not between", value1, value2, "specs");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

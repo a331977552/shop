@@ -30,4 +30,5 @@ public interface AttrValueDAOMapper {
     int updateByPrimaryKeySelective(AttrValueDAO record);
 
     int updateByPrimaryKey(AttrValueDAO record);
+
 }

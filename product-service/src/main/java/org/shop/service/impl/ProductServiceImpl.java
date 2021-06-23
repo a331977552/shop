@@ -52,15 +52,13 @@ public class ProductServiceImpl implements ProductService {
 		mapper.insertSelective(product);
 		//map product into  categories
 		List<ProductAddVO.SkuAddVO> skuList = Optional.ofNullable(productVO.getSkuList()).orElse(new ArrayList<>());
-		System.out.println(product);
 		List<SkuDAO> convert = BeanConvertor.convert(skuList, SkuDAO.class);
 		for (SkuDAO skuDAO : convert) {
 			skuDAO.setSales(0);
 			skuDAO.setProductId(product.getId());
 			skuMapper.insertSelective(skuDAO);
 		}
-		ProductReturnVO productReturnVO = convertToReturnVO(product, convert);
-		return productReturnVO;
+		return convertToReturnVO(product, convert);
 	}
 
 	ProductDAO convertToDAO(ProductAddVO vo) {

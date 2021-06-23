@@ -1,7 +1,8 @@
 
-export declare type  SkuVal =  string|{id?:string,key?:string,loading:boolean};
-export declare type  SkuObject =  {id:string,key?:string,loading:boolean};
-export declare type  KeyVal = { [key: string]: string };
-export declare type  SkuKeyVal = { [key: string]: SkuVal};
-export declare type  KeyVals = { [key: string]: string[] };
-export declare type  KeyValMix = { [key: string]: string | string[] };
+export  type  SkuImg = {id?:string,key?:string,loading:boolean};
+export  type  SkuVal =  string|SkuImg;
+export  type  SkuObject =  {id:string,key?:string,loading:boolean};
+export  type  KeyStr = { [key: string]: string };
+export  type  SkuKeyVal = { [key: string]: SkuVal};
+export  type  KeyVals = { [key: string]: string[] };
+export  type  KeyValMix = { [key: string]: string | string[] };

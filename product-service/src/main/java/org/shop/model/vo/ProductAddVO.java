@@ -23,6 +23,8 @@ public class ProductAddVO {
 	private List<SkuAddVO> skuList;
 	private Integer weight;
 
+	private String detail;
+
 
 	@EnumNamePattern(regexp = "OUT_OF_ORDER|ON_SALE")
 	private String status;
@@ -49,9 +51,9 @@ public class ProductAddVO {
 
 	private BigDecimal marketPrice;
 
+	private String specs;
 
 	private String suffix;
-
 
 	@Data
 	@ToString

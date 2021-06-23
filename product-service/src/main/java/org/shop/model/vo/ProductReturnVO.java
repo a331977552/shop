@@ -44,6 +44,11 @@ public class ProductReturnVO {
 	private String suffix;
 
 	private Integer sales;
+
+	private String specs;
+
+	private String detail;
+
 	@Data
 	@ToString
 	public static class SkuReturnVO {

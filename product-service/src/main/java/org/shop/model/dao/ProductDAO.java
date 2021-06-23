@@ -42,6 +42,10 @@ public class ProductDAO {
 
     private String suffix;
 
+    private String specs;
+
+    private String detail;
+
     public String getId() {
         return id;
     }
@@ -192,5 +196,21 @@ public class ProductDAO {
 
     public void setSuffix(String suffix) {
         this.suffix = suffix;
+    }
+
+    public String getSpecs() {
+        return specs;
+    }
+
+    public void setSpecs(String specs) {
+        this.specs = specs;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 }
