@@ -1,6 +1,9 @@
 <br />
 <p align="center">在线购物商城 基于 SpringBoot,Spring Cloud 开发,微服务架构,目前还在开发中. </p>  
-<p align="center">online shopping website，developed with SpringBoot in microservice architecture.</p>
+<p align="center">前端使用了typescript react 作为主要开发语言和框架</p>
+
+<p align="center">online shopping website，developed with SpringBoot in microservice architecture.
+  Typescript and React are mainly used to develop frentend</p>
   
 <h3 align="center">still under development</h3>
 
