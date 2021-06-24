@@ -33,10 +33,14 @@ export interface ProductModel {
     detail?:string,
 
     specs?:string,
-    skuList?: {stock: string, price: string, img: string | undefined, attribute: string}[]
+    skuList?: Sku[]
 
     suffix?:string //计量单位
 
+}
+
+export type Sku = {
+    stock: string, price: string, img: string | undefined, attribute: string
 }
 
 export interface ProductQueryModel {

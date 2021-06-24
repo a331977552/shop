@@ -1,15 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import {ProductModel} from "../../model";
-import {Button, Form, FormInstance, Input, InputNumber, message, Radio, Select, TreeSelect, Upload} from "antd";
-import {LoadingOutlined, PlusOutlined} from '@ant-design/icons';
+import React, {useEffect} from 'react';
+import {ProductModel} from "../../../model";
+import {Button, Form, FormInstance, Input, InputNumber, message, Radio, Select, Upload} from "antd";
 
-import {useAppDispatch, useAppSelector} from "../../store/hooks";
-import {CategoryTree} from "../category/CategoryConvertor";
-import {getBrandList, selectBrandReducer} from "../../store/slices/brandSlice";
-import {RcFile, UploadChangeParam} from "antd/lib/upload/interface";
-import {getTokenFromStorage} from "../../store/TokenConfig";
-import {log} from "../../services";
-import {beforeImageUpload} from "../../util/UploadConfig";
+import {useAppDispatch, useAppSelector} from "../../../store/hooks";
+import {CategoryTree} from "../../category/CategoryConvertor";
+import {getBrandList, selectBrandReducer} from "../../../store/slices/brandSlice";
+import { UploadChangeParam} from "antd/lib/upload/interface";
+import ImageUpload from "../ImageUpload";
 
 
 const formItemLayout = {
@@ -36,21 +33,21 @@ const tailFormItemLayout = {
 };
 
 function ProductAddStep1(props: {
-                             form:FormInstance,
+                             form: FormInstance,
                              productModel: ProductModel,
-                             onNextClick: (productModel: ProductModel) => void,
-    updateProduct: (productModel: ProductModel | undefined) => void,
+                             onNextClick: () => void,
+                             updateProduct: (productModel: ProductModel | undefined) => void,
                              categories: CategoryTree[]
                          }
 ) {
-    const {productModel, updateProduct,form} = props;
-    const [imgUploading, setImgUploading] = useState(false);
+    const {productModel, updateProduct, form} = props;
     const dispatch = useAppDispatch();
     let brandState = useAppSelector(selectBrandReducer);
     const brandOptions = brandState.data?.items.map((item) => ({
         value: String(item.id),
         label: item.name
     }))
+    console.log(brandOptions)
     useEffect(() => {
         if (!brandState.data) {
             dispatch(getBrandList());
@@ -58,16 +55,16 @@ function ProductAddStep1(props: {
     }, [dispatch, brandState.data]);
 
     function onFinish(value: ProductModel) {
-        props.onNextClick({...productModel, ...value,standardImg: productModel.standardImg});
+        if (!productModel.standardImg){
+            message.error("商品图片不能为空");
+            return;
+        }
+        props.updateProduct({...productModel, ...value, standardImg: productModel.standardImg});
+        props.onNextClick();
     }
 
-    const onFileUploading = (info: UploadChangeParam) => {
-        setImgUploading(info.file.status === 'uploading');
-        if (info.file.status === 'done') {
-            updateProduct({...productModel, standardImg: info.file.response.result.id});
-        } else if (info.file.status === 'error') {
-            message.error(info.file.response.msgDetail, 3)
-        }
+    const onImageUploadFinished = (id:string) => {
+            updateProduct({...productModel, standardImg: id});
     };
 
     useEffect(() => {
@@ -80,12 +77,11 @@ function ProductAddStep1(props: {
         updateProduct(undefined);
     }
 
-    function onValuesChange(changedFields: ProductModel, allFields: ProductModel) {
+    function onProductFormChange(changedFields: ProductModel, allFields: ProductModel) {
         updateProduct({
             ...productModel, ...allFields
         });
     }
-
 
     return (
         <div style={{
@@ -104,7 +100,7 @@ function ProductAddStep1(props: {
                 layout="horizontal"
                 onFinish={onFinish}
                 onReset={onReset}
-                onValuesChange={onValuesChange}
+                onValuesChange={onProductFormChange}
                 scrollToFirstError={true}
                 preserve={false}
             >
@@ -128,7 +124,7 @@ function ProductAddStep1(props: {
 
                 <Form.Item label="品牌" name={"brand"}
                            rules={[{required: true, message: '必须选择品牌'}]}
-                           initialValue={productModel?.brand}
+                           initialValue={String(productModel?.brand)}
                            hasFeedback={true}
 
                 >
@@ -168,35 +164,20 @@ function ProductAddStep1(props: {
                         <Radio.Button value={"OUT_OF_ORDER"}>已下架</Radio.Button>
                     </Radio.Group>
                 </Form.Item>
-                <Form.Item label="图片">
+                <Form.Item label="图片"
+                           required={true}
+                           // rules={[{required: true, message: "商品图片不能为空!"}]}
+                >
 
-                    <Upload
-                        listType="picture-card"
-                        className="avatar-uploader"
-                        showUploadList={false}
-                        headers={{
-                            "Authorization": "Bearer " + getTokenFromStorage()
-                        }}
-                        action="/api-gateway/img-service/api/img"
-                        beforeUpload={beforeImageUpload}
-                        onChange={onFileUploading}
-                    >
-                        {(productModel?.standardImg) ?
-                            <img src={"/api-gateway/img-service/api/img/" + productModel.standardImg} alt="avatar"
-                                 style={{width: '100%'}}/> :
-                            <div>
-                                {imgUploading ? <LoadingOutlined/> : <PlusOutlined/>}
-                                <div style={{marginTop: 8}}>Upload</div>
-                            </div>
-                        }
-                    </Upload>
+                    <ImageUpload onUploadFinished={onImageUploadFinished} img={productModel?.standardImg}/>
+
                 </Form.Item>
 
 
                 <Form.Item label="排序" name={"priority"}
-                           initialValue={productModel?.priority||0}
+                           initialValue={productModel?.priority || 0}
                            hasFeedback={true}
-                           rules={[{required:true,message:"排序不能为空"}]}
+                           rules={[{required: true, message: "排序不能为空"}]}
                 >
                     <InputNumber min={0} max={9999}/>
                 </Form.Item>

@@ -1,17 +1,16 @@
 import React, {useState} from 'react';
-import {ProductModel, SkuImg, SkuKeyVal} from "../../model";
-import {CategoryTree} from "../category/CategoryConvertor";
+import {ProductModel, SkuKeyVal} from "../../../model";
+import {CategoryTree} from "../../category/CategoryConvertor";
 import {Button, Form, message, Space, TreeSelect} from "antd";
 import {FormFinishInfo} from "rc-field-form/lib/FormContext";
-import AttrAddForm from "./AttrAddForm";
-import SpecAddForm from "./SpecAddForm";
-import DetailEditor from "./DetailEditor";
+import AttrUpdateForm from "./AttrUpdateForm";
+import SpecUpdateForm from "./SpecUpdateForm";
+import DetailEditor from "../DetailEditor";
 import {ContentState, convertToRaw, EditorState} from "draft-js";
 import draftToHtml from "draftjs-to-html";
-import {loadItem, saveItem} from "../../services";
 import htmlToDraft from "html-to-draftjs";
-import {debounce} from "../../util/TimerUtils";
-import {ProductAddAPI} from "../../api";
+import { productUpdateAPI} from "../../../api";
+import {assembleProductRequestData, transformSkuListToRequestData} from "../ProductCommon";
 
 const formItemLayout = {
     labelCol: {
@@ -24,34 +23,39 @@ const formItemLayout = {
     },
 };
 
-function ProductAddStep2(props: {
-    onPreviousClick: (productModel: ProductModel) => void,
+function ProductUpdateStep2(props: {
+    moveToPreviousStep: () => void,
     categories: CategoryTree[],
     productModel: ProductModel,
-    updateProduct: (productModel: ProductModel) => void
+    updateProduct: (productModel: ProductModel|undefined) => void
 }) {
     const [categoryForm] = Form.useForm();
-    const [skuList, setSkuList] = useState<Array<SkuKeyVal>>();
+    const {categories, updateProduct, productModel} = props;
+
+    const [skuList, setSkuList] = useState<Array<SkuKeyVal>|undefined>(()=>{
+        return productModel.skuList?.map(sku=>({
+            ...JSON.parse(sku.attribute),price:sku.price,stock:sku.stock,img: {id:sku.img,loading:false}
+        }));
+    });
     let onCategoryChangeFuncRef: () => void;
     let onCategoryChangeFuncSpecRef: () => void;
+    const {category} = productModel;
+
     const [editorState, setEditorState] = useState(() => {
-        const html = loadItem("product_adding_detail") || "";
-        console.log("init detail from cache")
-        const contentBlock = htmlToDraft(html);
+        const contentBlock = htmlToDraft(productModel.detail||'');
         if (contentBlock) {
             const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
             return EditorState.createWithContent(contentState);
         }
         return EditorState.createEmpty()
     });
-    const {categories, updateProduct, productModel} = props;
-    const {category} = productModel;
 
     function onPreviousClick() {
-        props.onPreviousClick({
+        updateProduct({
             ...productModel,
             ...categoryForm.getFieldsValue()
         });
+        props.moveToPreviousStep();
     }
 
     function onCategoryChange(categoryId: number) {
@@ -61,32 +65,23 @@ function ProductAddStep2(props: {
     }
 
     function onFormFinish(name: string, info: FormFinishInfo) {
-        let emptyPriceOrStock = (skuList || []).some(row => !((row["price"] as string || "").trim()) || !((row["stock"] as string || "").trim()));
+        let emptyPriceOrStock = (skuList || []).some(row => !((String(row["price"]) || "").trim()) || !((String(row["stock"])|| "").trim()));
         if (emptyPriceOrStock) {
             message.error("sku列表不能为空!", 3);
             return;
         }
         Promise.all([info.forms['category'].validateFields(), info.forms['attr'].validateFields()]).then(() => {
             const detailHtml = draftToHtml(convertToRaw(editorState.getCurrentContent()));
-            const specsRequestData = info.forms["spec"].getFieldsValue();
-
-            const skuRequestData =(skuList || []).map(constSku=>{
-                let sku = {...constSku};
-                delete sku["stock"];
-                delete sku["price"];
-                delete sku["img"];
-                return {stock:String(constSku["stock"]),price:String(constSku["price"]),img:(constSku["img"]as SkuImg).id,attribute:JSON.stringify(sku)}
-            });
-
-            const key = "product_add_key_";
-            const requestData:ProductModel = {...productModel,detail:detailHtml,specs:JSON.stringify(specsRequestData),skuList:skuRequestData}
-            ProductAddAPI(requestData).then(() => {
-                message.success({content: false ? "更新成功" : "添加成功", key, duration: 1});
+            const specsRequestData = info.forms["spec"]?.getFieldsValue()||{};
+            const skuRequestData =transformSkuListToRequestData(skuList);
+            const requestData:ProductModel = assembleProductRequestData(productModel,detailHtml,specsRequestData,skuRequestData)
+            const key = "product_update_key_";
+            productUpdateAPI(requestData).then(() => {
+                message.success({content:  "更新成功" , key, duration: 1});
             }).catch((err) => {
-                message.error({content: false ? "更新失败,原因" : "添加失败,原因:" + err.msgDetail?err.msgDetail:err, duration: 3, key});
+                console.log(err)
+                message.error({content: "更新失败,原因" + err.msgDetail?err.msgDetail:err, duration: 3, key});
             })
-
-            console.log(requestData);
         }).catch((error) => {
             message.error(error, 3);
         })
@@ -97,10 +92,6 @@ function ProductAddStep2(props: {
     }
 
     function _setEditorState(editorState: EditorState) {
-        debounce(() => {
-            let html = draftToHtml(convertToRaw(editorState.getCurrentContent()));
-            saveItem("product_adding_detail", html);
-        }, 2000);
         setEditorState(editorState);
     }
 
@@ -134,15 +125,17 @@ function ProductAddStep2(props: {
                         />
                     </Form.Item>
                 </Form>
-                <AttrAddForm
+                <AttrUpdateForm
                     dataSource={skuList}
                     setDataSource={_setSkuList}
+                    initAttrValues={productModel.skuList}
                     category={category}
                     onCategoryChangeRef={(onCategoryChange: () => void) => {
                         onCategoryChangeFuncRef = onCategoryChange;
                     }}
                 />
-                <SpecAddForm
+                <SpecUpdateForm
+                    initialSpecs={productModel.specs}
                     category={category}
                     onCategoryChangeFuncSpecRef={(onCategoryChange: () => void) => {
                         onCategoryChangeFuncSpecRef = onCategoryChange;
@@ -173,4 +166,4 @@ function ProductAddStep2(props: {
     );
 }
 
-export default ProductAddStep2;
+export default ProductUpdateStep2;

@@ -13,8 +13,9 @@ interface Loading {
 function StatusView(props: Loading) {
     const [loadOnce, setLoadOnce] = useState(false);
 
-    if (loadOnce)
+    if (loadOnce){
         return props.children;
+    }
     else if (props.status === 'error') {
         return <div style={{
             width: '100%',

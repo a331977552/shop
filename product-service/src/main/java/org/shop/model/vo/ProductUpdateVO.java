@@ -60,16 +60,13 @@ public class ProductUpdateVO {
 
 	private String suffix;
 
-	@NotNull(message = "sku不能为空")
+//	@NotNull(message = "sku不能为空")x
 	private List<SkuUpdateVO> skuList;
 
 	@Data
 	@ToString
 	public static class SkuUpdateVO {
 
-		@NotNull(message = "skuID不能为空")
-		@NotBlank(message = "skuID不能为空白")
-		private String id;
 
 		@NotNull(message = "stock cannot be null")
 		private Integer stock;

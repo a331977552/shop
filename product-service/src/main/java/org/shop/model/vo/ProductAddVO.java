@@ -19,7 +19,7 @@ public class ProductAddVO {
 	@NotNull(message = "必须指定产品目录")
 	private Integer category;
 
-	@NotEmpty(message = "商品 sku不能为空")
+//	@NotEmpty(message = "商品 sku不能为空")
 	private List<SkuAddVO> skuList;
 	private Integer weight;
 

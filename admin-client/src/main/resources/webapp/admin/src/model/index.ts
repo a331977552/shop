@@ -10,4 +10,4 @@ export * from './ProductAttrModel';
 export * from './ProductSpecModel';
 export * from './BrandModel';
 export * from './ImgModel';
-export * from './KeyVal'
+export * from './CommonTypes'

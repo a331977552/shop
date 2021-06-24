@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {KeyVals, ProductSpecModel} from "../../model";
+import {KeyVals, ProductSpecModel} from "../../../model";
 import {Form, Input, message, Select} from "antd";
-import {getProductSpecListAPI} from "../../api/ProductSpecAPI";
-import {loadItem, removeItem, saveItem} from "../../services";
+import {getProductSpecListAPI} from "../../../api/ProductSpecAPI";
+import {loadItem, removeItem, saveItem} from "../../../services";
 
 function saveSpecs(attrs: KeyVals) {
     saveItem("product_adding_specs", JSON.stringify(attrs));
@@ -25,14 +25,12 @@ function SpecAddForm(
 ) {
     const {category,onCategoryChangeFuncSpecRef} = props;
     const [specs, setSpecs] = useState<KeyVals>(() => {
-        console.log("specs init from cache");
         const specs = loadSpecs();
         return specs ? JSON.parse(specs) : {};
     });
     const [productSpecs, setProductSpecs] = useState<Array<ProductSpecModel>>();
 
     onCategoryChangeFuncSpecRef(()=>{
-        console.log("reset spec cache")
         setSpecs({});
         removeSpecsFromCache();
     });

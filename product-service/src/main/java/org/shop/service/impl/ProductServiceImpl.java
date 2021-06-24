@@ -106,12 +106,18 @@ public class ProductServiceImpl implements ProductService {
 				throw new ProductUpdateException("产品更新失败， brand ID 错误");
 			}
 		}
-		List<ProductUpdateVO.SkuUpdateVO> skuList = example.getSkuList();
-		for (ProductUpdateVO.SkuUpdateVO vo : skuList) {
-			SkuDAO convert = BeanConvertor.convert(vo, SkuDAO.class);
-			convert.setProductId(productDAO.getId());
-			convert.setUpdatedTime(LocalDateTime.now());
-			skuMapper.updateByPrimaryKeySelective(convert);
+		final String productID = example.getId();
+		SkuDAOExample skuExample=new SkuDAOExample();
+		skuExample.createCriteria().andProductIdEqualTo(productID);
+		skuMapper.deleteByExample(skuExample);
+
+		List<ProductUpdateVO.SkuUpdateVO> skuList = Optional.ofNullable(example.getSkuList()).orElse(new ArrayList<>());
+		for (ProductUpdateVO.SkuUpdateVO skuVO : skuList) {
+			SkuDAO sku = BeanConvertor.convert(skuVO, SkuDAO.class);
+			sku.setProductId(productDAO.getId());
+			sku.setCreatedTime(LocalDateTime.now());
+			sku.setUpdatedTime(LocalDateTime.now());
+			skuMapper.insertSelective(sku);
 		}
 	}
 

@@ -1,15 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Form, Checkbox, message, Input, Space, Popconfirm, Upload} from "antd";
 import TextArea from "antd/es/input/TextArea";
-import {KeyValMix, KeyVals, ProductAttrModel, SkuKeyVal, SkuObject, SkuVal} from "../../model";
-import {getProductAttrListAPI} from "../../api/ProductAttrAPI";
+import {KeyValMix, KeyVals, ProductAttrModel, SkuKeyVal, SkuObject, SkuVal} from "../../../model";
+import {getProductAttrListAPI} from "../../../api/ProductAttrAPI";
 import styled from "styled-components";
-import {loadItem, removeItem, saveItem} from "../../services";
-import {getTokenFromStorage} from "../../store/TokenConfig";
+import {loadItem, removeItem, saveItem} from "../../../services";
+import {getTokenFromStorage} from "../../../store/TokenConfig";
 import {LoadingOutlined, PlusOutlined} from "@ant-design/icons";
-import {beforeImageUpload} from "../../util/UploadConfig";
+import {beforeImageUpload} from "../../../util/UploadConfig";
 import {UploadChangeParam} from "antd/lib/upload/interface";
-import './attr.css'
+import '../attr.css'
+import {columnsPart2, generateData, TableItem} from "../ProductCommon";
 
 const CheckboxGroup = Checkbox.Group;
 const StyledTd = styled.td`
@@ -38,49 +39,7 @@ const tailForm =
         }
     }
 
-type  TableItem = {
-    title: string,
-    dataIndex: string
-};
-const columnsPart2: TableItem[] =
-    [
-        {
-            title: '价格',
-            dataIndex: 'price',
-        },
-        {
-            title: '库存',
-            dataIndex: 'stock',
-        },
-        {
-            title: '图片',
-            dataIndex: 'img',
-        }
-    ]
 
-function generateData(valueMap: KeyValMix): Array<SkuKeyVal> {
-    const data: SkuKeyVal[] = [];
-    if (Object.keys(valueMap).length === 0)
-        return data;
-
-    function _generateData(keys: string[], valueMap: KeyValMix, obj: any = {}) {
-        const key = keys[0];
-        let valArrayOfKey = valueMap[key];
-        if (typeof valArrayOfKey === 'string') {
-            valArrayOfKey = valArrayOfKey.split("\n");
-        }
-        valArrayOfKey.forEach(val => {
-            if (keys.length === 1) {
-                data.push({...obj, [key]: val, price: '', stock: '', img: {}});
-            } else {
-                _generateData(keys.slice(1), valueMap, {...obj, [key]: val})
-            }
-        });
-    }
-
-    _generateData(Object.keys(valueMap), valueMap, {});
-    return data;
-}
 
 function saveAttrs(attrs: KeyVals) {
     saveItem("product_adding_attrs", JSON.stringify(attrs));

@@ -1,63 +1,67 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState} from 'react';
 import {Col, Form, Row, Steps} from "antd";
 import ProductAddStep1 from "./ProductAddStep1";
 import ProductAddStep2 from "./ProductAddStep2";
-import {ProductModel} from "../../model";
-import {useAppSelector} from "../../store/hooks";
-import {selectUITree} from "../../store/slices/cateogrySlice";
-import {CategoryTree} from "../category/CategoryConvertor";
-import {loadItem, removeItem, saveItem} from "../../services";
-import {debounce} from "../../util/TimerUtils";
+import {ProductModel} from "../../../model";
+import {useAppSelector} from "../../../store/hooks";
+import {selectUITree} from "../../../store/slices/cateogrySlice";
+import {CategoryTree} from "../../category/CategoryConvertor";
+import {loadItem, removeItem, saveItem} from "../../../services";
+import {debounce} from "../../../util/TimerUtils";
 
 const {Step} = Steps;
 
-function saveProduct(currentStep: number, product: ProductModel | undefined) {
+function saveProduct(product: ProductModel | undefined) {
     debounce(() => {
         if (product) {
-            saveItem("product_adding_product", JSON.stringify({
-                currentStep,
-                product
-            }));
+            saveItem("product_adding_product", JSON.stringify(product));
         } else {
             removeItem("product_adding_product")
         }
     }, 2000);
 }
-function loadProduct(){
+function saveStep(step:number|undefined) {
+    debounce(() => {
+        if (step) {
+            saveItem("product_adding_step", JSON.stringify(step));
+        } else {
+            removeItem("product_adding_step")
+        }
+    }, 2000);
+}
+function loadStep():number {
+    return Number(loadItem("product_adding_step")) || 0;
+}
+function loadProduct():ProductModel{
     const storageProductItem = loadItem("product_adding_product");
-    const productStep: { currentStep: number, product?: ProductModel } = storageProductItem ? (JSON.parse(storageProductItem)) : {
-        currentStep: 0,
-        product: {status: 'ON_SALE',priority:0}
-    };
-    return productStep;
+    return storageProductItem ? (JSON.parse(storageProductItem)) :{status: 'ON_SALE',priority:0};
 }
 function ProductAddPage() {
-
     const [productForm] = Form.useForm();
-    const [currentStep, setCurrentStep] = useState(()=>{
-        return loadProduct().currentStep;
-    });
-    const [productModel, setProductModel] = useState<ProductModel | undefined>(()=>{
-        return loadProduct().product;
-    });
+    const [currentStep, setCurrentStep] = useState(()=>loadStep());
+    const [productModel, setProductModel] = useState<ProductModel | undefined>(()=> loadProduct());
     const categories = (useAppSelector(selectUITree) as CategoryTree[]).slice(1);
 
-    function onNextClick(product: ProductModel) {
-        setProductModel(product);
-        saveProduct(currentStep + 1, product)
+    function onNextClick() {
+        saveStep(currentStep+1);
         setCurrentStep(currentStep + 1);
     }
 
-    function onPreviousClick(product: ProductModel) {
-        setProductModel(product);
-        saveProduct(currentStep - 1, product)
+    function onPreviousClick() {
+        saveStep(currentStep-1);
         setCurrentStep(currentStep - 1);
     }
 
     function updateProduct(product: ProductModel | undefined) {
-        console.log(product,currentStep)
-        saveProduct(currentStep, product)
+        saveProduct(product)
         setProductModel(product);
+    }
+
+    function resetProductAddingPage() {
+        saveProduct({status: 'ON_SALE',priority:0} as ProductModel)
+        saveStep(0);
+        setCurrentStep(0);
+        setProductModel({status: 'ON_SALE',priority:0} as ProductModel);
     }
 
     return (
@@ -86,8 +90,9 @@ function ProductAddPage() {
                         currentStep === 1 &&
                         <ProductAddStep2  categories={categories}
                                           updateProduct={updateProduct}
+                                          resetProductAddingPage={resetProductAddingPage}
                                           productModel={productModel as ProductModel}
-                                         onPreviousClick={onPreviousClick} />
+                                          onPreviousClick={onPreviousClick} />
                     }
                 </Col>
             </Row>
