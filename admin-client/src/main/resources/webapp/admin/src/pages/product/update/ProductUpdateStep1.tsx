@@ -83,7 +83,6 @@ function ProductUpdateStep1({productModel, updateProduct, form,moveToNextStep} :
         <div style={{
             display: 'flex',
             flexDirection: 'column',
-            overflow: 'auto',
             height: '100%',
             alignItems: 'center',
             width: '100%'
@@ -127,7 +126,6 @@ function ProductUpdateStep1({productModel, updateProduct, form,moveToNextStep} :
                            rules={[{required: true, message: '必须选择品牌'}]}
                            initialValue={String(productModel?.brand)}
                            hasFeedback={true}
-
                 >
                     <Select
                         allowClear={true}

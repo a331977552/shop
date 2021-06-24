@@ -87,7 +87,6 @@ function ProductAddStep1(props: {
         <div style={{
             display: 'flex',
             flexDirection: 'column',
-            overflow: 'auto',
             height: '100%',
             alignItems: 'center',
             width: '100%'
