@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {ProductModel} from "../../../model";
-import {Button, Form, FormInstance, Input, InputNumber, message, Radio, Select, Upload} from "antd";
+import {Button, Form, FormInstance, Input, InputNumber, message, Radio, Select} from "antd";
 import {useAppDispatch, useAppSelector} from "../../../store/hooks";
 import {CategoryTree} from "../../category/CategoryConvertor";
 import {getBrandList, selectBrandReducer} from "../../../store/slices/brandSlice";

@@ -1,13 +1,13 @@
-import React, {useEffect, useState} from 'react';
-import {InputNumber, message, Typography} from 'antd';
+import React, {useCallback, useEffect, useState} from 'react';
+import {InputNumber, message, Result, Typography} from 'antd';
 import {Form, Input, Button, Radio} from 'antd';
 import {useAppSelector} from "../../store/hooks";
 
 import {useParams} from "react-router-dom";
-import CentredLoading from "../../components/CentredLoading";
-import {BrandModel} from "../../model";
+import {BrandModel, Status} from "../../model";
 import {addBrandAPI, getBrandAPI, updateBrandAPI} from "../../api";
 import {selectBrandList} from "../../store/slices/brandSlice";
+import StatusView from "../../components/StatusView";
 
 const {Title} = Typography;
 
@@ -40,16 +40,26 @@ function BrandAddOrUpdatePage() {
     const isUpdate = !!bid;
     let brandModels = useAppSelector(selectBrandList);
     const [brandModel, setBrandModel] = useState<BrandModel | undefined>(brandModels?.find(({id}) => id === +bid));
-    useEffect(() => {
-        if (isUpdate && !brandModel) {
+    const [status, setStatus] = useState<Status>(brandModel ? "finished" : 'loading');
+    const loadBrand = useCallback(
+        () => {
+            setStatus("loading")
             getBrandAPI(bid).then((result) => {
-
                 setBrandModel(result.result);
+                setStatus("finished");
             }).catch((error) => {
+                setStatus("error");
                 message.error("加载失败,请检查网络,原因:" + error.msgDetail, 3);
             })
+        },
+        [setStatus, bid, setBrandModel],
+    );
+
+    useEffect(() => {
+        if (isUpdate && !brandModel) {
+            loadBrand();
         }
-    }, [isUpdate, brandModel, bid, setBrandModel])
+    }, [isUpdate,loadBrand, brandModel])
 
 
     function onFinish(value: BrandModel) {
@@ -70,8 +80,18 @@ function BrandAddOrUpdatePage() {
         })
     }
 
-    if (isUpdate && !brandModel)
-        return <CentredLoading/>
+    if (isUpdate) {
+        if (status === 'error' || status === 'loading') {
+            return <StatusView status={status} retry={loadBrand} children={null}/>
+        }else if (status === 'finished' && !brandModel){
+            return <Result
+                status="404"
+                title="警告"
+                subTitle={`要更新的品牌: ${bid}不存在`}
+
+            />
+        }
+    }
     return (
         <div style={{
             display: 'flex',

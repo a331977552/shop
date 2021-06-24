@@ -1,5 +1,5 @@
 import React from 'react';
-import {InputNumber, message, Typography} from 'antd';
+import { InputNumber, message, Result, Typography} from 'antd';
 import {Form, Input, Button, Radio, TreeSelect} from 'antd';
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {
@@ -53,7 +53,14 @@ const CategoryUpdatePage = () => {
             message.error({content:"更新失败,原因:" +reason.errorMsg,key});
         })
     };
+    if (!category){
+        return <Result
+            status="404"
+            title="警告"
+            subTitle={`要更新的种类: ${cateID}不存在`}
 
+        />
+    }
     return (
         <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%'}}>
             <Title style={{marginBottom: '30px', marginTop: '10px'}}>种类更新</Title>

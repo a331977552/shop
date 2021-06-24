@@ -4,7 +4,7 @@ import CentredLoading from "./CentredLoading";
 
 interface Loading {
     status: "loading" | "error" | "finished"
-    children: JSX.Element,
+    children: JSX.Element|null,
     retry: React.MouseEventHandler<HTMLElement>,
     errorMsg?: string,
     loadOnce?: boolean
