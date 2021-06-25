@@ -32,7 +32,7 @@ function getOpenPath(pathArr: string[]):string {
     return openKey;
 }
 
-function DrawerLeft() {
+function LeftDrawer() {
     const [collapsed, setCollapsed] = useState(false);
     const history = useHistory<RouterState>();
     const pathArr = history.location.pathname.split("/");
@@ -44,6 +44,7 @@ function DrawerLeft() {
     }
 
     history.listen((location)=>{
+        console.log("listen",location)
        if(location.state?.updateMenu){
            setSelectedMenuKey(getMenuPath(location.pathname.split("/")));
        }
@@ -98,4 +99,4 @@ function DrawerLeft() {
     );
 }
 
-export default DrawerLeft;
+export default LeftDrawer;

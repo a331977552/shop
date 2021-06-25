@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import { Layout} from "antd";
 import AppHeader from "./pages/app/AppHeader";
-import DrawerLeft from "./pages/app/DrawerLeft";
+import LeftDrawer from "./pages/app/LeftDrawer";
 import ContentMain from "./pages/app/ContentMain";
 import AppFooter from "./pages/app/AppFooter";
 import {getUserInfo, selectUserReducer} from "./store/slices/userSlice";
@@ -27,7 +27,7 @@ function App() {
     return (
         <StatusView status={status} errorMsg={errorMsg} retry={onRetryClick}>
             <Layout style={{height: '100vh', display: 'flex'}}>
-                <DrawerLeft/>
+                <LeftDrawer/>
                 <Layout>
                     <AppHeader/>
                     <ContentMain/>

@@ -58,7 +58,7 @@ const AppHeader = () => {
     const [breadCrumbList,setBreadCrumbList] = useState<{ name:string,uipath:string }[]>(()=>calcBread(history.location.pathname));
     history.listen((location)=>{
         setBreadCrumbList(calcBread(history.location.pathname));
-    })
+    });
     const user = useAppSelector(selectUser)?.result;
     return (
         <Header style={{display: 'flex', backgroundColor: 'white', height: '50px', padding: '0 30px'}}>
@@ -66,7 +66,7 @@ const AppHeader = () => {
                 <Breadcrumb>
                     {breadCrumbList?.map((item,index)=>
                         <Breadcrumb.Item key={item.uipath}>{index+1 === breadCrumbList.length?item.name:
-                           <Link to={item.uipath}>{item.name}</Link>
+                           <Link to={{pathname:item?.uipath||"/",state:{updateMenu:true}}} >{item.name}</Link>
                         }</Breadcrumb.Item>)}
                 </Breadcrumb>
             </div>
