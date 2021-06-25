@@ -42,7 +42,7 @@ const breadCrumbMap:KeyStr = {
 }
 function calcBread(pathname:string){
     let pathArray = pathname.split("/");
-    if (pathArray.length >= 4 && pathArray[pathArray.length-2] == 'update'){
+    if (pathArray.length >= 4 && pathArray[pathArray.length-2] === 'update'){
         pathArray = pathArray.slice(0,pathArray.length-1);
     }
     const breadCrumbList: { name:string,uipath:string }[]= [];

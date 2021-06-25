@@ -6,40 +6,35 @@ import ProductBasePage from "../ProductBasePage";
 
 const {Content} = Layout;
 
-interface ContentProps {
-}
 
-class ContentMain extends Component<ContentProps, {}> {
+function ContentMain() {
+    console.log("contentMain")
+    return (
+        <Content
+            style={{
+                background: '#ffffff',
+                padding: 12,
+                margin: '10px',
+                minHeight: 280,
+                overflow:'auto'
+            }}
+        >
+            <Switch>
+                <Route path={[
+                    "/product","/product/**",
+                    "/category","/category/**",
+                    "/brand",'/brand/**',
+                    "/spec",'/spec/**',
+                    "/attr",'/attr/**']} >
+                    <ProductBasePage/>
+                </Route>
+                <Route path={"/"}>
+                    <HomePage/>
+                </Route>
 
-    render() {
-
-        return (
-            <Content
-                style={{
-                    background: '#ffffff',
-                    padding: 12,
-                    margin: '10px',
-                    minHeight: 280,
-                    overflow:'auto'
-                }}
-            >
-                <Switch>
-                    <Route path={[
-                        "/product","/product/**",
-                        "/category","/category/**",
-                        "/brand",'brand/**',
-                        "/spec",'spec/**',
-                        "/attr",'/attr/**']} >
-                        <ProductBasePage/>
-                    </Route>
-                    <Route path={"/"}>
-                        <HomePage/>
-                    </Route>
-
-                </Switch>
-            </Content>
-        );
-    }
+            </Switch>
+        </Content>
+    );
 }
 
 export default ContentMain;

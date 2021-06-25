@@ -1,6 +1,6 @@
 import React from 'react';
 import {message} from "antd";
-import { ProductModel} from "../../model";
+import {ProductModel, RouterState} from "../../model";
 import {useAppDispatch} from "../../store/hooks";
 import {useHistory} from "react-router-dom";
 import DeletionOperationHOC from "../../components/DeletionOperationHOC";
@@ -9,7 +9,7 @@ import { deleteProductByIdLocally } from '../../store/slices/productSlice';
 
 function ProductOperation(record: ProductModel) {
     const dispatch = useAppDispatch();
-    const history = useHistory();
+    const history = useHistory<RouterState>();
     const onProductDeleteClicked = () => {
         return deleteProductAPI(record.id).then(res => {
             message.success("删除成功!", 1)
@@ -18,7 +18,7 @@ function ProductOperation(record: ProductModel) {
     }
 
     function onUpdate() {
-        history.push("/product/update/" + record.id)
+        history.push({pathname:"/product/update/" +record.id,state:{updateMenu:true}})
     }
 
     return <DeletionOperationHOC  onDelete={onProductDeleteClicked} onUpdateClick={onUpdate}/>

@@ -1,6 +1,6 @@
 import React from 'react';
 import {message} from "antd";
-import {ProductAttrModel} from "../../model";
+import {ProductAttrModel, RouterState} from "../../model";
 import {useAppDispatch} from "../../store/hooks";
 import {useHistory} from "react-router-dom";
 import {deleteProductAttrAPI} from "../../api/ProductAttrAPI";
@@ -9,7 +9,7 @@ import { deleteProductAttrByIdLocally } from '../../store/slices/productAttrSlic
 
 function ProductAttrOperation(props: { record: ProductAttrModel }) {
     const dispatch = useAppDispatch();
-    const history = useHistory();
+    const history = useHistory<RouterState>();
     const onCategoryDeleteClicked = () => {
         return deleteProductAttrAPI(props.record.id).then(res => {
             message.success("删除成功!", 1)
@@ -18,7 +18,7 @@ function ProductAttrOperation(props: { record: ProductAttrModel }) {
     }
 
     function onUpdate() {
-        history.push("/attr/update/" + props.record.id)
+        history.push({pathname:"/attr/update/" +props.record.id,state:{updateMenu:false}})
     }
 
     return <DeletionOperationHOC  onDelete={onCategoryDeleteClicked} onUpdateClick={onUpdate}/>

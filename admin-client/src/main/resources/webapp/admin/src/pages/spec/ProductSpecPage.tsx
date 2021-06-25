@@ -88,7 +88,7 @@ function ProductSpecPage() {
     const {data, errorMsg, status} = spec;
 
     function onAddClick() {
-        history.push("/spec/add")
+        history.push({pathname:"/spec/add",state:{updateMenu:false}})
     }
 
     function onRetry() {

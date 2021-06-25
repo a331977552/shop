@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Tag, Space, Button, Table} from "antd";
-import {CategoryModel, ProductAttrModel} from "../../model";
+import {CategoryModel, ProductAttrModel, RouterState} from "../../model";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import { useHistory} from "react-router-dom";
 import ProductSpecOperation from "./ProductAttrOperation";
@@ -77,7 +77,7 @@ const columns = [
 function ProductAttrPage() {
     let [category, setCategory] = useState<CategoryModel>();
     let appDispatch = useAppDispatch();
-    let history = useHistory();
+    let history = useHistory<RouterState>();
     let spec = useAppSelector(selectProductAttrReducer);
     let cate = useAppSelector(selectCategoryDataReducer)?.items as CategoryModel[];
     let parsedQs = paramParser(history.location.search);
@@ -88,14 +88,14 @@ function ProductAttrPage() {
             setCategory(findCategoryByID(cate, +cateID));
             appDispatch(getProductAttrList({example: {categoryId: +cateID}}))
         } else {
-            history.push("/")
+            history.push({pathname:"/",state:{updateMenu:true}})
         }
     }, [appDispatch, cateID,history, cate]);
 
     const {data, errorMsg, status} = spec;
 
     function onAddClick() {
-        history.push("/attr/add")
+        history.push({pathname:"/attr/add",state:{updateMenu:false}})
     }
 
     function onRetry() {

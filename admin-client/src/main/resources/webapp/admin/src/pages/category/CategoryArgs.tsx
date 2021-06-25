@@ -1,17 +1,18 @@
 import React from 'react';
 import {Button, Space} from "antd";
-import {CategoryModel} from "../../model";
+import {CategoryModel, RouterState} from "../../model";
 import {useHistory} from "react-router-dom";
 
 function CategoryArgs(record:CategoryModel) {
-    let history = useHistory();
+    let history = useHistory<RouterState>();
 
     function onClickSpec() {
-        history.push("/spec?cid="+record.id)
+
+        history.push({pathname:"/spec",search:"cid="+record.id,state:{updateMenu:false}})
     }
 
     function onAttributeClick() {
-        history.push("/attr?cid="+record.id)
+        history.push({pathname:"/attr",search:'cid='+record.id,state:{updateMenu:false}})
     }
 
     return (

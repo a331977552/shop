@@ -7,3 +7,7 @@ export  type  SkuKeyVal = { [key: string]: SkuVal};
 export  type  KeyVals = { [key: string]: string[] };
 export  type  KeyValMix = { [key: string]: string | string[] };
 export  type  Status = "loading" | "error" | "finished";
+
+export  type  RouterState = {updateMenu?:boolean};
+
+

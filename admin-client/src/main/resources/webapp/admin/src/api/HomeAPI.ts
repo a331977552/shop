@@ -12,7 +12,7 @@ export function getHomeInfoAPI() {
                 msg: 'success',
                 result:{test: 'loading success from HomeAPI'}});
 
-        }, 2000);
+        }, 500);
     });
 
     // return  get<HomeModel>("/api-gateway/home-service");

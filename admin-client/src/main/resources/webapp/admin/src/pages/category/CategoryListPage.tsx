@@ -105,7 +105,7 @@ class CategoryListPage extends Component<PropsFromRedux> {
 
     onAddClick = () => {
         const {history} = this.props;
-        history.push("/category/add")
+        history.push({pathname:"/category/add",state:{updateMenu:true}})
     };
     onRetry = () => {
         console.log("onretry")

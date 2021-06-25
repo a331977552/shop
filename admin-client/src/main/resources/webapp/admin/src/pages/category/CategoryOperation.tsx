@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Button, message, Popconfirm, Space} from "antd";
 import {deleteCategoryAPI} from "../../api/CategoryAPI";
-import {CategoryModel} from "../../model";
+import {CategoryModel, RouterState} from "../../model";
 import {useAppDispatch} from "../../store/hooks";
 import {deleteCategoryByID} from '../../store/slices/cateogrySlice';
 import {useHistory} from "react-router-dom";
@@ -10,7 +10,7 @@ function CategoryOperation(props: { record: CategoryModel }) {
     const [loading, setLoading] = useState(false);
     const [visible, setVisible] = useState(false);
     const dispatch = useAppDispatch();
-    const history = useHistory();
+    const history = useHistory<RouterState>();
     const onCategoryDeleteClicked = () => {
         setLoading(true);
         setVisible(true);
@@ -33,7 +33,7 @@ function CategoryOperation(props: { record: CategoryModel }) {
     };
 
     const onUpdateClick = () => {
-        history.push("/category/update/" + props.record.id)
+        history.push({pathname:"/category/update/" + props.record.id,state:{updateMenu:true}})
     };
 
     return <Space size={"small"}>

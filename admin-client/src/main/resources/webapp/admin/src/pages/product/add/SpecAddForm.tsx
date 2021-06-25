@@ -19,33 +19,39 @@ function removeSpecsFromCache() {
 
 function SpecAddForm(
     props: {
-        onCategoryChangeFuncSpecRef:(onCategoryChange:()=>void)=>void,
+        onCategoryChangeFuncSpecRef: (onCategoryChange: () => void) => void,
         category?: number
     }
 ) {
-    const {category,onCategoryChangeFuncSpecRef} = props;
+    const {category, onCategoryChangeFuncSpecRef} = props;
     const [specs, setSpecs] = useState<KeyVals>(() => {
         const specs = loadSpecs();
         return specs ? JSON.parse(specs) : {};
     });
     const [productSpecs, setProductSpecs] = useState<Array<ProductSpecModel>>();
 
-    onCategoryChangeFuncSpecRef(()=>{
+    onCategoryChangeFuncSpecRef(() => {
         setSpecs({});
         removeSpecsFromCache();
     });
     useEffect(() => {
+        let isMounted = true;
         if (category) {
-            getProductSpecListAPI({example: {categoryId: category}}).then((result) => {
+            let promis = getProductSpecListAPI({example: {categoryId: category}});
+            promis.then((result) => {
                 const specsForm = result.result?.items?.map(item => ({
                     ...item, valueArray: Array.from(new Set(item.value?.split("\n")))
                 }));
-                setProductSpecs(specsForm);
+                isMounted&& setProductSpecs(specsForm);
             }).catch((error) => {
                 message.error(error.msgDetail, 3);
             })
         }
-    }, [setProductSpecs, category,setSpecs]);
+
+        return ()=>{
+            isMounted = false;
+        }
+    }, [setProductSpecs, category, setSpecs]);
 
 
     function onSpecValueChange(changedFields: any, allFields: { [key: string]: string[] }) {

@@ -34,19 +34,23 @@ function getOpenPath(pathArr: string[]):string {
 
 function DrawerLeft() {
     const [collapsed, setCollapsed] = useState(false);
-    let histroy = useHistory();
-    const pathArr = histroy.location.pathname.split("/");
+    const history = useHistory();
+    const pathArr = history.location.pathname.split("/");
 
     const [selectedMenuKey,setSelectedMenuKey] = useState<string>(()=>getMenuPath(pathArr));
     const [openPath] = useState<string>(()=>getOpenPath(pathArr));
     const onCollapse = (collapsed: boolean) => {
         setCollapsed(collapsed);
     }
-    histroy.listen((location)=>{
-        setSelectedMenuKey(getMenuPath(location.pathname.split("/")));
+
+    history.listen((location)=>{
+       if((location.state as any)?.updateMenu){
+           setSelectedMenuKey(getMenuPath(location.pathname.split("/")));
+       }
     });
-    const onMenuSelected = ({key,keyPath}: { item: any, key: string, keyPath: Array<string>, domEvent: any }) => {
-        histroy.push(key);
+    const onMenuSelected = ({key}: { item: any, key: string, keyPath: Array<string>, domEvent: any }) => {
+        setSelectedMenuKey(key);
+        history.push({pathname:key,state:{updateMenu:false}});
     };
 
     return (

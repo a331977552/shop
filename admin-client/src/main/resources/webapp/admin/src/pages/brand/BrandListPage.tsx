@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {Button, Table, Tag, Space} from "antd";
-import {BrandModel} from "../../model";
+import {BrandModel, RouterState} from "../../model";
 import BrandOperation from "./BrandOperation";
 import BrandSetting from "./BrandSetting";
 import StatusView from "../../components/StatusView";
@@ -76,7 +76,7 @@ const columns = [
 function BrandListPage() {
     let dispatch = useAppDispatch();
     let brandState = useAppSelector(selectBrandReducer)
-    let history = useHistory();
+    let history = useHistory<RouterState>();
     const {status, errorMsg, data} = brandState;
     let localName: string | undefined = undefined;
     useEffect(() => {
@@ -88,7 +88,7 @@ function BrandListPage() {
     }
 
     function onAddClick() {
-        history.push("/brand/add")
+        history.push({pathname:"/brand/add",state:{updateMenu:false}})
     }
 
     function onSearch(name: string) {

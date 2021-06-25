@@ -4,6 +4,7 @@ import {Spin} from 'antd';
 import {useHistory} from 'react-router-dom';
 import loginAPI from "../../api/UserAPI";
 import {setTokenToStorage} from "../../store/TokenConfig";
+import {RouterState} from "../../model";
 
 
 const layout = {
@@ -17,15 +18,14 @@ const tailLayout = {
 function LoginPage() {
     const [status,setStatus] = useState("");
     const [errorMsg,setErrorMsg] = useState(null);
-    let history = useHistory();
+    let history = useHistory<RouterState>();
 
     const onFinish = (values: any) => {
         setStatus("loading")
         loginAPI(values).then(response=>{
             let result = response.result as string;
             setTokenToStorage(result);
-
-            history.push("/")
+            history.push({pathname:"/",state:{updateMenu:true}})
         }).catch(reason => {
             setStatus("error")
             setErrorMsg(reason.msgDetail);

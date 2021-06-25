@@ -79,13 +79,19 @@ function AttrAddForm(props: {
 
     //load attrs from server once category is changed
     useEffect(() => {
+        let isMounted = true;
         if (category) {
             getProductAttrListAPI({example: {categoryId: category}}).then((result) => {
                 const items = result.result?.items;
-                setProductAttrs(items);
+                if (isMounted){
+                    setProductAttrs(items);
+                }
             }).catch((error) => {
                 message.error(error.msgDetail, 3);
             })
+        }
+        return () => {
+            isMounted = false
         }
     }, [setProductAttrs, category]);
 

@@ -27,6 +27,9 @@ function ProductBasePage() {
         dispatch(getCategoryList())
     }
 
+    console.log("productbase")
+
+
     return (
         <StatusView status={categoryReducer.categoryList.status} retry={retry}>
             <Switch>

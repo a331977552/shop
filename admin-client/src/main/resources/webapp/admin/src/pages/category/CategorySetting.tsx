@@ -1,16 +1,16 @@
 import React from 'react';
 import {Button, Space, Switch} from "antd";
-import {CategoryModel} from "../../model";
+import {CategoryModel, RouterState} from "../../model";
 import {useAppDispatch} from "../../store/hooks";
 import { toggleVisible} from '../../store/slices/cateogrySlice';
 import {useHistory} from "react-router-dom";
 
 function CategorySetting(props: { record: CategoryModel }) {
     const {record} = props
-    const history = useHistory();
+    const history = useHistory<RouterState>();
     const dispatch = useAppDispatch();
     const onShowNextLevelClicked = () => {
-        history.push("/category/?pid=" + record.id)
+        history.push({pathname:"/category",search:"pid=" +record.id,state:{updateMenu:true}})
     }
 
     const onVisibleChanged = () => {

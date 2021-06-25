@@ -1,6 +1,6 @@
 import React from 'react';
 import DeletionOperationHOC from "../../components/DeletionOperationHOC";
-import {BrandModel} from "../../model";
+import {BrandModel, RouterState} from "../../model";
 import {useHistory} from "react-router-dom";
 import {deleteBrandAPI} from "../../api";
 import {message} from "antd";
@@ -8,7 +8,7 @@ import {deleteBrand} from "../../store/slices/brandSlice";
 import {useAppDispatch} from "../../store/hooks";
 
 function BrandOperation(props: BrandModel) {
-    let history = useHistory();
+    let history = useHistory<RouterState>();
     let dispatch = useAppDispatch();
     function onBrandDeleteClicked() {
         return deleteBrandAPI(props.id).then(() => {
@@ -18,7 +18,7 @@ function BrandOperation(props: BrandModel) {
     }
 
     function onUpdate() {
-        history.push("/brand/update/" + props.id)
+        history.push({pathname:"/brand/update/" +props.id,state:{updateMenu:false}})
     }
 
     return (

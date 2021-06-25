@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {Button, Col, Form, Input, Row, Select, TreeSelect} from "antd";
 import styled from "styled-components";
-import {ProductQueryModel} from "../../model";
+import {ProductQueryModel, RouterState} from "../../model";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {getProductList, selectProductList} from "../../store/slices/productSlice";
 import {selectCategoryReducer, selectUITree} from "../../store/slices/cateogrySlice";
@@ -23,7 +23,7 @@ function ProductSearch() {
     let productPageModel = useAppSelector(selectProductList);
     let categoryReducer = useAppSelector(selectCategoryReducer);
     let dispatch = useAppDispatch();
-    let history = useHistory();
+    let history = useHistory<RouterState>();
     let brandState = useAppSelector(selectBrandReducer);
     const brandOptions = brandState.data?.items.map((item) => ({
         value: String(item.id),
@@ -39,7 +39,7 @@ function ProductSearch() {
 
 
     function onAddClick() {
-        history.push("/product/add");
+        history.push({pathname:"/product/add",state:{updateMenu:true}});
     }
 
     function onResetClick() {
