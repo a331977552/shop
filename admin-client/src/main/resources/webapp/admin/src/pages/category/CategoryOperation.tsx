@@ -33,7 +33,7 @@ function CategoryOperation(props: { record: CategoryModel }) {
     };
 
     const onUpdateClick = () => {
-        history.push("category/update/" + props.record.id)
+        history.push("/category/update/" + props.record.id)
     };
 
     return <Space size={"small"}>

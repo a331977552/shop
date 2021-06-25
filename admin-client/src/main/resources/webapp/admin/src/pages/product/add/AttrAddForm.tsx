@@ -63,14 +63,12 @@ function AttrAddForm(props: {
     const {setDataSource, dataSource, category,onCategoryChangeRef} = props;
     const [productAttrs, setProductAttrs] = useState<Array<ProductAttrModel>>();
     const [attrValues, setAttrValues] = useState<KeyVals>(() => {
-        console.log("attr init from cache");
         const attrs = loadAttrs();
         return attrs ? JSON.parse(attrs) : {};
     });
 
     //reset cache and data when category changed manually
     onCategoryChangeRef(()=>{
-            console.log("reset attr cache")
             setAttrValues({});
             removeAttrsFromCache();
             setColumns(undefined);
@@ -83,7 +81,6 @@ function AttrAddForm(props: {
     useEffect(() => {
         if (category) {
             getProductAttrListAPI({example: {categoryId: category}}).then((result) => {
-                console.log("load attrs")
                 const items = result.result?.items;
                 setProductAttrs(items);
             }).catch((error) => {

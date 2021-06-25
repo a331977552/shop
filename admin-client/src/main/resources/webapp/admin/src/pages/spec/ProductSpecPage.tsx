@@ -51,7 +51,7 @@ const columns = [
         dataIndex: 'value',
         key: 'value',
         render: (text: string, record: ProductSpecModel) => {
-            return text?.split("\n").map(value => <Tag>{value}</Tag>)
+            return text?.split("\n").map(value => <Tag key={value}>{value}</Tag>)
         }
     },
     {
@@ -88,7 +88,7 @@ function ProductSpecPage() {
     const {data, errorMsg, status} = spec;
 
     function onAddClick() {
-        history.push("/product/spec/add")
+        history.push("/spec/add")
     }
 
     function onRetry() {

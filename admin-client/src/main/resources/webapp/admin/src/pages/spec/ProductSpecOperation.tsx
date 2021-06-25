@@ -18,7 +18,7 @@ function ProductSpecOperation(props: { record: ProductSpecModel }) {
     }
 
     const onUpdateClick = () => {
-        history.push("/product/spec/update/" + props.record.id)
+        history.push("/spec/update/" + props.record.id)
     };
 
     return <DeletionOperationHOC onDelete={onCategoryDeleteClicked} onUpdateClick={onUpdateClick}/>

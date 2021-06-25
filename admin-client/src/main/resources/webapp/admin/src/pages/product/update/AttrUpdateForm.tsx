@@ -48,7 +48,6 @@ function AttrUpdateForm(props: {
 
 }) {
     const {setDataSource, dataSource, category, onCategoryChangeRef, initAttrValues} = props;
-    console.log(initAttrValues)
     const [productAttrs, setProductAttrs] = useState<Array<ProductAttrModel>>();//product attributes example:{'规格':['1','2']}
     const [attrValues, setAttrValues] = useState<KeyVals>(() => transformSkuListToForm(initAttrValues));// selected product attribute values{规格:'1'}
     onCategoryChangeRef(() => {

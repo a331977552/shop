@@ -88,7 +88,7 @@ function BrandListPage() {
     }
 
     function onAddClick() {
-        history.push("/product/brand/add")
+        history.push("/brand/add")
     }
 
     function onSearch(name: string) {

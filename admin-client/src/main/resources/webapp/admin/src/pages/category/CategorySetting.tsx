@@ -10,7 +10,7 @@ function CategorySetting(props: { record: CategoryModel }) {
     const history = useHistory();
     const dispatch = useAppDispatch();
     const onShowNextLevelClicked = () => {
-        history.push("/product/category/?pid=" + record.id)
+        history.push("/category/?pid=" + record.id)
     }
 
     const onVisibleChanged = () => {

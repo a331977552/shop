@@ -24,7 +24,12 @@ class ContentMain extends Component<ContentProps, {}> {
                 }}
             >
                 <Switch>
-                    <Route path={"/product/*"} >
+                    <Route path={[
+                        "/product","/product/**",
+                        "/category","/category/**",
+                        "/brand",'brand/**',
+                        "/spec",'spec/**',
+                        "/attr",'/attr/**']} >
                         <ProductBasePage/>
                     </Route>
                     <Route path={"/"}>

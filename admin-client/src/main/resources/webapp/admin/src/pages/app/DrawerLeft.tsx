@@ -2,23 +2,53 @@ import React, {useState} from 'react';
 import {Layout, Menu} from "antd";
 import {LaptopOutlined, NotificationOutlined, UserOutlined, HomeOutlined} from "@ant-design/icons";
 import {useHistory} from "react-router-dom";
+import {KeyStr} from "../../model";
 
 const {Sider} = Layout;
 const {SubMenu} = Menu;
 
+const proArray: KeyStr = {
+    "product": '/pro',
+    "category": '/pro',
+    "brand": '/pro',
+    "spec": '/pro',
+    "attr": '/pro'
+};
+
+function getMenuPath(pathArr: string[]) {
+
+    let selectedMenuKey = '/';
+    if (pathArr.length >= 2) {
+        selectedMenuKey =  "/" + pathArr.slice(1).join("/");
+    }
+    return selectedMenuKey;
+}
+
+function getOpenPath(pathArr: string[]):string {
+    let openKey = "/";
+    if (pathArr.length >= 2) {
+        openKey = proArray[pathArr[1]] || '/'
+    }
+    return openKey;
+}
 
 function DrawerLeft() {
     const [collapsed, setCollapsed] = useState(false);
     let histroy = useHistory();
+    const pathArr = histroy.location.pathname.split("/");
+
+    const [selectedMenuKey,setSelectedMenuKey] = useState<string>(()=>getMenuPath(pathArr));
+    const [openPath] = useState<string>(()=>getOpenPath(pathArr));
     const onCollapse = (collapsed: boolean) => {
         setCollapsed(collapsed);
     }
-
-    const onMenuSelected = ({keyPath}: { item: any, key: string, keyPath: Array<string>, domEvent: any }) => {
-        histroy.push( keyPath.reverse().join(""));
+    histroy.listen((location)=>{
+        setSelectedMenuKey(getMenuPath(location.pathname.split("/")));
+    });
+    const onMenuSelected = ({key,keyPath}: { item: any, key: string, keyPath: Array<string>, domEvent: any }) => {
+        histroy.push(key);
     };
-    const pathArr = histroy.location.pathname.split("/");
-    const defaultOpenKeys = pathArr.length>=2 && "/"+pathArr[1];
+
     return (
         <Sider theme={'light'}
                style={{
@@ -31,14 +61,14 @@ function DrawerLeft() {
                onCollapse={onCollapse}>
             <Menu
                 mode="inline"
-                defaultSelectedKeys={["/"+pathArr[pathArr.length-1]]}
-                defaultOpenKeys={[defaultOpenKeys||"/product"]}
+                selectedKeys={[selectedMenuKey]}
+                defaultOpenKeys={[openPath]}
                 onSelect={onMenuSelected}
             >
                 <Menu.Item key="/" icon={<HomeOutlined/>}>主页</Menu.Item>
-                <SubMenu key="/product" icon={<UserOutlined/>} title="商品">
-                    <Menu.Item key="/list">商品列表</Menu.Item>
-                    <Menu.Item key="/add">添加商品</Menu.Item>
+                <SubMenu key="/pro" icon={<UserOutlined/>} title="商品">
+                    <Menu.Item key="/product">商品列表</Menu.Item>
+                    <Menu.Item key="/product/add">添加商品</Menu.Item>
                     <Menu.Item key="/category">分类列表</Menu.Item>
                     <Menu.Item key="/brand">品牌列表</Menu.Item>
                 </SubMenu>

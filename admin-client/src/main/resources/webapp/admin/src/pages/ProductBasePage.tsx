@@ -30,7 +30,7 @@ function ProductBasePage() {
     return (
         <StatusView status={categoryReducer.categoryList.status} retry={retry}>
             <Switch>
-                <Route path={"/product/list"} exact={true}>
+                <Route path={"/product"} exact={true}>
                     <ProductListPage/>
                 </Route>
                 <Route path={["/product/add"]} >
@@ -41,36 +41,38 @@ function ProductBasePage() {
                     <ProductUpdatePage/>
                 </Route>
 
-                <Route path={"/product/category/add"} exact={true}>
+                <Route path={"/category"} exact={true}>
+                    <CategoryListPage/>
+                </Route>
+                <Route path={"/category/add"} exact={true}>
                     <CategoryAddPage/>
                 </Route>
+                <Route path={"/category/update/:cateID"} exact={true}>
+                    <CategoryUpdatePage/>
+                </Route>
 
-                <Route path={["/product/spec/add", "/product/spec/update/:specID"]} exact={true}>
+                <Route path={["/spec/add", "/spec/update/:specID"]} exact={true}>
                     <ProductSpecAddOrUpdatePage/>
                 </Route>
 
-                <Route path={"/product/spec"} exact={true}>
+                <Route path={"/spec"} exact={true}>
                     <ProductSpecPage/>
                 </Route>
 
-                <Route path={"/product/attr"} exact={true}>
+                <Route path={"/attr"} exact={true}>
                     <ProductAttrPage/>
                 </Route>
-                <Route path={"/product/brand"} exact={true}>
+                <Route path={"/brand"} exact={true}>
                     <BrandListPage/>
                 </Route>
-                <Route path={["/product/brand/add","/product/brand/update/:bid"]} exact={true}>
+                <Route path={["/brand/add","/brand/update/:bid"]} exact={true}>
                     <BrandAddOrUpdatePage/>
                 </Route>
-                <Route path={["/product/attr/add", "/product/attr/update/:attrID"]} exact={true}>
+                <Route path={["/attr/add", "/attr/update/:attrID"]} exact={true}>
                     <ProductAttrAddOrUpdatePage/>
                 </Route>
-                <Route path={"/product/category/update/:cateID"} exact={true}>
-                    <CategoryUpdatePage/>
-                </Route>
-                <Route path={"/product/category"} exact={true}>
-                    <CategoryListPage/>
-                </Route>
+
+
             </Switch>
         </StatusView>
     );

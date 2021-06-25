@@ -40,7 +40,6 @@ function SpecAddForm(
                 const specsForm = result.result?.items?.map(item => ({
                     ...item, valueArray: Array.from(new Set(item.value?.split("\n")))
                 }));
-                console.log("load spec")
                 setProductSpecs(specsForm);
             }).catch((error) => {
                 message.error(error.msgDetail, 3);

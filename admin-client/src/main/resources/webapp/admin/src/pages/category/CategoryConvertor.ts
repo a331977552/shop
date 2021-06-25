@@ -53,7 +53,6 @@ export function resetToLeafIfNecessary(items:CategoryModel[],parentId:number) {
             acc + (curr.parent === parentId ? 1 : 0)
         , 0)
     //sync parent leaf status
-    console.log(items,parentId,elementsWithSameParent);
     if (elementsWithSameParent === 0) {
         let parent = items.find(item => item.id === parentId) as CategoryModel;
         parent.isleaf = true;

@@ -95,7 +95,7 @@ function ProductAttrPage() {
     const {data, errorMsg, status} = spec;
 
     function onAddClick() {
-        history.push("/product/attr/add")
+        history.push("/attr/add")
     }
 
     function onRetry() {

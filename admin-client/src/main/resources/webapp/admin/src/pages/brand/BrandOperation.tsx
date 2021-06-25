@@ -18,7 +18,7 @@ function BrandOperation(props: BrandModel) {
     }
 
     function onUpdate() {
-        history.push("/product/brand/update/" + props.id)
+        history.push("/brand/update/" + props.id)
     }
 
     return (

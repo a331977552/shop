@@ -39,7 +39,6 @@ function ProductAddStep2(props: {
     let onCategoryChangeFuncSpecRef: () => void;
     const [editorState, setEditorState] = useState(() => {
         const html = loadItem("product_adding_detail") || "";
-        console.log("init detail from cache")
         const contentBlock = htmlToDraft(html);
         if (contentBlock) {
             const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
@@ -88,8 +87,6 @@ function ProductAddStep2(props: {
             }).catch((err) => {
                 message.error({content: false ? "更新失败,原因" : "添加失败,原因:" + err.msgDetail?err.msgDetail:err, duration: 3, key});
             })
-
-            console.log(requestData);
         }).catch((error) => {
             message.error(error, 3);
         })

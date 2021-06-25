@@ -18,7 +18,7 @@ function ProductAttrOperation(props: { record: ProductAttrModel }) {
     }
 
     function onUpdate() {
-        history.push("/product/attr/update/" + props.record.id)
+        history.push("/attr/update/" + props.record.id)
     }
 
     return <DeletionOperationHOC  onDelete={onCategoryDeleteClicked} onUpdateClick={onUpdate}/>

@@ -46,7 +46,6 @@ function ProductAddStep1(props: {
         value: String(item.id),
         label: item.name
     }))
-    console.log(brandOptions)
     useEffect(() => {
         if (!brandState.data) {
             dispatch(getBrandList());
