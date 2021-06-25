@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Layout, Menu} from "antd";
 import {LaptopOutlined, NotificationOutlined, UserOutlined, HomeOutlined} from "@ant-design/icons";
 import {useHistory} from "react-router-dom";
-import {KeyStr} from "../../model";
+import {KeyStr, RouterState} from "../../model";
 
 const {Sider} = Layout;
 const {SubMenu} = Menu;
@@ -34,7 +34,7 @@ function getOpenPath(pathArr: string[]):string {
 
 function DrawerLeft() {
     const [collapsed, setCollapsed] = useState(false);
-    const history = useHistory();
+    const history = useHistory<RouterState>();
     const pathArr = history.location.pathname.split("/");
 
     const [selectedMenuKey,setSelectedMenuKey] = useState<string>(()=>getMenuPath(pathArr));
@@ -44,7 +44,7 @@ function DrawerLeft() {
     }
 
     history.listen((location)=>{
-       if((location.state as any)?.updateMenu){
+       if(location.state?.updateMenu){
            setSelectedMenuKey(getMenuPath(location.pathname.split("/")));
        }
     });
