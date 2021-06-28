@@ -7,19 +7,27 @@
   
 <h3 align="center">still under development</h3>
 
-| 模块(module)  | 作用(functionality) |细节 (detail)|
-| ------------- | ------------- |----------|
-| scheme.sql| 数据表的元数据,(table's meta data)|可以导入数据库中生成对应的表(can be imported into database,  generate tables)
-| user-service| 用户服务(user service)  |用户登录,用户的信息查询,jwt token的生成(user login, user info acquire, jwt token generation)
-| product-service| 商品服务(product service)  | 商品,种类,种类属性,规格的增删改查(the CRUD of products,categories,products' specifcations, attributes )
-| api-gateway| api gateway |所有的api都会经过这里,信息收集,认证,(all api calls will go through this services in which it will collect all sorts of info)
-
+| 模块 | 作用|细节|
+| ---------------- | ------------- |----------|
+| scheme.sql| 数据表的元数据|可以导入数据库中生成对应的表
+| user-service| 用户服务|用户登录,用户的信息查询,jwt token的生成
+| product-service| 商品服务 | 商品,种类,种类属性,规格的增删改查
+| api-gateway| api gateway |所有的api都会经过这里,信息收集,认证
 
 目前可以展示的部分页面(part of demonstrable pages): 
 
 ![alt text](https://github.com/a331977552/shop/blob/main/docs/brand.jpg?raw=true)
 ![alt text](https://github.com/a331977552/shop/blob/main/docs/category.jpg?raw=true)
 ![alt text](https://github.com/a331977552/shop/blob/main/docs/productadd.jpg?raw=true)
+
+
+
+| module  | functionality |detail|
+| ------------- | ------------- |----------|
+| scheme.sql|table's meta data|can be imported into database,  generate tables
+| user-service| user service |user login, user info acquire, jwt token generation
+| product-service| product service  | the CRUD of products,categories,products' specifcations, attributes 
+| api-gateway| api gateway |all api calls will go through this services in which it will collect all sorts of info
 
 
 
