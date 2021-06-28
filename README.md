@@ -1,11 +1,13 @@
-<br />
-<p align="center">在线购物商城 基于 SpringBoot,Spring Cloud 开发,微服务架构,目前还在开发中. </p>  
-<p align="center">前端使用了typescript react 作为主要开发语言和框架</p>
+<h1>前言:该项目为前后端分离项目,主要利用React,SpringBoot作为前后端技术框架</h1>
 
-<p align="center">online shopping website，developed with SpringBoot in microservice architecture.
+
+<p >在线购物商城 基于 SpringBoot,Spring Cloud 开发,微服务架构,目前还在开发中. </p>  
+<p >前端使用了typescript react 作为主要开发语言和框架</p>
+
+<p >online shopping website，developed with SpringBoot in microservice architecture.
   Typescript and React are mainly used to develop frentend</p>
   
-<h3 align="center">still under development</h3>
+<h3 >still under development</h3>
 
 | 模块 | 作用|细节|
 | ---------------- | ------------- |----------|
