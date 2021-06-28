@@ -77,8 +77,8 @@ function LeftDrawer() {
                     <Menu.Item key="/category">分类列表</Menu.Item>
                     <Menu.Item key="/brand">品牌列表</Menu.Item>
                 </SubMenu>
-                <SubMenu key="/order" icon={<LaptopOutlined/>} title="订单">
-                    <Menu.Item key="/order_list">订单列表</Menu.Item>
+                <SubMenu key="/or" icon={<LaptopOutlined/>} title="订单">
+                    <Menu.Item key="/order">订单列表</Menu.Item>
                     <Menu.Item key="/setting">订单设置</Menu.Item>
                     <Menu.Item key="/refund">退款处理</Menu.Item>
                     <Menu.Item key="/refund_reason">退款原因设置</Menu.Item>

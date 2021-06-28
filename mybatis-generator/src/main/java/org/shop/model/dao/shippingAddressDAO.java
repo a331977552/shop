@@ -1,16 +1,13 @@
 package org.shop.model.dao;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class ShopOrderDAO {
+public class ShippingAddressDAO {
     private String id;
 
-    private String customerId;
+    private String orderId;
 
-    private BigDecimal totalPrice;
-
-    private String status;
+    private String customerName;
 
     private String postCode;
 
@@ -30,28 +27,20 @@ public class ShopOrderDAO {
         this.id = id;
     }
 
-    public String getCustomerId() {
-        return customerId;
+    public String getOrderId() {
+        return orderId;
     }
 
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 
-    public BigDecimal getTotalPrice() {
-        return totalPrice;
+    public String getCustomerName() {
+        return customerName;
     }
 
-    public void setTotalPrice(BigDecimal totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
     public String getPostCode() {

@@ -8,7 +8,7 @@ import CategoryUpdatePage from "./category/CategoryUpdatePage";
 import CategoryListPage from "./category/CategoryListPage";
 import {useAppDispatch, useAppSelector} from "../store/hooks";
 import {getCategoryList, selectCategoryReducer} from "../store/slices/cateogrySlice";
-import StatusView from "./../components/StatusView";
+import StatusView from "../components/StatusView";
 import ProductAttrPage from "./attr/ProductAttrPage";
 import ProductAttrAddOrUpdatePage from "./attr/ProductAttrAddOrUpdatePage";
 import BrandListPage from "./brand/BrandListPage";
@@ -16,7 +16,7 @@ import BrandAddOrUpdatePage from "./brand/BrandAddOrUpdatePage";
 import ProductAddPage from "./product/add/ProductAddPage";
 import ProductUpdatePage from "./product/update/ProductUpdatePage";
 
-function ProductBasePage() {
+function ProductSectionBasePage() {
     let dispatch = useAppDispatch();
     let categoryReducer = useAppSelector(selectCategoryReducer);
     useEffect(() => {
@@ -27,7 +27,6 @@ function ProductBasePage() {
         dispatch(getCategoryList())
     }
 
-    console.log("productbase")
 
 
     return (
@@ -81,4 +80,4 @@ function ProductBasePage() {
     );
 }
 
-export default ProductBasePage;
+export default ProductSectionBasePage;

@@ -25,8 +25,15 @@ public class OrderItemCreateVO {
 	@IDValid(message = "sku ID 不能为空")
 	private Integer skuId;
 
+	private String thumbImg;
+
+	private String productSku;
+
 	@NotNull
 	@Min(value = 0,message = "商品价格不能为负数")
 	private BigDecimal subtotal;
+
+
+
 
 }

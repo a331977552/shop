@@ -11,7 +11,6 @@ import java.util.List;
 @ToString
 public class OrderReturnVO {
 
-
 	private String id;
 
 	private String customerId;
@@ -20,17 +19,25 @@ public class OrderReturnVO {
 
 	private String status;
 
-	private String postCode;
-
-	private String homeAddress;
-
-	private String phoneNumber;
-
 	private LocalDateTime createdTime;
 
 	private LocalDateTime updatedTime;
 
+	private String payMethod;
+
+	private String orderSource;
+
+	private String orderNum;
+
+	private String buyerComment;
+
+	private String sellerComment;
+
+	private Integer autoConfirmDays;
+
 	private List<OrderItemReturnVO> items;
+
+	private ShippingAddressReturnVO address;
 
 
 }

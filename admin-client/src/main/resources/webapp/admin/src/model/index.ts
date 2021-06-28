@@ -11,3 +11,4 @@ export * from './ProductSpecModel';
 export * from './BrandModel';
 export * from './ImgModel';
 export * from './CommonTypes'
+export * from './OrderModel'

@@ -28,10 +28,11 @@
 <!--        <table tableName="customer_address" domainObjectName="CustomerAddressDAO"></table>-->
 <!--        <table tableName="image" domainObjectName="ImageDAO"></table>-->
 <!--        <table tableName="image_product" domainObjectName="ImageProductDAO"></table>-->
-<!--        <table tableName="order_item" domainObjectName="OrderItemDAO" />-->
-        <table tableName="product" domainObjectName="ProductDAO"></table>
-<!--        <table tableName="shop_order" domainObjectName="ShopOrderDAO"/>-->
-<!--        <table tableName="shopping_cart" domainObjectName="ShoppingCartDAO"></table>-->
+<!--        <table tableName="product" domainObjectName="ProductDAO"></table>-->
+        <table tableName="s_order" domainObjectName="OrderDAO"/>
+        <table tableName="s_order_item" domainObjectName="OrderItemDAO" />
+        <table tableName="shipping_address" domainObjectName="ShippingAddressDAO"/>
+        <!--        <table tableName="shopping_cart" domainObjectName="ShoppingCartDAO"></table>-->
 <!--        <table tableName="snapshot_product" domainObjectName="SnapshotProductDAO"></table>-->
 <!--        <table tableName="brand" domainObjectName="BrandDAO">-->
 <!--                        <generatedKey column="id" sqlStatement="MySql"></generatedKey>-->

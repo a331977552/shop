@@ -5,7 +5,6 @@
     <id column="id" jdbcType="CHAR" property="id" />
     <result column="customer_id" jdbcType="CHAR" property="customerId" />
     <result column="order_id" jdbcType="CHAR" property="orderId" />
-    <result column="sku_id" jdbcType="INTEGER" property="skuId" />
     <result column="quantity" jdbcType="INTEGER" property="quantity" />
     <result column="product_id" jdbcType="CHAR" property="productId" />
     <result column="snapshot_product_id" jdbcType="CHAR" property="snapshotProductId" />
@@ -14,6 +13,7 @@
     <result column="thumb_img" jdbcType="VARCHAR" property="thumbImg" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+    <result column="product_sku" jdbcType="VARCHAR" property="productSku" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -74,8 +74,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, customer_id, order_id, sku_id, quantity, product_id, snapshot_product_id, unit_price, 
-    subTotal, thumb_img, created_time, updated_time
+    id, customer_id, order_id, quantity, product_id, snapshot_product_id, unit_price, 
+    subTotal, thumb_img, created_time, updated_time, product_sku
   </sql>
   <select id="selectByExample" parameterType="org.shop.model.dao.OrderItemDAOExample" resultMap="BaseResultMap">
     select
@@ -83,7 +83,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from order_item
+    from s_order_item
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -94,33 +94,33 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from order_item
+    from s_order_item
     where id = #{id,jdbcType=CHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from order_item
+    delete from s_order_item
     where id = #{id,jdbcType=CHAR}
   </delete>
   <delete id="deleteByExample" parameterType="org.shop.model.dao.OrderItemDAOExample">
-    delete from order_item
+    delete from s_order_item
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="org.shop.model.dao.OrderItemDAO">
-    insert into order_item (id, customer_id, order_id, 
-      sku_id, quantity, product_id, 
-      snapshot_product_id, unit_price, subTotal, 
-      thumb_img, created_time, updated_time
+    insert into s_order_item (id, customer_id, order_id, 
+      quantity, product_id, snapshot_product_id, 
+      unit_price, subTotal, thumb_img, 
+      created_time, updated_time, product_sku
       )
     values (#{id,jdbcType=CHAR}, #{customerId,jdbcType=CHAR}, #{orderId,jdbcType=CHAR}, 
-      #{skuId,jdbcType=INTEGER}, #{quantity,jdbcType=INTEGER}, #{productId,jdbcType=CHAR}, 
-      #{snapshotProductId,jdbcType=CHAR}, #{unitPrice,jdbcType=DECIMAL}, #{subtotal,jdbcType=DECIMAL}, 
-      #{thumbImg,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}
+      #{quantity,jdbcType=INTEGER}, #{productId,jdbcType=CHAR}, #{snapshotProductId,jdbcType=CHAR}, 
+      #{unitPrice,jdbcType=DECIMAL}, #{subtotal,jdbcType=DECIMAL}, #{thumbImg,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, #{productSku,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="org.shop.model.dao.OrderItemDAO">
-    insert into order_item
+    insert into s_order_item
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -130,9 +130,6 @@
       </if>
       <if test="orderId != null">
         order_id,
-      </if>
-      <if test="skuId != null">
-        sku_id,
       </if>
       <if test="quantity != null">
         quantity,
@@ -158,6 +155,9 @@
       <if test="updatedTime != null">
         updated_time,
       </if>
+      <if test="productSku != null">
+        product_sku,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -168,9 +168,6 @@
       </if>
       <if test="orderId != null">
         #{orderId,jdbcType=CHAR},
-      </if>
-      <if test="skuId != null">
-        #{skuId,jdbcType=INTEGER},
       </if>
       <if test="quantity != null">
         #{quantity,jdbcType=INTEGER},
@@ -196,16 +193,19 @@
       <if test="updatedTime != null">
         #{updatedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="productSku != null">
+        #{productSku,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="org.shop.model.dao.OrderItemDAOExample" resultType="java.lang.Long">
-    select count(*) from order_item
+    select count(*) from s_order_item
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update order_item
+    update s_order_item
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=CHAR},
@@ -215,9 +215,6 @@
       </if>
       <if test="record.orderId != null">
         order_id = #{record.orderId,jdbcType=CHAR},
-      </if>
-      <if test="record.skuId != null">
-        sku_id = #{record.skuId,jdbcType=INTEGER},
       </if>
       <if test="record.quantity != null">
         quantity = #{record.quantity,jdbcType=INTEGER},
@@ -243,17 +240,19 @@
       <if test="record.updatedTime != null">
         updated_time = #{record.updatedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.productSku != null">
+        product_sku = #{record.productSku,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update order_item
+    update s_order_item
     set id = #{record.id,jdbcType=CHAR},
       customer_id = #{record.customerId,jdbcType=CHAR},
       order_id = #{record.orderId,jdbcType=CHAR},
-      sku_id = #{record.skuId,jdbcType=INTEGER},
       quantity = #{record.quantity,jdbcType=INTEGER},
       product_id = #{record.productId,jdbcType=CHAR},
       snapshot_product_id = #{record.snapshotProductId,jdbcType=CHAR},
@@ -261,22 +260,20 @@
       subTotal = #{record.subtotal,jdbcType=DECIMAL},
       thumb_img = #{record.thumbImg,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
-      updated_time = #{record.updatedTime,jdbcType=TIMESTAMP}
+      updated_time = #{record.updatedTime,jdbcType=TIMESTAMP},
+      product_sku = #{record.productSku,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="org.shop.model.dao.OrderItemDAO">
-    update order_item
+    update s_order_item
     <set>
       <if test="customerId != null">
         customer_id = #{customerId,jdbcType=CHAR},
       </if>
       <if test="orderId != null">
         order_id = #{orderId,jdbcType=CHAR},
-      </if>
-      <if test="skuId != null">
-        sku_id = #{skuId,jdbcType=INTEGER},
       </if>
       <if test="quantity != null">
         quantity = #{quantity,jdbcType=INTEGER},
@@ -302,14 +299,16 @@
       <if test="updatedTime != null">
         updated_time = #{updatedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="productSku != null">
+        product_sku = #{productSku,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=CHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="org.shop.model.dao.OrderItemDAO">
-    update order_item
+    update s_order_item
     set customer_id = #{customerId,jdbcType=CHAR},
       order_id = #{orderId,jdbcType=CHAR},
-      sku_id = #{skuId,jdbcType=INTEGER},
       quantity = #{quantity,jdbcType=INTEGER},
       product_id = #{productId,jdbcType=CHAR},
       snapshot_product_id = #{snapshotProductId,jdbcType=CHAR},
@@ -317,7 +316,8 @@
       subTotal = #{subtotal,jdbcType=DECIMAL},
       thumb_img = #{thumbImg,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
-      updated_time = #{updatedTime,jdbcType=TIMESTAMP}
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      product_sku = #{productSku,jdbcType=VARCHAR}
     where id = #{id,jdbcType=CHAR}
   </update>
 </mapper>

@@ -81,5 +81,9 @@ public class TestHttpClient {
 		return this.exchange(headers, HttpMethod.PUT, result, stringRef, null);
 	}
 
+	public  ResponseEntity<String> put( Object result) {
+		return this.exchange(null, HttpMethod.PUT, result, strResRef, null);
+	}
+
 
 }

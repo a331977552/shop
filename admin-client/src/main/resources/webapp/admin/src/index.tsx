@@ -5,7 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'antd/dist/antd.css';
 import {
-    authenticationRequestInterceptor,
+    addTokenToHeader,
     addResponseTransformInterceptor,
     authenticationInterceptor
 } from "./store/HttpConfig";
@@ -32,7 +32,7 @@ function Index() {
         history.push("/login");
     });
     addResponseTransformInterceptor();
-    authenticationRequestInterceptor();
+    addTokenToHeader();
     return <Switch>
         <Route path={"/login"}>
             <LoginPage/>

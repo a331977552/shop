@@ -1,10 +1,19 @@
 // Add a request interceptor
 import axios from "axios";
 import {getTokenFromStorage} from "./TokenConfig";
+import 'nprogress/nprogress.css'
+import NProgress from 'nprogress'
+const calculatePercentage = (loaded:number, total:number) => (Math.floor(loaded) / total)
+export function addTokenToHeader() {
 
-
-export function authenticationRequestInterceptor() {
+    axios.defaults.onDownloadProgress = e => {
+        if(e.lengthComputable){
+            const percentage = calculatePercentage(e.loaded, e.total);
+            NProgress.set(percentage)
+        }
+    }
     axios.interceptors.request.use(function (config) {
+        NProgress.start();
         // Do something before request is sent
         let token = getTokenFromStorage();
         if (token) {
@@ -20,8 +29,10 @@ export function authenticationRequestInterceptor() {
 export function addResponseTransformInterceptor() {
 
     axios.interceptors.response.use((response) => {
+        NProgress.done(true)
         return response.data;
     }, function (reason) {
+        NProgress.done(true)
         console.log("http error:", reason.toJSON());
         if (reason.response?.data) {
             return Promise.reject(reason.response.data)

@@ -1,8 +1,9 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Layout} from "antd";
 import {Route, Switch} from "react-router-dom";
 import HomePage from "../home/HomePage";
-import ProductBasePage from "../ProductBasePage";
+import ProductSectionBasePage from "../ProductSectionBasePage";
+import OrderSectionBasePage from "../OrderSectionBasePage";
 
 const {Content} = Layout;
 
@@ -16,18 +17,24 @@ function ContentMain() {
                 padding: 12,
                 margin: '10px',
                 minHeight: 280,
-                overflow:'auto'
+                overflow: 'auto'
             }}
         >
             <Switch>
                 <Route path={[
-                    "/product","/product/**",
-                    "/category","/category/**",
-                    "/brand",'/brand/**',
-                    "/spec",'/spec/**',
-                    "/attr",'/attr/**']} >
-                    <ProductBasePage/>
+                    "/product", "/product/**",
+                    "/category", "/category/**",
+                    "/brand", '/brand/**',
+                    "/spec", '/spec/**',
+                    "/attr", '/attr/**']}>
+                    <ProductSectionBasePage/>
                 </Route>
+                <Route path={[
+                    "/order", "/order/**",
+                ]}>
+                    <OrderSectionBasePage/>
+                </Route>
+
                 <Route path={"/"}>
                     <HomePage/>
                 </Route>

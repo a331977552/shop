@@ -1,11 +1,12 @@
-import React, { useState} from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components'
-import {Breadcrumb, Layout} from "antd";
+import {Breadcrumb, Layout, Dropdown, Menu} from "antd";
 
 import {useAppSelector} from "../../store/hooks";
 import {selectUser} from "../../store/slices/userSlice";
-import {useHistory,Link} from "react-router-dom";
+import {useHistory, Link} from "react-router-dom";
 import {KeyStr} from "../../model";
+import {removeTokenFromStorage} from "../../store/TokenConfig";
 
 const {Header} = Layout;
 
@@ -17,7 +18,7 @@ const StyledSpan = styled.span`
   text-decoration: underline;
 `
 
-const breadCrumbMap:KeyStr = {
+const breadCrumbMap: KeyStr = {
     "/product": '商品列表',
     "/product/add": '添加',
     "/product/update": '更新',
@@ -37,65 +38,66 @@ const breadCrumbMap:KeyStr = {
     "/brand": '品牌列表',
     "/brand/add": '品牌添加',
     "/brand/update": '品牌更新',
-    "":'主页',
+    "": '主页',
 
 }
-function calcBread(pathname:string){
+
+function calcBread(pathname: string) {
     let pathArray = pathname.split("/");
-    if (pathArray.length >= 4 && pathArray[pathArray.length-2] === 'update'){
-        pathArray = pathArray.slice(0,pathArray.length-1);
+    if (pathArray.length >= 4 && pathArray[pathArray.length - 2] === 'update') {
+        pathArray = pathArray.slice(0, pathArray.length - 1);
     }
-    const breadCrumbList: { name:string,uipath:string }[]= [];
-    while(pathArray.length>0){
-        breadCrumbList.unshift({name:breadCrumbMap[pathArray.join("/")],uipath:pathArray.join("/")});
-        pathArray = pathArray.slice(0,pathArray.length-1);
+    const breadCrumbList: { name: string, uipath: string }[] = [];
+    while (pathArray.length > 0) {
+        breadCrumbList.unshift({name: breadCrumbMap[pathArray.join("/")], uipath: pathArray.join("/")});
+        pathArray = pathArray.slice(0, pathArray.length - 1);
     }
     return breadCrumbList;
 }
 
 const AppHeader = () => {
     let history = useHistory();
-    const [breadCrumbList,setBreadCrumbList] = useState<{ name:string,uipath:string }[]>(()=>calcBread(history.location.pathname));
-    history.listen((location)=>{
+    const [breadCrumbList, setBreadCrumbList] = useState<{ name: string, uipath: string }[]>(() => calcBread(history.location.pathname));
+    history.listen((location) => {
         setBreadCrumbList(calcBread(history.location.pathname));
     });
     const user = useAppSelector(selectUser)?.result;
+
+    function loginOut() {
+        removeTokenFromStorage();
+        history.push("/login");
+    }
+    if (!user)
+        return null;
+
+
+
     return (
         <Header style={{display: 'flex', backgroundColor: 'white', height: '50px', padding: '0 30px'}}>
             <div style={{alignSelf: "center"}}>
                 <Breadcrumb>
-                    {breadCrumbList?.map((item,index)=>
-                        <Breadcrumb.Item key={item.uipath}>{index+1 === breadCrumbList.length?item.name:
-                           <Link to={{pathname:item?.uipath||"/",state:{updateMenu:true}}} >{item.name}</Link>
+                    {breadCrumbList?.map((item, index) =>
+                        <Breadcrumb.Item key={item.uipath}>{index + 1 === breadCrumbList.length ? item.name :
+                            <Link to={{pathname: item?.uipath || "/", state: {updateMenu: true}}}>{item.name}</Link>
                         }</Breadcrumb.Item>)}
                 </Breadcrumb>
             </div>
             <div style={{flex: '1 0 0px'}}/>
             <div style={{display: 'flex'}}>
-                <StyledSpan> {user?.alias}</StyledSpan>
+                <Dropdown trigger={['click']}  overlay={
+                    <Menu>
+                        <Menu.Item key="0" >
+                            <a >{user.alias}</a>
+                        </Menu.Item>
+                        <Menu.Divider />
+                        <Menu.Item onClick={loginOut}>注销</Menu.Item>
+                    </Menu>
+                }>
+                    <StyledSpan> {user.alias}</StyledSpan>
+                </Dropdown>
             </div>
         </Header>
     );
 };
 export default AppHeader;
-
-//
-// const mapStateToProps = (state: RootState) => ({
-//
-// })
-//
-// const mapDispatch = {
-//     toggleOn: () => ({ type: 'TOGGLE_IS_ON' }),
-// }
-//
-//
-// const connector = connect(mapStateToProps, mapDispatch)
-//
-// // The inferred type will look like:
-// // {isOn: boolean, toggleOn: () => void}
-// type PropsFromRedux = ConnectedProps<typeof connector>
-//
-// interface Props extends PropsFromRedux{
-//     id:number
-// }
 

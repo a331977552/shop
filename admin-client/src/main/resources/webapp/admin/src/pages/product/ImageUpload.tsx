@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {message, Upload} from "antd";
+import {message, Upload,Image} from "antd";
 import {getTokenFromStorage} from "../../store/TokenConfig";
 import {beforeImageUpload} from "../../util/UploadConfig";
 import {LoadingOutlined, PlusOutlined} from "@ant-design/icons";
@@ -21,6 +21,7 @@ function ImageUpload({img,onUploadFinished}: {onUploadFinished:(imgID:string,inf
             listType="picture-card"
             className="avatar-uploader"
             showUploadList={false}
+            // previewFile={}
             headers={{
                 "Authorization": "Bearer " + getTokenFromStorage()
             }}
@@ -30,8 +31,11 @@ function ImageUpload({img,onUploadFinished}: {onUploadFinished:(imgID:string,inf
 
         >
             {img ?
-                <img src={"/api-gateway/img-service/api/img/" + img} alt="avatar"
-                     style={{width: '100%'}}/> :
+                <Image
+                    alt="avatar"
+                    width={200}
+                    src={"/api-gateway/img-service/api/img/" + img}
+                />:
                 <div>
                     {imgUploading ? <LoadingOutlined/> : <PlusOutlined/>}
                     <div style={{marginTop: 8}}>Upload</div>

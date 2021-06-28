@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.shop.mapper.ShopOrderDAOMapper">
-  <resultMap id="BaseResultMap" type="org.shop.model.dao.ShopOrderDAO">
+<mapper namespace="org.shop.mapper.OrderItemDAOMapper">
+  <resultMap id="BaseResultMap" type="org.shop.model.dao.OrderItemDAO">
     <id column="id" jdbcType="CHAR" property="id" />
     <result column="customer_id" jdbcType="CHAR" property="customerId" />
-    <result column="total_price" jdbcType="DECIMAL" property="totalPrice" />
-    <result column="status" jdbcType="CHAR" property="status" />
-    <result column="post_code" jdbcType="VARCHAR" property="postCode" />
-    <result column="home_address" jdbcType="VARCHAR" property="homeAddress" />
-    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="order_id" jdbcType="CHAR" property="orderId" />
+    <result column="quantity" jdbcType="INTEGER" property="quantity" />
+    <result column="product_id" jdbcType="CHAR" property="productId" />
+    <result column="snapshot_product_id" jdbcType="CHAR" property="snapshotProductId" />
+    <result column="unit_price" jdbcType="DECIMAL" property="unitPrice" />
+    <result column="subTotal" jdbcType="DECIMAL" property="subtotal" />
+    <result column="thumb_img" jdbcType="VARCHAR" property="thumbImg" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+    <result column="product_sku" jdbcType="VARCHAR" property="productSku" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -71,16 +74,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, customer_id, total_price, status, post_code, home_address, phone_number, created_time, 
-    updated_time
+    id, customer_id, order_id, quantity, product_id, snapshot_product_id, unit_price, 
+    subTotal, thumb_img, created_time, updated_time, product_sku
   </sql>
-  <select id="selectByExample" parameterType="org.shop.model.dao.ShopOrderDAOExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="org.shop.model.dao.OrderItemDAOExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from shop_order
+    from s_order_item
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -91,31 +94,33 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from shop_order
+    from s_order_item
     where id = #{id,jdbcType=CHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from shop_order
+    delete from s_order_item
     where id = #{id,jdbcType=CHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="org.shop.model.dao.ShopOrderDAOExample">
-    delete from shop_order
+  <delete id="deleteByExample" parameterType="org.shop.model.dao.OrderItemDAOExample">
+    delete from s_order_item
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="org.shop.model.dao.ShopOrderDAO">
-    insert into shop_order (id, customer_id, total_price, 
-      status, post_code, home_address, 
-      phone_number, created_time, updated_time
+  <insert id="insert" parameterType="org.shop.model.dao.OrderItemDAO">
+    insert into s_order_item (id, customer_id, order_id, 
+      quantity, product_id, snapshot_product_id, 
+      unit_price, subTotal, thumb_img, 
+      created_time, updated_time, product_sku
       )
-    values (#{id,jdbcType=CHAR}, #{customerId,jdbcType=CHAR}, #{totalPrice,jdbcType=DECIMAL}, 
-      #{status,jdbcType=CHAR}, #{postCode,jdbcType=VARCHAR}, #{homeAddress,jdbcType=VARCHAR}, 
-      #{phoneNumber,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}
+    values (#{id,jdbcType=CHAR}, #{customerId,jdbcType=CHAR}, #{orderId,jdbcType=CHAR}, 
+      #{quantity,jdbcType=INTEGER}, #{productId,jdbcType=CHAR}, #{snapshotProductId,jdbcType=CHAR}, 
+      #{unitPrice,jdbcType=DECIMAL}, #{subtotal,jdbcType=DECIMAL}, #{thumbImg,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, #{productSku,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="org.shop.model.dao.ShopOrderDAO">
-    insert into shop_order
+  <insert id="insertSelective" parameterType="org.shop.model.dao.OrderItemDAO">
+    insert into s_order_item
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -123,26 +128,35 @@
       <if test="customerId != null">
         customer_id,
       </if>
-      <if test="totalPrice != null">
-        total_price,
+      <if test="orderId != null">
+        order_id,
       </if>
-      <if test="status != null">
-        status,
+      <if test="quantity != null">
+        quantity,
       </if>
-      <if test="postCode != null">
-        post_code,
+      <if test="productId != null">
+        product_id,
       </if>
-      <if test="homeAddress != null">
-        home_address,
+      <if test="snapshotProductId != null">
+        snapshot_product_id,
       </if>
-      <if test="phoneNumber != null">
-        phone_number,
+      <if test="unitPrice != null">
+        unit_price,
+      </if>
+      <if test="subtotal != null">
+        subTotal,
+      </if>
+      <if test="thumbImg != null">
+        thumb_img,
       </if>
       <if test="createdTime != null">
         created_time,
       </if>
       <if test="updatedTime != null">
         updated_time,
+      </if>
+      <if test="productSku != null">
+        product_sku,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -152,20 +166,26 @@
       <if test="customerId != null">
         #{customerId,jdbcType=CHAR},
       </if>
-      <if test="totalPrice != null">
-        #{totalPrice,jdbcType=DECIMAL},
+      <if test="orderId != null">
+        #{orderId,jdbcType=CHAR},
       </if>
-      <if test="status != null">
-        #{status,jdbcType=CHAR},
+      <if test="quantity != null">
+        #{quantity,jdbcType=INTEGER},
       </if>
-      <if test="postCode != null">
-        #{postCode,jdbcType=VARCHAR},
+      <if test="productId != null">
+        #{productId,jdbcType=CHAR},
       </if>
-      <if test="homeAddress != null">
-        #{homeAddress,jdbcType=VARCHAR},
+      <if test="snapshotProductId != null">
+        #{snapshotProductId,jdbcType=CHAR},
       </if>
-      <if test="phoneNumber != null">
-        #{phoneNumber,jdbcType=VARCHAR},
+      <if test="unitPrice != null">
+        #{unitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="subtotal != null">
+        #{subtotal,jdbcType=DECIMAL},
+      </if>
+      <if test="thumbImg != null">
+        #{thumbImg,jdbcType=VARCHAR},
       </if>
       <if test="createdTime != null">
         #{createdTime,jdbcType=TIMESTAMP},
@@ -173,16 +193,19 @@
       <if test="updatedTime != null">
         #{updatedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="productSku != null">
+        #{productSku,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="org.shop.model.dao.ShopOrderDAOExample" resultType="java.lang.Long">
-    select count(*) from shop_order
+  <select id="countByExample" parameterType="org.shop.model.dao.OrderItemDAOExample" resultType="java.lang.Long">
+    select count(*) from s_order_item
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update shop_order
+    update s_order_item
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=CHAR},
@@ -190,20 +213,26 @@
       <if test="record.customerId != null">
         customer_id = #{record.customerId,jdbcType=CHAR},
       </if>
-      <if test="record.totalPrice != null">
-        total_price = #{record.totalPrice,jdbcType=DECIMAL},
+      <if test="record.orderId != null">
+        order_id = #{record.orderId,jdbcType=CHAR},
       </if>
-      <if test="record.status != null">
-        status = #{record.status,jdbcType=CHAR},
+      <if test="record.quantity != null">
+        quantity = #{record.quantity,jdbcType=INTEGER},
       </if>
-      <if test="record.postCode != null">
-        post_code = #{record.postCode,jdbcType=VARCHAR},
+      <if test="record.productId != null">
+        product_id = #{record.productId,jdbcType=CHAR},
       </if>
-      <if test="record.homeAddress != null">
-        home_address = #{record.homeAddress,jdbcType=VARCHAR},
+      <if test="record.snapshotProductId != null">
+        snapshot_product_id = #{record.snapshotProductId,jdbcType=CHAR},
       </if>
-      <if test="record.phoneNumber != null">
-        phone_number = #{record.phoneNumber,jdbcType=VARCHAR},
+      <if test="record.unitPrice != null">
+        unit_price = #{record.unitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.subtotal != null">
+        subTotal = #{record.subtotal,jdbcType=DECIMAL},
+      </if>
+      <if test="record.thumbImg != null">
+        thumb_img = #{record.thumbImg,jdbcType=VARCHAR},
       </if>
       <if test="record.createdTime != null">
         created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -211,46 +240,58 @@
       <if test="record.updatedTime != null">
         updated_time = #{record.updatedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.productSku != null">
+        product_sku = #{record.productSku,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update shop_order
+    update s_order_item
     set id = #{record.id,jdbcType=CHAR},
       customer_id = #{record.customerId,jdbcType=CHAR},
-      total_price = #{record.totalPrice,jdbcType=DECIMAL},
-      status = #{record.status,jdbcType=CHAR},
-      post_code = #{record.postCode,jdbcType=VARCHAR},
-      home_address = #{record.homeAddress,jdbcType=VARCHAR},
-      phone_number = #{record.phoneNumber,jdbcType=VARCHAR},
+      order_id = #{record.orderId,jdbcType=CHAR},
+      quantity = #{record.quantity,jdbcType=INTEGER},
+      product_id = #{record.productId,jdbcType=CHAR},
+      snapshot_product_id = #{record.snapshotProductId,jdbcType=CHAR},
+      unit_price = #{record.unitPrice,jdbcType=DECIMAL},
+      subTotal = #{record.subtotal,jdbcType=DECIMAL},
+      thumb_img = #{record.thumbImg,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
-      updated_time = #{record.updatedTime,jdbcType=TIMESTAMP}
+      updated_time = #{record.updatedTime,jdbcType=TIMESTAMP},
+      product_sku = #{record.productSku,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="org.shop.model.dao.ShopOrderDAO">
-    update shop_order
+  <update id="updateByPrimaryKeySelective" parameterType="org.shop.model.dao.OrderItemDAO">
+    update s_order_item
     <set>
       <if test="customerId != null">
         customer_id = #{customerId,jdbcType=CHAR},
       </if>
-      <if test="totalPrice != null">
-        total_price = #{totalPrice,jdbcType=DECIMAL},
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=CHAR},
       </if>
-      <if test="status != null">
-        status = #{status,jdbcType=CHAR},
+      <if test="quantity != null">
+        quantity = #{quantity,jdbcType=INTEGER},
       </if>
-      <if test="postCode != null">
-        post_code = #{postCode,jdbcType=VARCHAR},
+      <if test="productId != null">
+        product_id = #{productId,jdbcType=CHAR},
       </if>
-      <if test="homeAddress != null">
-        home_address = #{homeAddress,jdbcType=VARCHAR},
+      <if test="snapshotProductId != null">
+        snapshot_product_id = #{snapshotProductId,jdbcType=CHAR},
       </if>
-      <if test="phoneNumber != null">
-        phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      <if test="unitPrice != null">
+        unit_price = #{unitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="subtotal != null">
+        subTotal = #{subtotal,jdbcType=DECIMAL},
+      </if>
+      <if test="thumbImg != null">
+        thumb_img = #{thumbImg,jdbcType=VARCHAR},
       </if>
       <if test="createdTime != null">
         created_time = #{createdTime,jdbcType=TIMESTAMP},
@@ -258,19 +299,25 @@
       <if test="updatedTime != null">
         updated_time = #{updatedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="productSku != null">
+        product_sku = #{productSku,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=CHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="org.shop.model.dao.ShopOrderDAO">
-    update shop_order
+  <update id="updateByPrimaryKey" parameterType="org.shop.model.dao.OrderItemDAO">
+    update s_order_item
     set customer_id = #{customerId,jdbcType=CHAR},
-      total_price = #{totalPrice,jdbcType=DECIMAL},
-      status = #{status,jdbcType=CHAR},
-      post_code = #{postCode,jdbcType=VARCHAR},
-      home_address = #{homeAddress,jdbcType=VARCHAR},
-      phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      order_id = #{orderId,jdbcType=CHAR},
+      quantity = #{quantity,jdbcType=INTEGER},
+      product_id = #{productId,jdbcType=CHAR},
+      snapshot_product_id = #{snapshotProductId,jdbcType=CHAR},
+      unit_price = #{unitPrice,jdbcType=DECIMAL},
+      subTotal = #{subtotal,jdbcType=DECIMAL},
+      thumb_img = #{thumbImg,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
-      updated_time = #{updatedTime,jdbcType=TIMESTAMP}
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      product_sku = #{productSku,jdbcType=VARCHAR}
     where id = #{id,jdbcType=CHAR}
   </update>
 </mapper>
