@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
 import { Table} from "antd";
-import {getProductList, selectProductReducer} from "../../store/slices/productSlice";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import StatusView from "../../components/StatusView";
 import { OrderModel} from "../../model";
