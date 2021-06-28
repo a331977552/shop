@@ -9,12 +9,17 @@
   
 <h3 >still under development</h3>
 
-| 模块 | 作用|细节|
-| ---------------- | ------------- |----------|
-| scheme.sql| 数据表的元数据|可以导入数据库中生成对应的表
-| user-service| 用户服务|用户登录,用户的信息查询,jwt token的生成
-| product-service| 商品服务 | 商品,种类,种类属性,规格的增删改查
-| api-gateway| api gateway |所有的api都会经过这里,信息收集,认证
+| 模块(服务) | 作用|
+| ---------------- | ------------- |
+| scheme.sql| 数据表结构|
+| user-service| 用户服务|
+| product-service| 商品服务| 
+| api-gateway| api gateway|
+| admin-client| 后台管理界面|
+| common|所有模块都会引用,包含了很多公用工具|
+| test-utility|所有模块都会引用,封装了一些test工具|
+
+
 
 目前可以展示的部分页面(part of demonstrable pages): 
 
