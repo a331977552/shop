@@ -9,10 +9,10 @@
 
 | 模块(module)  | 作用(functionality) |细节 (detail)|
 | ------------- | ------------- |----------|
-| Scheme.sql  | 数据表的元数据,(table's meta data)|可以导入数据库中生成对应的表(can be imported into database,  generate tables)
-| user service  | 用户服务(user service)  |用户登录,用户的信息查询,jwt token的生成(user login, user info acquire, jwt token generation)
-| product service  | 商品服务(product service)  | 商品,种类,种类属性,规格的增删改查(the CRUD of products,categories,products' specifcations, attributes )
-| api gateway  | api gateway |所有的api都会经过这里,信息收集,认证,(all api calls will go through this services in which it will collect all sorts of info)
+| scheme.sql| 数据表的元数据,(table's meta data)|可以导入数据库中生成对应的表(can be imported into database,  generate tables)
+| user-service| 用户服务(user service)  |用户登录,用户的信息查询,jwt token的生成(user login, user info acquire, jwt token generation)
+| product-service| 商品服务(product service)  | 商品,种类,种类属性,规格的增删改查(the CRUD of products,categories,products' specifcations, attributes )
+| api-gateway| api gateway |所有的api都会经过这里,信息收集,认证,(all api calls will go through this services in which it will collect all sorts of info)
 
 
 目前可以展示的部分页面(part of demonstrable pages): 
