@@ -7,7 +7,7 @@
 <p >online shopping website，developed with SpringBoot in microservice architecture.
   Typescript and React are mainly used to develop frentend</p>
   
-<h3 >still under development</h3>
+
 
 | 模块(服务) | 作用|
 | ---------------- | ------------- |
@@ -36,6 +36,6 @@
 | product-service| product service  | the CRUD of products,categories,products' specifcations, attributes 
 | api-gateway| api gateway |all api calls will go through this services in which it will collect all sorts of info
 
-
+<h3 >still under development</h3>
 
 instead of using `ribbon`,  `zuul`, `hystrix`,   `resilience4j` `spring load balancer` and `spring cloud gateway` are applied in this project since it's the latest recommendation from spring.io
