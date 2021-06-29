@@ -26,6 +26,10 @@
 ![alt text](https://github.com/a331977552/shop/blob/main/docs/brand.jpg?raw=true)
 ![alt text](https://github.com/a331977552/shop/blob/main/docs/category.jpg?raw=true)
 ![alt text](https://github.com/a331977552/shop/blob/main/docs/productadd.jpg?raw=true)
+![alt text](https://github.com/a331977552/shop/blob/main/docs/order.png?raw=true)
+![alt text](https://github.com/a331977552/shop/blob/main/docs/product_attri.png?raw=true)
+![alt text](https://github.com/a331977552/shop/blob/main/docs/product_specs.png?raw=true)
+
 
 
 
