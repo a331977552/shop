@@ -23,11 +23,22 @@
 
 目前可以展示的部分页面(part of demonstrable pages): 
 
-![alt text](https://github.com/a331977552/shop/blob/main/docs/brand.jpg?raw=true)
-![alt text](https://github.com/a331977552/shop/blob/main/docs/category.jpg?raw=true)
+![alt text](https://github.com/a331977552/shop/blob/main/docs/product_list.png?raw=true)
+<br/>
+![alt text](https://github.com/a331977552/shop/blob/main/docs/product_add1.png?raw=true)
+<br/>
 ![alt text](https://github.com/a331977552/shop/blob/main/docs/productadd.jpg?raw=true)
+<br/>
+![alt text](https://github.com/a331977552/shop/blob/main/docs/brand.jpg?raw=true)
+<br/>
+![alt text](https://github.com/a331977552/shop/blob/main/docs/brand.jpg?raw=true)
+<br/>
+![alt text](https://github.com/a331977552/shop/blob/main/docs/category.jpg?raw=true)
+<br/>
 ![alt text](https://github.com/a331977552/shop/blob/main/docs/order.png?raw=true)
+<br/>
 ![alt text](https://github.com/a331977552/shop/blob/main/docs/product_attri.png?raw=true)
+<br/>
 ![alt text](https://github.com/a331977552/shop/blob/main/docs/product_specs.png?raw=true)
 
 
