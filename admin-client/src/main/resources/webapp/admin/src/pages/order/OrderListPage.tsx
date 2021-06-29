@@ -1,12 +1,15 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Table} from "antd";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import StatusView from "../../components/StatusView";
-import { OrderModel} from "../../model";
+import {OrderModel, OrderQueryModel} from "../../model";
 import OrderSearch from "./OrderSearch";
 import OrderOperation from "./OrderOperation";
 import {getOrderList, selectOrderReducer} from "../../store/slices/orderSlice";
 import dayjs from "dayjs";
+
+
+
 const payMap:{[key:string]:string} = {
     "wechat":"微信",
     "alipay":"支付宝",
@@ -104,21 +107,23 @@ const columns = [
 function OrderListPage() {
     let dispatch = useAppDispatch();
     let orderReducer = useAppSelector(selectOrderReducer);
+    const [orderQueryModel,setOrderQueryModel]= useState<OrderQueryModel>();
+
     const { status, errorMsg,data} = orderReducer;
     useEffect(() => {
-        dispatch(getOrderList({currentPage:0,pageSize:10}));
-    }, [dispatch])
+        dispatch(getOrderList({currentPage:0,pageSize:20,example:orderQueryModel}));
+    }, [dispatch,orderQueryModel])
 
     function onRetry() {
-        dispatch(getOrderList({currentPage:data?data.currentPage:0,pageSize:data?data.pageSize:10}));
+        dispatch(getOrderList({currentPage:data?data.currentPage:0,pageSize:data?data.pageSize:10,example:orderQueryModel}));
     }
 
     function onPageChange(page:number, pageSize?:number) {
-        dispatch(getOrderList({currentPage:Math.max(0,--page),pageSize:pageSize}));
+        dispatch(getOrderList({currentPage:Math.max(0,--page),pageSize:pageSize,example:orderQueryModel}));
     }
     return (
         <div style={{display: 'flex', overflow: 'auto',height: '100%', flexDirection: 'column'}}>
-            <OrderSearch/>
+            <OrderSearch setOrderQueryModel={setOrderQueryModel} />
             <StatusView status={status} retry={onRetry} loadOnce={true} errorMsg={errorMsg}>
                 <div style={{width: '100%', flex: '1 0 0px',  marginTop: '10px'}}>
                     <Table loading={status === 'loading'} rowKey={"id"} dataSource={data?.items} columns={columns}

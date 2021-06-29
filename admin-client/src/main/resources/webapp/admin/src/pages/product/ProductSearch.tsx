@@ -17,11 +17,10 @@ const StyledCol = styled(Col)`
 `
 
 function StyledColHOC(props: any) {
-
-    return <StyledCol md={{span: 12}} sm={{span: 12}} xs={{span: 24}}>{props.children}</StyledCol>
+    return <StyledCol xxl={{span:6}} xl={{span:8}} md={{span: 12}} sm={{span: 24}} xs={{span: 24}}>{props.children}</StyledCol>
 }
 
-function ProductSearch({setProductQueryModel}: { productQueryModel?: ProductQueryModel, setProductQueryModel: React.Dispatch<React.SetStateAction<ProductQueryModel | undefined>> }) {
+function ProductSearch({setProductQueryModel}: { setProductQueryModel: React.Dispatch<React.SetStateAction<ProductQueryModel | undefined>> }) {
     const [form] = useForm();
     let uiTree = useAppSelector(selectUITree) as CategoryTree[];
     uiTree = [...uiTree].slice(1);
@@ -56,7 +55,7 @@ function ProductSearch({setProductQueryModel}: { productQueryModel?: ProductQuer
               onFinish={onSubmit}
               form={form}
         >
-            <Row gutter={20}>
+            <Row gutter={20} style={{width:'100%'}}>
                 <StyledColHOC>
                     <Form.Item
                         name={`name`}
@@ -106,7 +105,7 @@ function ProductSearch({setProductQueryModel}: { productQueryModel?: ProductQuer
                         </Select>
                     </Form.Item>
                 </StyledColHOC>
-                <StyledCol md={{span: 12}} sm={{span: 24}} xs={{span: 24}}
+                <StyledCol xl={{span:8}} xxl={{span:18}} md={{span: 12}} sm={{span: 24}} xs={{span: 24}}
                            style={{display: 'flex', justifyContent: 'flex-end'}}>
                     <Form.Item
                     >

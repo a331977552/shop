@@ -34,11 +34,7 @@ const columns = [
             return statusMap[text];
         }
     },
-    {
-        title: '图片',
-        dataIndex: 'thumbnailImg',
-        key: 'thumbnailImg',
-    },
+
     {
         title: '销量',
         dataIndex: 'sales',
@@ -48,6 +44,18 @@ const columns = [
         title: '价格',
         dataIndex: 'price',
         key: 'price',
+        render(text: string, record: ProductModel, index: number) {
+            return text?("¥"+Number(text)):text;
+        }
+    },
+    {
+        title: '图片',
+        dataIndex: 'standardImg',
+        key: 'standardImg',
+        render(text: string, record: ProductModel, index: number) {
+
+            return text?<img style={{width:'60px'}} src={"/api-gateway/img-service/api/img/"+text}/>:text;
+        }
     },
     {
         title: '排序',
@@ -77,9 +85,9 @@ export default function ProductListPage() {
 
 
     useEffect(() => {
-        dispatch(getProductList({currentPage:data?data.currentPage:0,
-            pageSize:data?data.pageSize:20,example:productQueryModel}));
-    }, [productQueryModel])
+        dispatch(getProductList({currentPage:0,
+            pageSize:20,example:productQueryModel}));
+    }, [dispatch,productQueryModel])
 
     function onRetry() {
         dispatch(getProductList({currentPage:data?data.currentPage:0,
@@ -92,7 +100,7 @@ export default function ProductListPage() {
     }
     return (
         <div style={{display: 'flex', height: '100%', flexDirection: 'column',overflow: 'auto',}}>
-            <ProductSearch setProductQueryModel={setProductQueryModel} productQueryModel={productQueryModel} />
+            <ProductSearch setProductQueryModel={setProductQueryModel} />
             <StatusView status={status} retry={onRetry} loadOnce={true} errorMsg={errorMsg}>
                 <div style={{width: '100%', flex: '1 0 0px',  marginTop: '10px'}}>
                     <Table loading={status === 'loading'} rowKey={"id"} dataSource={data?.items} columns={columns}
