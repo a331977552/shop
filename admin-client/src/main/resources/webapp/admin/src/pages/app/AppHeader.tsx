@@ -87,10 +87,10 @@ const AppHeader = () => {
                 <Dropdown trigger={['click']}  overlay={
                     <Menu>
                         <Menu.Item key="0" >
-                            <a >{user.alias}</a>
+                            {user.alias}
                         </Menu.Item>
                         <Menu.Divider />
-                        <Menu.Item onClick={loginOut}>注销</Menu.Item>
+                        <Menu.Item key="1" onClick={loginOut}>注销</Menu.Item>
                     </Menu>
                 }>
                     <StyledSpan> {user.alias}</StyledSpan>

@@ -1,8 +1,7 @@
 import React from 'react';
 import {Button, Col, Form, Input, Row, Select} from "antd";
 import styled from "styled-components";
-import {OrderQueryModel, ProductQueryModel, RouterState} from "../../model";
-import {AutoComplete} from 'antd';
+import {OrderQueryModel, ProductQueryModel} from "../../model";
 import {useForm} from "antd/es/form/Form";
 
 

@@ -54,7 +54,7 @@ const columns = [
         key: 'standardImg',
         render(text: string, record: ProductModel, index: number) {
 
-            return text?<img style={{width:'60px'}} src={"/api-gateway/img-service/api/img/"+text}/>:text;
+            return text?<img alt={"product img"} style={{width:'60px'}} src={"/api-gateway/img-service/api/img/"+text}/>:text;
         }
     },
     {
