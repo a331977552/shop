@@ -28,6 +28,8 @@ public class OrderDAO {
 
     private Integer autoConfirmDays;
 
+    private String username;
+
     public String getId() {
         return id;
     }
@@ -122,5 +124,13 @@ public class OrderDAO {
 
     public void setAutoConfirmDays(Integer autoConfirmDays) {
         this.autoConfirmDays = autoConfirmDays;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

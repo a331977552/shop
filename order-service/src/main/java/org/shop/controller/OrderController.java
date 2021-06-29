@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @RestController()
 @RequestMapping("/api/order")
@@ -41,10 +40,20 @@ public class OrderController {
 
 	@GetMapping("/{page}/{pageSize}")
 	public ResponseEntity<Result<Page<OrderReturnVO>>> getAllOrderByPage(@PathVariable(name = "page") Integer page,
-	                                                                         @PathVariable(name = "pageSize") int pageSize,
-	                                                                         @RequestParam(name = "orderBy", required = false) String order, @RequestBody(required = false) OrderQueryVO example) {
+	                                                                     @PathVariable(name = "pageSize") int pageSize,
+	                                                                     @RequestParam(name = "orderBy", required = false) String order,
+	                                                                     @RequestParam(name = "receiverName", required = false) String receiverName,
+	                                                                     @RequestParam(name = "orderNum", required = false) String orderNum,
+	                                                                     @RequestParam(name = "orderSource", required = false) String orderSource,
+	                                                                     @RequestParam(name = "status", required = false) String status,
+	                                                                     @RequestParam(name = "username", required = false) String username
+
+	) {
+
 		Page<OrderQueryVO> of = Page.of(page, Math.max(5, Math.min(pageSize, this.pageSize)), order);
-		return ResponseEntity.ok(Result.of(service.findAllOrders(Optional.ofNullable(example).orElse(new OrderQueryVO()), of)));
+		final OrderQueryVO orderQueryVO = new OrderQueryVO(receiverName,username, orderNum, orderSource, status);
+		return ResponseEntity.ok(Result.of(service.findAllOrders(orderQueryVO, of)));
 	}
+
 
 }

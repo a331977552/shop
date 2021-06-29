@@ -1,10 +1,9 @@
 package org.shop.mapper;
 
+import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.shop.model.dao.OrderItemDAO;
 import org.shop.model.dao.OrderItemDAOExample;
-
-import java.util.List;
 
 public interface OrderItemDAOMapper {
     long countByExample(OrderItemDAOExample example);

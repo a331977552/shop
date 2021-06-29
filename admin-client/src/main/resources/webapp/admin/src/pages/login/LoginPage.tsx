@@ -5,6 +5,7 @@ import {useHistory} from 'react-router-dom';
 import loginAPI from "../../api/UserAPI";
 import {setTokenToStorage} from "../../store/TokenConfig";
 import {RouterState} from "../../model";
+import {paramParser} from "../../services";
 
 
 const layout = {
@@ -25,7 +26,13 @@ function LoginPage() {
         loginAPI(values).then(response=>{
             let result = response.result as string;
             setTokenToStorage(result);
-            history.push({pathname:"/",state:{updateMenu:true}})
+            const param = paramParser(history.location.search);
+            const redirect_url =param["redirect_url"] as string;
+            if (redirect_url){
+                window.location.replace(decodeURI(redirect_url));
+            }else {
+                history.push({pathname:"/",state:{updateMenu:true}})
+            }
         }).catch(reason => {
             setStatus("error")
             setErrorMsg(reason.msgDetail);

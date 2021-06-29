@@ -4,10 +4,7 @@ import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.log4j.Log4j2;
 import org.shop.common.RedisService;
 import org.shop.common.Result;
-import org.shop.common.util.BeanConvertor;
-import org.shop.common.util.Page;
-import org.shop.common.util.SecurityUtil;
-import org.shop.common.util.UUIDUtils;
+import org.shop.common.util.*;
 import org.shop.exception.OrderCreationException;
 import org.shop.exception.OrderUpdateException;
 import org.shop.mapper.OrderDAOMapper;
@@ -227,7 +224,27 @@ public class OrderServiceImpl implements OrderService {
 	public Page<OrderReturnVO> findAllOrders(OrderQueryVO example, Page<OrderQueryVO> page) {
 
 		OrderDAOExample exam = new OrderDAOExample();
-		String orderBy = Optional.ofNullable(page.getOrderBy()).orElse("updated_time desc ");
+		final OrderDAOExample.Criteria criteria = exam.createCriteria();
+		if(TextUtil.hasText(example.getUsername())){
+			criteria.andUsernameLike("%"+example.getUsername()+"%");
+		}
+		if(TextUtil.hasText(example.getOrderSource())){
+			criteria.andOrderSourceEqualTo(example.getOrderSource());
+		}
+		if(TextUtil.hasText(example.getOrderNum())){
+			criteria.andOrderNumLike("%"+example.getOrderNum()+"%");
+		}
+		if(TextUtil.hasText(example.getStatus())){
+			criteria.andStatusEqualTo(example.getStatus());
+		}
+		if(TextUtil.hasText(example.getReceiverName())){
+			ShippingAddressDAOExample addExample = new ShippingAddressDAOExample();
+			addExample.createCriteria().andCustomerNameLike("%"+example.getReceiverName()+"%");
+			final List<ShippingAddressDAO> shippingAddressDAOS = shippingAddressDAOMapper.selectByExample(addExample);
+			final List<String> ids = shippingAddressDAOS.stream().map(ShippingAddressDAO::getOrderId).collect(Collectors.toList());
+			criteria.andIdIn(ids);
+		}
+		String orderBy = Optional.ofNullable(page.getOrderBy()).orElse("created_time desc ");
 		exam.setOrderByClause(orderBy + " limit " + page.getPageSize() + " offset " + page.getOffset());
 		final List<OrderDAO> shopOrderDAOS = orderMapper.selectByExample(exam);
 		final long count = orderMapper.countByExample(exam);

@@ -1,9 +1,9 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Table} from "antd";
 import {getProductList, selectProductReducer} from "../../store/slices/productSlice";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import StatusView from "../../components/StatusView";
-import { ProductModel} from "../../model";
+import {ProductModel, ProductQueryModel} from "../../model";
 import ProductSearch from "./ProductSearch";
 import ProductOperation from "./ProductOperation";
 
@@ -72,23 +72,29 @@ const columns = [
 export default function ProductListPage() {
     let dispatch = useAppDispatch();
     let productReducer = useAppSelector(selectProductReducer);
+    const [productQueryModel,setProductQueryModel]= useState<ProductQueryModel>();
     const { status, errorMsg,data} = productReducer;
+
+
     useEffect(() => {
-        dispatch(getProductList({currentPage:0,pageSize:20}));
-    }, [dispatch])
+        dispatch(getProductList({currentPage:data?data.currentPage:0,
+            pageSize:data?data.pageSize:20,example:productQueryModel}));
+    }, [productQueryModel])
 
     function onRetry() {
-        dispatch(getProductList({currentPage:data?data.currentPage:0,pageSize:data?data.pageSize:20}));
+        dispatch(getProductList({currentPage:data?data.currentPage:0,
+            pageSize:data?data.pageSize:20,example:productQueryModel}));
     }
 
     function onPageChange(page:number, pageSize?:number) {
-        dispatch(getProductList({currentPage:Math.max(0,--page),pageSize:pageSize}));
+        dispatch(getProductList({currentPage:Math.max(0,--page),
+            pageSize:pageSize,example:productQueryModel}));
     }
     return (
-        <div style={{display: 'flex', height: '100%', flexDirection: 'column'}}>
-            <ProductSearch/>
+        <div style={{display: 'flex', height: '100%', flexDirection: 'column',overflow: 'auto',}}>
+            <ProductSearch setProductQueryModel={setProductQueryModel} productQueryModel={productQueryModel} />
             <StatusView status={status} retry={onRetry} loadOnce={true} errorMsg={errorMsg}>
-                <div style={{width: '100%', flex: '1 0 0px', overflow: 'auto', marginTop: '10px'}}>
+                <div style={{width: '100%', flex: '1 0 0px',  marginTop: '10px'}}>
                     <Table loading={status === 'loading'} rowKey={"id"} dataSource={data?.items} columns={columns}
                     pagination={data&&{total:data.totalElements,
                         current:(data.currentPage+1),pageSize:data.pageSize,onChange:onPageChange}}

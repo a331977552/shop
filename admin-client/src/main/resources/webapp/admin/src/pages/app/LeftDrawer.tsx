@@ -44,7 +44,6 @@ function LeftDrawer() {
     }
 
     history.listen((location)=>{
-        console.log("listen",location)
        if(location.state?.updateMenu){
            setSelectedMenuKey(getMenuPath(location.pathname.split("/")));
        }

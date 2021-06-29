@@ -8,6 +8,8 @@ public class OrderDAO {
 
     private String customerId;
 
+    private String username;
+
     private BigDecimal totalPrice;
 
     private String status;
@@ -122,5 +124,13 @@ public class OrderDAO {
 
     public void setAutoConfirmDays(Integer autoConfirmDays) {
         this.autoConfirmDays = autoConfirmDays;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

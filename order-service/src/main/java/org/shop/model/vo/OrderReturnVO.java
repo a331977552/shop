@@ -15,6 +15,8 @@ public class OrderReturnVO {
 
 	private String customerId;
 
+	private String username;
+
 	private BigDecimal totalPrice;
 
 	private String status;

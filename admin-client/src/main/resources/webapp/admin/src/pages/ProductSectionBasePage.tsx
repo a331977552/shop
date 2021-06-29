@@ -27,8 +27,6 @@ function ProductSectionBasePage() {
         dispatch(getCategoryList())
     }
 
-
-
     return (
         <StatusView status={categoryReducer.categoryList.status} retry={retry}>
             <Switch>

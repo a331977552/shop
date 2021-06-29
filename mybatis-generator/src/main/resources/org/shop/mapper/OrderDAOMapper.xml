@@ -10,10 +10,11 @@
     <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
     <result column="pay_method" jdbcType="CHAR" property="payMethod" />
     <result column="order_source" jdbcType="CHAR" property="orderSource" />
-    <result column="order_num" jdbcType="VARCHAR" property="orderNum" />
+    <result column="order_num" jdbcType="CHAR" property="orderNum" />
     <result column="buyer_comment" jdbcType="VARCHAR" property="buyerComment" />
     <result column="seller_comment" jdbcType="VARCHAR" property="sellerComment" />
     <result column="auto_confirm_days" jdbcType="INTEGER" property="autoConfirmDays" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -75,7 +76,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, customer_id, total_price, status, created_time, updated_time, pay_method, order_source, 
-    order_num, buyer_comment, seller_comment, auto_confirm_days
+    order_num, buyer_comment, seller_comment, auto_confirm_days, username
   </sql>
   <select id="selectByExample" parameterType="org.shop.model.dao.OrderDAOExample" resultMap="BaseResultMap">
     select
@@ -111,13 +112,13 @@
     insert into s_order (id, customer_id, total_price, 
       status, created_time, updated_time, 
       pay_method, order_source, order_num, 
-      buyer_comment, seller_comment, auto_confirm_days
-      )
+      buyer_comment, seller_comment, auto_confirm_days, 
+      username)
     values (#{id,jdbcType=CHAR}, #{customerId,jdbcType=CHAR}, #{totalPrice,jdbcType=DECIMAL}, 
       #{status,jdbcType=CHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, 
-      #{payMethod,jdbcType=CHAR}, #{orderSource,jdbcType=CHAR}, #{orderNum,jdbcType=VARCHAR}, 
-      #{buyerComment,jdbcType=VARCHAR}, #{sellerComment,jdbcType=VARCHAR}, #{autoConfirmDays,jdbcType=INTEGER}
-      )
+      #{payMethod,jdbcType=CHAR}, #{orderSource,jdbcType=CHAR}, #{orderNum,jdbcType=CHAR}, 
+      #{buyerComment,jdbcType=VARCHAR}, #{sellerComment,jdbcType=VARCHAR}, #{autoConfirmDays,jdbcType=INTEGER}, 
+      #{username,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="org.shop.model.dao.OrderDAO">
     insert into s_order
@@ -158,6 +159,9 @@
       <if test="autoConfirmDays != null">
         auto_confirm_days,
       </if>
+      <if test="username != null">
+        username,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -185,7 +189,7 @@
         #{orderSource,jdbcType=CHAR},
       </if>
       <if test="orderNum != null">
-        #{orderNum,jdbcType=VARCHAR},
+        #{orderNum,jdbcType=CHAR},
       </if>
       <if test="buyerComment != null">
         #{buyerComment,jdbcType=VARCHAR},
@@ -195,6 +199,9 @@
       </if>
       <if test="autoConfirmDays != null">
         #{autoConfirmDays,jdbcType=INTEGER},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -232,7 +239,7 @@
         order_source = #{record.orderSource,jdbcType=CHAR},
       </if>
       <if test="record.orderNum != null">
-        order_num = #{record.orderNum,jdbcType=VARCHAR},
+        order_num = #{record.orderNum,jdbcType=CHAR},
       </if>
       <if test="record.buyerComment != null">
         buyer_comment = #{record.buyerComment,jdbcType=VARCHAR},
@@ -242,6 +249,9 @@
       </if>
       <if test="record.autoConfirmDays != null">
         auto_confirm_days = #{record.autoConfirmDays,jdbcType=INTEGER},
+      </if>
+      <if test="record.username != null">
+        username = #{record.username,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -258,10 +268,11 @@
       updated_time = #{record.updatedTime,jdbcType=TIMESTAMP},
       pay_method = #{record.payMethod,jdbcType=CHAR},
       order_source = #{record.orderSource,jdbcType=CHAR},
-      order_num = #{record.orderNum,jdbcType=VARCHAR},
+      order_num = #{record.orderNum,jdbcType=CHAR},
       buyer_comment = #{record.buyerComment,jdbcType=VARCHAR},
       seller_comment = #{record.sellerComment,jdbcType=VARCHAR},
-      auto_confirm_days = #{record.autoConfirmDays,jdbcType=INTEGER}
+      auto_confirm_days = #{record.autoConfirmDays,jdbcType=INTEGER},
+      username = #{record.username,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -291,7 +302,7 @@
         order_source = #{orderSource,jdbcType=CHAR},
       </if>
       <if test="orderNum != null">
-        order_num = #{orderNum,jdbcType=VARCHAR},
+        order_num = #{orderNum,jdbcType=CHAR},
       </if>
       <if test="buyerComment != null">
         buyer_comment = #{buyerComment,jdbcType=VARCHAR},
@@ -301,6 +312,9 @@
       </if>
       <if test="autoConfirmDays != null">
         auto_confirm_days = #{autoConfirmDays,jdbcType=INTEGER},
+      </if>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=CHAR}
@@ -314,10 +328,11 @@
       updated_time = #{updatedTime,jdbcType=TIMESTAMP},
       pay_method = #{payMethod,jdbcType=CHAR},
       order_source = #{orderSource,jdbcType=CHAR},
-      order_num = #{orderNum,jdbcType=VARCHAR},
+      order_num = #{orderNum,jdbcType=CHAR},
       buyer_comment = #{buyerComment,jdbcType=VARCHAR},
       seller_comment = #{sellerComment,jdbcType=VARCHAR},
-      auto_confirm_days = #{autoConfirmDays,jdbcType=INTEGER}
+      auto_confirm_days = #{autoConfirmDays,jdbcType=INTEGER},
+      username = #{username,jdbcType=VARCHAR}
     where id = #{id,jdbcType=CHAR}
   </update>
 </mapper>

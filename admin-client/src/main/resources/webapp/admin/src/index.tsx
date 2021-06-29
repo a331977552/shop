@@ -29,7 +29,7 @@ function Index() {
     let history = useHistory();
     authenticationInterceptor(() => {
         removeTokenFromStorage();
-        history.push("/login");
+        history.push("/login?redirect_url="+encodeURI(window.location.href));
     });
     addResponseTransformInterceptor();
     addTokenToHeader();

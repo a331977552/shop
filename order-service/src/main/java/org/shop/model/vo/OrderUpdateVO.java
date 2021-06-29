@@ -16,13 +16,11 @@ public class OrderUpdateVO {
 	@EnumNamePattern(regexp = "UNPAID|PAID|SHIPPED|FINISHED|REFUND|CLOSED")
 	private String status;
 
-
 	private String payMethod;
 
 	private String buyerComment;
 
 	private String sellerComment;
-
 
 	private List<OrderItemUpdateVO> items;
 

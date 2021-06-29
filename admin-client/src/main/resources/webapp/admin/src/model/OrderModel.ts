@@ -6,11 +6,11 @@ export interface OrderModel {
 
     totalPrice?: number;
 
-    status?: 'UNPAID' | 'PAID' | 'SHIPPED' | 'FINISHED' | 'REFUND' | 'CLOSED';
+    status?: 'UNPAID' | 'PAID' | 'SHIPPING'|'SHIPPED' | 'FINISHED' | 'REFUND' | 'CLOSED';
 
-    createdTime?: Date;
+    createdTime?: string;
 
-    updatedTime?: Date;
+    updatedTime?: string;
 
     payMethod?: string;
 

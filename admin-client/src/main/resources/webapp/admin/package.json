@@ -20,6 +20,7 @@
     "@types/styled-components": "^5.1.9",
     "antd": "^4.16.1",
     "axios": "^0.21.1",
+    "dayjs": "^1.10.5",
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",
     "html-to-draftjs": "^1.5.0",
