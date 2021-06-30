@@ -39,9 +39,11 @@ const tailForm =
     }
 
 
+
+
 function AttrUpdateForm(props: {
     dataSource: SkuKeyVal[] | undefined,//data list in sku table
-    initAttrValues: { stock: string, price: string, img: string | undefined, attribute: string }[] | undefined,
+    initAttrValues: { stock: string, price: string, img: string | undefined, attribute: string }[] | undefined, //
     setDataSource: (dataSource: SkuKeyVal[] | undefined) => void,
     onCategoryChangeRef: (onCategoryChange: () => void) => void,
     category?: number,

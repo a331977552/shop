@@ -1,11 +1,11 @@
 import React from 'react';
 import {message} from "antd";
-import {ProductModel, RouterState} from "../../model";
-import {useAppDispatch} from "../../store/hooks";
+import {ProductModel, RouterState} from "../../../model";
+import {useAppDispatch} from "../../../store/hooks";
 import {useHistory} from "react-router-dom";
-import DeletionOperationHOC from "../../components/DeletionOperationHOC";
-import {deleteProductAPI} from "../../api";
-import { deleteProductByIdLocally } from '../../store/slices/productSlice';
+import DeletionOperationHOC from "../../../components/DeletionOperationHOC";
+import {deleteProductAPI} from "../../../api";
+import { deleteProductByIdLocally } from '../../../store/slices/productSlice';
 
 function ProductOperation(record: ProductModel) {
     const dispatch = useAppDispatch();

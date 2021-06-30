@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {Route, Switch} from "react-router-dom";
-import ProductListPage from "./product/ProductListPage";
+import ProductListPage from "./product/list/ProductListPage";
 import CategoryAddPage from "./category/CategoryAddPage";
 import ProductSpecAddOrUpdatePage from "./spec/ProductSpecAddOrUpdatePage";
 import ProductSpecPage from "./spec/ProductSpecPage";

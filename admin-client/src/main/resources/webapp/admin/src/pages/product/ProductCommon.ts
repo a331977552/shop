@@ -39,10 +39,35 @@ export function generateData(valueMap: KeyValMix): Array<SkuKeyVal> {
     return data;
 }
 
-
+/*
+skuList = initAttrValues =  [
+  {
+    "id": 47,
+    "productId": "dc789ffbd7d948379960051201f95bf7",
+    "stock": 33,
+    "sales": 0,
+    "price": 45,
+    "attribute": "{\"材料\":\"EVA\",\"品质\":\"低档\"}",
+    "img": null
+  },
+  ...
+] */
+/**
+ * accumulate all selected attributes
+ *
+ * example: all attributes:
+ *      材料:EVA,PVC
+ *      品质:低档,高档,
+ * selected =>
+ *      材料:EVA,PVC
+ *      品质:低档
+ * result =>
+ *      {材料:['EVA','PVC'],品质:['低档']}
+ * @param initAttrValues
+ */
 export function transformSkuListToForm(initAttrValues: { stock: string, price: string, img: string | undefined, attribute: string }[] | undefined):KeyVals| {  } {
     return initAttrValues?initAttrValues.reduce((accu: any, current) => {
-        const attributes = JSON.parse(current.attribute);//{规格:['1'],颜色:[2]}
+        const attributes = JSON.parse(current.attribute);//"{"材料":"EVA","品质":"低档"}",
         Object.keys(attributes).forEach(attrKey => {
             if (!accu[attrKey]) {
                 accu[attrKey] = [];

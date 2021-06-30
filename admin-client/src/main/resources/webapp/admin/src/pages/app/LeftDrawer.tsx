@@ -12,7 +12,8 @@ const proArray: KeyStr = {
     "category": '/pro',
     "brand": '/pro',
     "spec": '/pro',
-    "attr": '/pro'
+    "attr": '/pro',
+    "order":'/or',
 };
 
 function getMenuPath(pathArr: string[]) {

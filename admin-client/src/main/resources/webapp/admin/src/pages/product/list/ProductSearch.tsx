@@ -1,13 +1,13 @@
 import React, {useEffect} from 'react';
 import {Button, Col, Form, Input, Row, Select, TreeSelect} from "antd";
 import styled from "styled-components";
-import {ProductQueryModel, RouterState} from "../../model";
-import {useAppDispatch, useAppSelector} from "../../store/hooks";
-import {selectCategoryReducer, selectUITree} from "../../store/slices/cateogrySlice";
+import {ProductQueryModel, RouterState} from "../../../model";
+import {useAppDispatch, useAppSelector} from "../../../store/hooks";
+import {selectCategoryReducer, selectUITree} from "../../../store/slices/cateogrySlice";
 import {useHistory} from "react-router-dom";
-import {getBrandList, selectBrandReducer} from "../../store/slices/brandSlice";
+import {getBrandList, selectBrandReducer} from "../../../store/slices/brandSlice";
 import {AutoComplete} from 'antd';
-import {CategoryTree} from "../category/CategoryConvertor";
+import {CategoryTree} from "../../category/CategoryConvertor";
 import {useForm} from "antd/es/form/Form";
 
 const {Option} = AutoComplete;
