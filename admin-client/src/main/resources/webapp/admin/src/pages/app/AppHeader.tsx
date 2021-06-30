@@ -38,7 +38,9 @@ const breadCrumbMap: KeyStr = {
     "/brand": '品牌列表',
     "/brand/add": '品牌添加',
     "/brand/update": '品牌更新',
+
     "/order":'订单列表',
+    "/order/detail":'订单详情',
     "": '主页',
 }
 

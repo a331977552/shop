@@ -6,7 +6,7 @@ export interface OrderModel {
 
     totalPrice?: number;
 
-    status?: 'UNPAID' | 'PAID' | 'SHIPPING'|'SHIPPED' | 'FINISHED' | 'REFUND' | 'CLOSED';
+    status: 'UNPAID' | 'PAID' | 'SHIPPING'|'SHIPPED' | 'FINISHED' | 'REFUND' | 'CLOSED';
 
     createdTime?: string;
 

@@ -16,13 +16,17 @@ const proArray: KeyStr = {
     "order":'/or',
 };
 
+const pathMenuMap: KeyStr = {
+    // "/order/detail":'/order',
+};
+
 function getMenuPath(pathArr: string[]) {
 
     let selectedMenuKey = '/';
     if (pathArr.length >= 2) {
         selectedMenuKey =  "/" + pathArr.slice(1).join("/");
     }
-    return selectedMenuKey;
+    return pathMenuMap[selectedMenuKey]||selectedMenuKey;
 }
 
 function getOpenPath(pathArr: string[]):string {
