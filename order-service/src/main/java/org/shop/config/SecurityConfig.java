@@ -1,5 +1,6 @@
 package org.shop.config;
 
+import org.shop.common.handler.AuthenticationFailureHandler;
 import org.shop.common.handler.CustomAccessDeniedHandler;
 import org.shop.common.security.JWTAuthenticationProvider;
 import org.shop.common.security.JwtAuthFilter;
@@ -46,16 +47,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				cors().configurationSource(corsConfigurationSource()).
 				and().
 				authorizeRequests().
+				antMatchers( "/error").permitAll().
 				requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll().
-				antMatchers(HttpMethod.GET,"/api/order").permitAll().
-				antMatchers(HttpMethod.POST, "/api/product").hasAuthority("ADMIN").
-				antMatchers(HttpMethod.PUT, "/api/product").hasAuthority("ADMIN").
-				antMatchers(HttpMethod.PUT, "/api/product").hasAuthority("ADMIN").
-				antMatchers( "/api/product/sku/*").hasAuthority("ADMIN").
-				antMatchers(HttpMethod.DELETE, "/api/product/*").hasAuthority("ADMIN").
-				anyRequest().hasAnyAuthority("ADMIN").
+				antMatchers(HttpMethod.GET, "/api/order/*", "/api/order/*/*").hasAnyAuthority("ADMIN", "CUSTOMER").
+				antMatchers(HttpMethod.POST, "/api/order").hasAnyAuthority("ADMIN", "CUSTOMER").
+				antMatchers(HttpMethod.POST, "/api/order/ship").hasAnyAuthority("ADMIN").
+				antMatchers(HttpMethod.PUT, "/api/order").hasAnyAuthority("ADMIN", "CUSTOMER").
+				antMatchers(HttpMethod.DELETE, "/api/order/*").hasAuthority("ADMIN").
+				anyRequest().authenticated().
 				and().
-				exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler()).
+				exceptionHandling().authenticationEntryPoint(new AuthenticationFailureHandler()).
+				accessDeniedHandler(new CustomAccessDeniedHandler()).
 				and().
 				sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().
 				addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class).
@@ -66,7 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(Arrays.asList("*"));
-		configuration.setAllowedMethods(Arrays.asList("GET", "POST","DELETE","PUT", "HEAD", "OPTION"));
+		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "DELETE", "PUT", "HEAD", "OPTION"));
 		configuration.setAllowedHeaders(Arrays.asList("*"));
 		configuration.addExposedHeader("Authorization");
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

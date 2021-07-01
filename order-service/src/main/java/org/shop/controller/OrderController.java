@@ -2,17 +2,16 @@ package org.shop.controller;
 
 import org.shop.common.Result;
 import org.shop.common.util.Page;
-import org.shop.model.vo.OrderCreateVO;
-import org.shop.model.vo.OrderQueryVO;
-import org.shop.model.vo.OrderReturnVO;
-import org.shop.model.vo.OrderUpdateVO;
+import org.shop.model.vo.*;
 import org.shop.service.OrderService;
+import org.shop.service.OrderShippingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 
 @RestController()
 @RequestMapping("/api/order")
@@ -22,6 +21,9 @@ public class OrderController {
 	Integer pageSize;
 	@Autowired
 	OrderService service;
+
+	@Autowired
+	OrderShippingService shippingService;
 
 	@PostMapping()
 	public ResponseEntity<Result<OrderReturnVO>> addOrder(@Valid @RequestBody OrderCreateVO vo) {
@@ -34,8 +36,18 @@ public class OrderController {
 	}
 
 	@PutMapping()
-	public void getOrder(@Valid @RequestBody OrderUpdateVO vo) {
+	public void updateOrder(@Valid @RequestBody OrderUpdateVO vo) {
 		service.updateOrder(vo);
+	}
+	@PostMapping("/ship")
+	public Result<OrderShippingInfoReturnVO> shipProduct(@Valid @RequestBody OrderShippingInfoAddVO vo) {
+		return Result.of(shippingService.shipOrder(vo));
+	}
+
+
+	@DeleteMapping("/{orderID}")
+	public void deleteOrder(@Valid @NotEmpty(message = "订单ID不能为空")@PathVariable(name = "orderID") String orderID) {
+		service.deleteOrder(orderID);
 	}
 
 	@GetMapping("/{page}/{pageSize}")

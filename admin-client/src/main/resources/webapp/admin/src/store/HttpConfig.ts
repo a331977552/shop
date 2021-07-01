@@ -26,7 +26,7 @@ export function addTokenToHeader() {
     });
 }
 
-export function addResponseTransformInterceptor() {
+export function addResponseTransformInterceptor(onAuthenticationFailure?: Function) {
 
     axios.interceptors.response.use((response) => {
         NProgress.done(true)
@@ -34,6 +34,9 @@ export function addResponseTransformInterceptor() {
     }, function (reason) {
         NProgress.done(true)
         console.log("http error:", reason.toJSON());
+        if (reason.response?.status === 401){
+            onAuthenticationFailure&&onAuthenticationFailure();
+        }else
         if (reason.response?.data) {
             return Promise.reject(reason.response.data)
         } else if (reason.request) {
@@ -49,6 +52,7 @@ export const authenticationInterceptor = (onAuthenticationFailure: Function) => 
         return response;
     }, function (reason) {
         if (reason.response.status === 401) {
+            console.log("onAuthenticationFailure")
             onAuthenticationFailure();
         }
         return Promise.reject(reason);

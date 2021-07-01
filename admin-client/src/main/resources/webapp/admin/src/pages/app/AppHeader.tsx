@@ -41,6 +41,7 @@ const breadCrumbMap: KeyStr = {
 
     "/order":'订单列表',
     "/order/detail":'订单详情',
+    "/order/shipping":'发货',
     "": '主页',
 }
 

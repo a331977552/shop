@@ -25,4 +25,6 @@ public class OrderUpdateVO {
 	private List<OrderItemUpdateVO> items;
 
 	private ShippingAddressUpdateVO address;
+
+
 }

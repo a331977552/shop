@@ -27,11 +27,14 @@ Spin.setDefaultIndicator(antIcon);
 
 function Index() {
     let history = useHistory();
-    authenticationInterceptor(() => {
+    // authenticationInterceptor(() => {
+    //     removeTokenFromStorage();
+    //     history.push("/login?redirect_url="+encodeURI(window.location.href));
+    // });
+    addResponseTransformInterceptor(() => {
         removeTokenFromStorage();
         history.push("/login?redirect_url="+encodeURI(window.location.href));
     });
-    addResponseTransformInterceptor();
     addTokenToHeader();
     return <Switch>
         <Route path={"/login"}>

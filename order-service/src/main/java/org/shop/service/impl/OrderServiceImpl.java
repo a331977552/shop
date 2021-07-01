@@ -37,7 +37,6 @@ public class OrderServiceImpl implements OrderService {
 	OrderItemDAOMapper itemMapper;
 	@Autowired
 	ShippingAddressDAOMapper shippingAddressDAOMapper;
-
 	@Autowired
 	ProductServiceProxy productService;
 	@Autowired
@@ -54,7 +53,6 @@ public class OrderServiceImpl implements OrderService {
 		BigDecimal totalPrice = new BigDecimal(0);
 
 		OrderDAO order  = populateOrder(vo, orderID, customerId);
-
 		for (OrderItemCreateVO item :  vo.getItems()) {
 			totalPrice = creteOrderItem(customerId,orderID, totalPrice, item);
 		}
@@ -90,6 +88,7 @@ public class OrderServiceImpl implements OrderService {
 		order.setOrderNum(OrderNumGenerator.generateOrderNum(redisService));
 		order.setUpdatedTime(LocalDateTime.now());
 		order.setCreatedTime(LocalDateTime.now());
+		order.setDeleted(false);
 		return order;
 	}
 
@@ -221,10 +220,21 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
+	public void deleteOrder(String orderID) {
+		OrderDAO orderDAO = new OrderDAO();
+		orderDAO.setId(orderID);
+		orderDAO.setDeleted(true);
+		orderMapper.updateByPrimaryKeySelective(orderDAO);
+	}
+
+
+
+	@Override
 	public Page<OrderReturnVO> findAllOrders(OrderQueryVO example, Page<OrderQueryVO> page) {
 
 		OrderDAOExample exam = new OrderDAOExample();
 		final OrderDAOExample.Criteria criteria = exam.createCriteria();
+		criteria.andDeletedEqualTo(false);
 		if(TextUtil.hasText(example.getUsername())){
 			criteria.andUsernameLike("%"+example.getUsername()+"%");
 		}

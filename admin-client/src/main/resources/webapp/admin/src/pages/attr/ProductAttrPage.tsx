@@ -8,7 +8,7 @@ import {selectCategoryDataReducer} from "../../store/slices/cateogrySlice";
 import {findCategoryByID} from "../category/CategoryConvertor";
 import StatusView from "../../components/StatusView";
 import {getProductAttrList, selectProductAttrReducer} from "../../store/slices/productAttrSlice";
-import {paramParser} from "../../services";
+import {parseSearchParams} from "../../services";
 
 const columns = [
     {
@@ -80,7 +80,7 @@ function ProductAttrPage() {
     let history = useHistory<RouterState>();
     let spec = useAppSelector(selectProductAttrReducer);
     let cate = useAppSelector(selectCategoryDataReducer)?.items as CategoryModel[];
-    let parsedQs = paramParser(history.location.search);
+    let parsedQs = parseSearchParams(history.location.search);
     const cateID = parsedQs['cid'] as string;
 
     useEffect(() => {

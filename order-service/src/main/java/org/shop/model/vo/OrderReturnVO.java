@@ -41,5 +41,7 @@ public class OrderReturnVO {
 
 	private ShippingAddressReturnVO address;
 
+	private Boolean deleted;
+
 
 }

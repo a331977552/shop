@@ -1,7 +1,6 @@
 import qs from 'qs';
 
-export function paramParser(params:string){
-    let result = qs.parse(params, { ignoreQueryPrefix: true });
-    return  result;
+export function parseSearchParams(params:string){
+    return  qs.parse(params, {ignoreQueryPrefix: true});
 }
 

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.shop.mapper.OrderShippingInfoDAOMapper">
+  <resultMap id="BaseResultMap" type="org.shop.model.dao.OrderShippingInfoDAO">
+    <id column="id" jdbcType="CHAR" property="id" />
+    <result column="tracking_num" jdbcType="CHAR" property="trackingNum" />
+    <result column="delivery_name_id" jdbcType="INTEGER" property="deliveryNameId" />
+    <result column="delivery_company_name" jdbcType="VARCHAR" property="deliveryCompanyName" />
+    <result column="order_id" jdbcType="CHAR" property="orderId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, tracking_num, delivery_name_id, delivery_company_name, order_id
+  </sql>
+  <select id="selectByExample" parameterType="org.shop.model.dao.OrderShippingInfoDAOExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from order_shipping_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from order_shipping_info
+    where id = #{id,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from order_shipping_info
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="org.shop.model.dao.OrderShippingInfoDAOExample">
+    delete from order_shipping_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="org.shop.model.dao.OrderShippingInfoDAO">
+    insert into order_shipping_info (id, tracking_num, delivery_name_id, 
+      delivery_company_name, order_id)
+    values (#{id,jdbcType=CHAR}, #{trackingNum,jdbcType=CHAR}, #{deliveryNameId,jdbcType=INTEGER}, 
+      #{deliveryCompanyName,jdbcType=VARCHAR}, #{orderId,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="org.shop.model.dao.OrderShippingInfoDAO">
+    insert into order_shipping_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="trackingNum != null">
+        tracking_num,
+      </if>
+      <if test="deliveryNameId != null">
+        delivery_name_id,
+      </if>
+      <if test="deliveryCompanyName != null">
+        delivery_company_name,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="trackingNum != null">
+        #{trackingNum,jdbcType=CHAR},
+      </if>
+      <if test="deliveryNameId != null">
+        #{deliveryNameId,jdbcType=INTEGER},
+      </if>
+      <if test="deliveryCompanyName != null">
+        #{deliveryCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="org.shop.model.dao.OrderShippingInfoDAOExample" resultType="java.lang.Long">
+    select count(*) from order_shipping_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update order_shipping_info
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=CHAR},
+      </if>
+      <if test="record.trackingNum != null">
+        tracking_num = #{record.trackingNum,jdbcType=CHAR},
+      </if>
+      <if test="record.deliveryNameId != null">
+        delivery_name_id = #{record.deliveryNameId,jdbcType=INTEGER},
+      </if>
+      <if test="record.deliveryCompanyName != null">
+        delivery_company_name = #{record.deliveryCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderId != null">
+        order_id = #{record.orderId,jdbcType=CHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update order_shipping_info
+    set id = #{record.id,jdbcType=CHAR},
+      tracking_num = #{record.trackingNum,jdbcType=CHAR},
+      delivery_name_id = #{record.deliveryNameId,jdbcType=INTEGER},
+      delivery_company_name = #{record.deliveryCompanyName,jdbcType=VARCHAR},
+      order_id = #{record.orderId,jdbcType=CHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="org.shop.model.dao.OrderShippingInfoDAO">
+    update order_shipping_info
+    <set>
+      <if test="trackingNum != null">
+        tracking_num = #{trackingNum,jdbcType=CHAR},
+      </if>
+      <if test="deliveryNameId != null">
+        delivery_name_id = #{deliveryNameId,jdbcType=INTEGER},
+      </if>
+      <if test="deliveryCompanyName != null">
+        delivery_company_name = #{deliveryCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.shop.model.dao.OrderShippingInfoDAO">
+    update order_shipping_info
+    set tracking_num = #{trackingNum,jdbcType=CHAR},
+      delivery_name_id = #{deliveryNameId,jdbcType=INTEGER},
+      delivery_company_name = #{deliveryCompanyName,jdbcType=VARCHAR},
+      order_id = #{orderId,jdbcType=CHAR}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

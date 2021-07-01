@@ -30,8 +30,10 @@
 <!--        <table tableName="image_product" domainObjectName="ImageProductDAO"></table>-->
 <!--        <table tableName="product" domainObjectName="ProductDAO"></table>-->
         <table tableName="s_order" domainObjectName="OrderDAO"/>
-        <table tableName="s_order_item" domainObjectName="OrderItemDAO" />
-        <table tableName="shipping_address" domainObjectName="ShippingAddressDAO"/>
+        <table tableName="order_shipping_info" domainObjectName="OrderShippingInfoDAO"/>
+        <!--        <table tableName="s_order_item" domainObjectName="OrderItemDAO" />-->
+<!--        <table tableName="shipping_address" domainObjectName="ShippingAddressDAO"/>-->
+<!--        <table tableName="delivery_company" domainObjectName="DeliveryCompanyDAO"/>-->
         <!--        <table tableName="shopping_cart" domainObjectName="ShoppingCartDAO"></table>-->
 <!--        <table tableName="snapshot_product" domainObjectName="SnapshotProductDAO"></table>-->
 <!--        <table tableName="brand" domainObjectName="BrandDAO">-->

@@ -15,6 +15,8 @@
     <result column="seller_comment" jdbcType="VARCHAR" property="sellerComment" />
     <result column="auto_confirm_days" jdbcType="INTEGER" property="autoConfirmDays" />
     <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="deleted" jdbcType="BIT" property="deleted" />
+    <result column="shipping_info_id" jdbcType="CHAR" property="shippingInfoId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -76,7 +78,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, customer_id, total_price, status, created_time, updated_time, pay_method, order_source, 
-    order_num, buyer_comment, seller_comment, auto_confirm_days, username
+    order_num, buyer_comment, seller_comment, auto_confirm_days, username, deleted, shipping_info_id
   </sql>
   <select id="selectByExample" parameterType="org.shop.model.dao.OrderDAOExample" resultMap="BaseResultMap">
     select
@@ -113,12 +115,14 @@
       status, created_time, updated_time, 
       pay_method, order_source, order_num, 
       buyer_comment, seller_comment, auto_confirm_days, 
-      username)
+      username, deleted, shipping_info_id
+      )
     values (#{id,jdbcType=CHAR}, #{customerId,jdbcType=CHAR}, #{totalPrice,jdbcType=DECIMAL}, 
       #{status,jdbcType=CHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, 
       #{payMethod,jdbcType=CHAR}, #{orderSource,jdbcType=CHAR}, #{orderNum,jdbcType=CHAR}, 
       #{buyerComment,jdbcType=VARCHAR}, #{sellerComment,jdbcType=VARCHAR}, #{autoConfirmDays,jdbcType=INTEGER}, 
-      #{username,jdbcType=VARCHAR})
+      #{username,jdbcType=VARCHAR}, #{deleted,jdbcType=BIT}, #{shippingInfoId,jdbcType=CHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="org.shop.model.dao.OrderDAO">
     insert into s_order
@@ -162,6 +166,12 @@
       <if test="username != null">
         username,
       </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
+      <if test="shippingInfoId != null">
+        shipping_info_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -202,6 +212,12 @@
       </if>
       <if test="username != null">
         #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=BIT},
+      </if>
+      <if test="shippingInfoId != null">
+        #{shippingInfoId,jdbcType=CHAR},
       </if>
     </trim>
   </insert>
@@ -253,6 +269,12 @@
       <if test="record.username != null">
         username = #{record.username,jdbcType=VARCHAR},
       </if>
+      <if test="record.deleted != null">
+        deleted = #{record.deleted,jdbcType=BIT},
+      </if>
+      <if test="record.shippingInfoId != null">
+        shipping_info_id = #{record.shippingInfoId,jdbcType=CHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -272,7 +294,9 @@
       buyer_comment = #{record.buyerComment,jdbcType=VARCHAR},
       seller_comment = #{record.sellerComment,jdbcType=VARCHAR},
       auto_confirm_days = #{record.autoConfirmDays,jdbcType=INTEGER},
-      username = #{record.username,jdbcType=VARCHAR}
+      username = #{record.username,jdbcType=VARCHAR},
+      deleted = #{record.deleted,jdbcType=BIT},
+      shipping_info_id = #{record.shippingInfoId,jdbcType=CHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -316,6 +340,12 @@
       <if test="username != null">
         username = #{username,jdbcType=VARCHAR},
       </if>
+      <if test="deleted != null">
+        deleted = #{deleted,jdbcType=BIT},
+      </if>
+      <if test="shippingInfoId != null">
+        shipping_info_id = #{shippingInfoId,jdbcType=CHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=CHAR}
   </update>
@@ -332,7 +362,9 @@
       buyer_comment = #{buyerComment,jdbcType=VARCHAR},
       seller_comment = #{sellerComment,jdbcType=VARCHAR},
       auto_confirm_days = #{autoConfirmDays,jdbcType=INTEGER},
-      username = #{username,jdbcType=VARCHAR}
+      username = #{username,jdbcType=VARCHAR},
+      deleted = #{deleted,jdbcType=BIT},
+      shipping_info_id = #{shippingInfoId,jdbcType=CHAR}
     where id = #{id,jdbcType=CHAR}
   </update>
 </mapper>

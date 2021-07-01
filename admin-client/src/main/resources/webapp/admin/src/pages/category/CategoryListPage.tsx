@@ -10,7 +10,7 @@ import {withRouter} from "react-router";
 import {RouteComponentProps} from "react-router";
 import CategoryArgs from "./CategoryArgs";
 import {findCategoriesByParentID} from "./CategoryConvertor";
-import {paramParser} from "../../services";
+import {parseSearchParams} from "../../services";
 import StatusView from "../../components/StatusView";
 
 
@@ -97,7 +97,7 @@ class CategoryListPage extends Component<PropsFromRedux> {
 
     static getDerivedStateFromProps(nextProps: PropsFromRedux) {
         let items = nextProps.categoryList.data?.items as CategoryModel[];
-        let param = paramParser(nextProps.location.search);
+        let param = parseSearchParams(nextProps.location.search);
         const pid = param["pid"];
         return {items: pid ? findCategoriesByParentID(items, +pid) : items}
     }

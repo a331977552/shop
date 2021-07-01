@@ -8,7 +8,7 @@ import ProductSpecOperation from "./ProductSpecOperation";
 import {selectCategoryDataReducer} from "../../store/slices/cateogrySlice";
 import {findCategoryByID} from "../category/CategoryConvertor";
 import StatusView from "../../components/StatusView";
-import {paramParser} from "../../services";
+import {parseSearchParams} from "../../services";
 
 const columns = [
     {
@@ -79,7 +79,7 @@ function ProductSpecPage() {
     let history = useHistory();
     let spec = useAppSelector(selectProductSpecReducer);
     let cate = useAppSelector(selectCategoryDataReducer)?.items as CategoryModel[];
-    let parsedQs = paramParser(history.location.search);
+    let parsedQs = parseSearchParams(history.location.search);
     const cateID = parsedQs['cid'] as string;
     useEffect(() => {
         setCategory(findCategoryByID(cate, +cateID));

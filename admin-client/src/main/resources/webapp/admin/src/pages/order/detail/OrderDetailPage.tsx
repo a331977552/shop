@@ -1,9 +1,9 @@
 import React from 'react';
 
-function OrderDetail() {
+function OrderDetailPage() {
     return (
         <div>detail</div>
     );
 }
 
-export default OrderDetail;
+export default OrderDetailPage;

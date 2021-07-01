@@ -6,7 +6,6 @@ import org.shop.model.dao.OrderDAO;
 import org.shop.model.dao.OrderDAOExample;
 
 import java.util.List;
-
 @Mapper
 public interface OrderDAOMapper {
     long countByExample(OrderDAOExample example);
