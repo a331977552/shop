@@ -12,9 +12,9 @@ import lombok.ToString;
 public class ProductQueryVO {
 
 	private String name;
-	private Integer category;
+	private Integer categoryId;
 	private Status status;
-	private Integer brand;
+	private Integer brandId;
 	private String itemNo;
 
 }

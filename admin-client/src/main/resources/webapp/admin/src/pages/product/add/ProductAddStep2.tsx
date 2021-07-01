@@ -46,7 +46,7 @@ function ProductAddStep2(props: {
         }
         return EditorState.createEmpty()
     });
-    const {category} = productModel;
+    const {categoryId} = productModel;
 
     function onPreviousClick() {
         props.updateProduct({
@@ -57,7 +57,7 @@ function ProductAddStep2(props: {
     }
 
     function onCategoryChange(categoryId: number) {
-        updateProduct({...productModel, category: categoryId});
+        updateProduct({...productModel, categoryId: categoryId});
         onCategoryChangeFuncRef && onCategoryChangeFuncRef();
         onCategoryChangeFuncSpecRef && onCategoryChangeFuncSpecRef();
     }
@@ -125,8 +125,8 @@ function ProductAddStep2(props: {
                     layout="horizontal"
                     preserve={false}
                 >
-                    <Form.Item label="商品分类" initialValue={category}
-                               name="category"
+                    <Form.Item label="商品分类" initialValue={categoryId}
+                               name="categoryId"
                                rules={[{required: true, message: '必须设置种类所属'}]}>
                         <TreeSelect notFoundContent={<div>数据加载错误,请检查网络</div>}
                                     treeData={categories}
@@ -137,13 +137,13 @@ function ProductAddStep2(props: {
                 <AttrAddForm
                     dataSource={skuList}
                     setDataSource={_setSkuList}
-                    category={category}
+                    categoryId={categoryId}
                     onCategoryChangeRef={(onCategoryChange: () => void) => {
                         onCategoryChangeFuncRef = onCategoryChange;
                     }}
                 />
                 <SpecAddForm
-                    category={category}
+                    categoryId={categoryId}
                     onCategoryChangeFuncSpecRef={(onCategoryChange: () => void) => {
                         onCategoryChangeFuncSpecRef = onCategoryChange;
                     }}

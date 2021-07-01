@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class ShippingAddressReturnVO {
 	private String id;
 
-	private String orderId;
+	private String sOrderId;
 
 	private String customerName;
 

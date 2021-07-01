@@ -89,7 +89,7 @@ class ProductControllerTest {
 	private ResponseEntity<Result<ProductReturnVO>> testSuccessBody(String token) {
 		final ProductAddVO successVO = new ProductAddVO();
 		successVO.setName("测试产品 new");
-		successVO.setCategory(1);
+		successVO.setCategoryId(1);
 		List<ProductAddVO.SkuAddVO> list= new ArrayList<>();
 		ProductAddVO.SkuAddVO vo1 =new ProductAddVO.SkuAddVO();
 
@@ -222,12 +222,12 @@ class ProductControllerTest {
 		final Page<ProductReturnVO> page1 = responseEntity.getBody().getResult();
 		final Page<ProductReturnVO> page2 = responseEntity2.getBody().getResult();
 		for (ProductReturnVO item : page1.getItems()) {
-			assertEquals(1, item.getCategory());
+			assertEquals(1, item.getCategoryId());
 			System.out.println(item);
 		}
 		System.out.println();
 		for (ProductReturnVO item : page2.getItems()) {
-			assertEquals(1, item.getCategory());
+			assertEquals(1, item.getCategoryId());
 			System.out.println(item);
 		}
 		assertEquals(id, id2);

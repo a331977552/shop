@@ -4,8 +4,9 @@
   <resultMap id="BaseResultMap" type="org.shop.model.dao.OrderShippingInfoDAO">
     <id column="id" jdbcType="CHAR" property="id" />
     <result column="tracking_num" jdbcType="CHAR" property="trackingNum" />
-    <result column="delivery_name_id" jdbcType="INTEGER" property="deliveryNameId" />
+    <result column="delivery_company_id" jdbcType="INTEGER" property="deliveryCompanyId" />
     <result column="delivery_company_name" jdbcType="VARCHAR" property="deliveryCompanyName" />
+    <result column="s_order_id" jdbcType="CHAR" property="sOrderId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -66,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, tracking_num, delivery_name_id, delivery_company_name
+    id, tracking_num, delivery_company_id, delivery_company_name, s_order_id
   </sql>
   <select id="selectByExample" parameterType="org.shop.model.dao.OrderShippingInfoDAOExample" resultMap="BaseResultMap">
     select
@@ -99,10 +100,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="org.shop.model.dao.OrderShippingInfoDAO">
-    insert into order_shipping_info (id, tracking_num, delivery_name_id, 
-      delivery_company_name)
-    values (#{id,jdbcType=CHAR}, #{trackingNum,jdbcType=CHAR}, #{deliveryNameId,jdbcType=INTEGER}, 
-      #{deliveryCompanyName,jdbcType=VARCHAR})
+    insert into order_shipping_info (id, tracking_num, delivery_company_id, 
+      delivery_company_name, s_order_id)
+    values (#{id,jdbcType=CHAR}, #{trackingNum,jdbcType=CHAR}, #{deliveryCompanyId,jdbcType=INTEGER}, 
+      #{deliveryCompanyName,jdbcType=VARCHAR}, #{sOrderId,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="org.shop.model.dao.OrderShippingInfoDAO">
     insert into order_shipping_info
@@ -113,11 +114,14 @@
       <if test="trackingNum != null">
         tracking_num,
       </if>
-      <if test="deliveryNameId != null">
-        delivery_name_id,
+      <if test="deliveryCompanyId != null">
+        delivery_company_id,
       </if>
       <if test="deliveryCompanyName != null">
         delivery_company_name,
+      </if>
+      <if test="sOrderId != null">
+        s_order_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -127,11 +131,14 @@
       <if test="trackingNum != null">
         #{trackingNum,jdbcType=CHAR},
       </if>
-      <if test="deliveryNameId != null">
-        #{deliveryNameId,jdbcType=INTEGER},
+      <if test="deliveryCompanyId != null">
+        #{deliveryCompanyId,jdbcType=INTEGER},
       </if>
       <if test="deliveryCompanyName != null">
         #{deliveryCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="sOrderId != null">
+        #{sOrderId,jdbcType=CHAR},
       </if>
     </trim>
   </insert>
@@ -150,11 +157,14 @@
       <if test="record.trackingNum != null">
         tracking_num = #{record.trackingNum,jdbcType=CHAR},
       </if>
-      <if test="record.deliveryNameId != null">
-        delivery_name_id = #{record.deliveryNameId,jdbcType=INTEGER},
+      <if test="record.deliveryCompanyId != null">
+        delivery_company_id = #{record.deliveryCompanyId,jdbcType=INTEGER},
       </if>
       <if test="record.deliveryCompanyName != null">
         delivery_company_name = #{record.deliveryCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sOrderId != null">
+        s_order_id = #{record.sOrderId,jdbcType=CHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -165,8 +175,9 @@
     update order_shipping_info
     set id = #{record.id,jdbcType=CHAR},
       tracking_num = #{record.trackingNum,jdbcType=CHAR},
-      delivery_name_id = #{record.deliveryNameId,jdbcType=INTEGER},
-      delivery_company_name = #{record.deliveryCompanyName,jdbcType=VARCHAR}
+      delivery_company_id = #{record.deliveryCompanyId,jdbcType=INTEGER},
+      delivery_company_name = #{record.deliveryCompanyName,jdbcType=VARCHAR},
+      s_order_id = #{record.sOrderId,jdbcType=CHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -177,11 +188,14 @@
       <if test="trackingNum != null">
         tracking_num = #{trackingNum,jdbcType=CHAR},
       </if>
-      <if test="deliveryNameId != null">
-        delivery_name_id = #{deliveryNameId,jdbcType=INTEGER},
+      <if test="deliveryCompanyId != null">
+        delivery_company_id = #{deliveryCompanyId,jdbcType=INTEGER},
       </if>
       <if test="deliveryCompanyName != null">
         delivery_company_name = #{deliveryCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="sOrderId != null">
+        s_order_id = #{sOrderId,jdbcType=CHAR},
       </if>
     </set>
     where id = #{id,jdbcType=CHAR}
@@ -189,8 +203,9 @@
   <update id="updateByPrimaryKey" parameterType="org.shop.model.dao.OrderShippingInfoDAO">
     update order_shipping_info
     set tracking_num = #{trackingNum,jdbcType=CHAR},
-      delivery_name_id = #{deliveryNameId,jdbcType=INTEGER},
-      delivery_company_name = #{deliveryCompanyName,jdbcType=VARCHAR}
+      delivery_company_id = #{deliveryCompanyId,jdbcType=INTEGER},
+      delivery_company_name = #{deliveryCompanyName,jdbcType=VARCHAR},
+      s_order_id = #{sOrderId,jdbcType=CHAR}
     where id = #{id,jdbcType=CHAR}
   </update>
 </mapper>

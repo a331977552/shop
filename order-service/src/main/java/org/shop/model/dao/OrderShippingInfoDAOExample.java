@@ -244,63 +244,63 @@ public class OrderShippingInfoDAOExample {
             return (Criteria) this;
         }
 
-        public Criteria andDeliveryNameIdIsNull() {
-            addCriterion("delivery_name_id is null");
+        public Criteria andDeliveryCompanyIdIsNull() {
+            addCriterion("delivery_company_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andDeliveryNameIdIsNotNull() {
-            addCriterion("delivery_name_id is not null");
+        public Criteria andDeliveryCompanyIdIsNotNull() {
+            addCriterion("delivery_company_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDeliveryNameIdEqualTo(Integer value) {
-            addCriterion("delivery_name_id =", value, "deliveryNameId");
+        public Criteria andDeliveryCompanyIdEqualTo(Integer value) {
+            addCriterion("delivery_company_id =", value, "deliveryCompanyId");
             return (Criteria) this;
         }
 
-        public Criteria andDeliveryNameIdNotEqualTo(Integer value) {
-            addCriterion("delivery_name_id <>", value, "deliveryNameId");
+        public Criteria andDeliveryCompanyIdNotEqualTo(Integer value) {
+            addCriterion("delivery_company_id <>", value, "deliveryCompanyId");
             return (Criteria) this;
         }
 
-        public Criteria andDeliveryNameIdGreaterThan(Integer value) {
-            addCriterion("delivery_name_id >", value, "deliveryNameId");
+        public Criteria andDeliveryCompanyIdGreaterThan(Integer value) {
+            addCriterion("delivery_company_id >", value, "deliveryCompanyId");
             return (Criteria) this;
         }
 
-        public Criteria andDeliveryNameIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("delivery_name_id >=", value, "deliveryNameId");
+        public Criteria andDeliveryCompanyIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("delivery_company_id >=", value, "deliveryCompanyId");
             return (Criteria) this;
         }
 
-        public Criteria andDeliveryNameIdLessThan(Integer value) {
-            addCriterion("delivery_name_id <", value, "deliveryNameId");
+        public Criteria andDeliveryCompanyIdLessThan(Integer value) {
+            addCriterion("delivery_company_id <", value, "deliveryCompanyId");
             return (Criteria) this;
         }
 
-        public Criteria andDeliveryNameIdLessThanOrEqualTo(Integer value) {
-            addCriterion("delivery_name_id <=", value, "deliveryNameId");
+        public Criteria andDeliveryCompanyIdLessThanOrEqualTo(Integer value) {
+            addCriterion("delivery_company_id <=", value, "deliveryCompanyId");
             return (Criteria) this;
         }
 
-        public Criteria andDeliveryNameIdIn(List<Integer> values) {
-            addCriterion("delivery_name_id in", values, "deliveryNameId");
+        public Criteria andDeliveryCompanyIdIn(List<Integer> values) {
+            addCriterion("delivery_company_id in", values, "deliveryCompanyId");
             return (Criteria) this;
         }
 
-        public Criteria andDeliveryNameIdNotIn(List<Integer> values) {
-            addCriterion("delivery_name_id not in", values, "deliveryNameId");
+        public Criteria andDeliveryCompanyIdNotIn(List<Integer> values) {
+            addCriterion("delivery_company_id not in", values, "deliveryCompanyId");
             return (Criteria) this;
         }
 
-        public Criteria andDeliveryNameIdBetween(Integer value1, Integer value2) {
-            addCriterion("delivery_name_id between", value1, value2, "deliveryNameId");
+        public Criteria andDeliveryCompanyIdBetween(Integer value1, Integer value2) {
+            addCriterion("delivery_company_id between", value1, value2, "deliveryCompanyId");
             return (Criteria) this;
         }
 
-        public Criteria andDeliveryNameIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("delivery_name_id not between", value1, value2, "deliveryNameId");
+        public Criteria andDeliveryCompanyIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("delivery_company_id not between", value1, value2, "deliveryCompanyId");
             return (Criteria) this;
         }
 
@@ -374,73 +374,73 @@ public class OrderShippingInfoDAOExample {
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdIsNull() {
-            addCriterion("order_id is null");
+        public Criteria andSOrderIdIsNull() {
+            addCriterion("s_order_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdIsNotNull() {
-            addCriterion("order_id is not null");
+        public Criteria andSOrderIdIsNotNull() {
+            addCriterion("s_order_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdEqualTo(String value) {
-            addCriterion("order_id =", value, "orderId");
+        public Criteria andSOrderIdEqualTo(String value) {
+            addCriterion("s_order_id =", value, "sOrderId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdNotEqualTo(String value) {
-            addCriterion("order_id <>", value, "orderId");
+        public Criteria andSOrderIdNotEqualTo(String value) {
+            addCriterion("s_order_id <>", value, "sOrderId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdGreaterThan(String value) {
-            addCriterion("order_id >", value, "orderId");
+        public Criteria andSOrderIdGreaterThan(String value) {
+            addCriterion("s_order_id >", value, "sOrderId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdGreaterThanOrEqualTo(String value) {
-            addCriterion("order_id >=", value, "orderId");
+        public Criteria andSOrderIdGreaterThanOrEqualTo(String value) {
+            addCriterion("s_order_id >=", value, "sOrderId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdLessThan(String value) {
-            addCriterion("order_id <", value, "orderId");
+        public Criteria andSOrderIdLessThan(String value) {
+            addCriterion("s_order_id <", value, "sOrderId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdLessThanOrEqualTo(String value) {
-            addCriterion("order_id <=", value, "orderId");
+        public Criteria andSOrderIdLessThanOrEqualTo(String value) {
+            addCriterion("s_order_id <=", value, "sOrderId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdLike(String value) {
-            addCriterion("order_id like", value, "orderId");
+        public Criteria andSOrderIdLike(String value) {
+            addCriterion("s_order_id like", value, "sOrderId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdNotLike(String value) {
-            addCriterion("order_id not like", value, "orderId");
+        public Criteria andSOrderIdNotLike(String value) {
+            addCriterion("s_order_id not like", value, "sOrderId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdIn(List<String> values) {
-            addCriterion("order_id in", values, "orderId");
+        public Criteria andSOrderIdIn(List<String> values) {
+            addCriterion("s_order_id in", values, "sOrderId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdNotIn(List<String> values) {
-            addCriterion("order_id not in", values, "orderId");
+        public Criteria andSOrderIdNotIn(List<String> values) {
+            addCriterion("s_order_id not in", values, "sOrderId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdBetween(String value1, String value2) {
-            addCriterion("order_id between", value1, value2, "orderId");
+        public Criteria andSOrderIdBetween(String value1, String value2) {
+            addCriterion("s_order_id between", value1, value2, "sOrderId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdNotBetween(String value1, String value2) {
-            addCriterion("order_id not between", value1, value2, "orderId");
+        public Criteria andSOrderIdNotBetween(String value1, String value2) {
+            addCriterion("s_order_id not between", value1, value2, "sOrderId");
             return (Criteria) this;
         }
     }

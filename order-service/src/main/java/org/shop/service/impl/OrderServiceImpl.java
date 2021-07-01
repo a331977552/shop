@@ -73,7 +73,7 @@ public class OrderServiceImpl implements OrderService {
 
 	private ShippingAddressReturnVO getAddressByOrder(String orderID) {
 		ShippingAddressDAOExample example =new ShippingAddressDAOExample();
-		example.createCriteria().andOrderIdEqualTo(orderID);
+		example.createCriteria().andSOrderIdEqualTo(orderID);
 		return BeanConvertor.convert(shippingAddressDAOMapper.selectByExample(example).get(0),ShippingAddressReturnVO.class);
 	}
 
@@ -102,9 +102,8 @@ public class OrderServiceImpl implements OrderService {
 		BigDecimal subTotal = sku.getPrice().multiply(BigDecimal.valueOf(item.getQuantity()));
 		totalPrice = totalPrice.add(subTotal);
 		final OrderItemDAO orderItemDAO = BeanConvertor.convert(item, OrderItemDAO.class);
-		orderItemDAO.setOrderId(orderId);
+		orderItemDAO.setsOrderId(orderId);
 		orderItemDAO.setId(UUIDUtils.generateID());
-		orderItemDAO.setCustomerId(customerId);
 		orderItemDAO.setUpdatedTime(LocalDateTime.now());
 		orderItemDAO.setCreatedTime(LocalDateTime.now());
 		orderItemDAO.setSnapshotProductId("test");
@@ -123,7 +122,7 @@ public class OrderServiceImpl implements OrderService {
 		shippingAddressDAO.setUpdatedTime(LocalDateTime.now());
 		BeanUtils.copyProperties(address, shippingAddressDAO);
 
-		shippingAddressDAO.setOrderId(orderID);
+		shippingAddressDAO.setsOrderId(orderID);
 		shippingAddressDAO.setId(UUIDUtils.generateID());
 		shippingAddressDAOMapper.insert(shippingAddressDAO);
 	}
@@ -157,7 +156,7 @@ public class OrderServiceImpl implements OrderService {
 		BigDecimal totalPrice = new BigDecimal(0);
 		final List<OrderItemUpdateVO> items = updateVO.getItems();
 		OrderItemDAOExample itemExample = new OrderItemDAOExample();
-		itemExample.createCriteria().andOrderIdEqualTo(updateVO.getId());
+		itemExample.createCriteria().andSOrderIdEqualTo(updateVO.getId());
 		final long itemCount = itemMapper.countByExample(itemExample);
 		if (itemCount != items.size()) {
 			throw new OrderUpdateException("订单更新不能增加或删除条目,请重新创建订单!");
@@ -206,7 +205,7 @@ public class OrderServiceImpl implements OrderService {
 	private List<OrderItemReturnVO> findItemsByOrderID(String id) {
 		//find all corresponding items.
 		OrderItemDAOExample oie = new OrderItemDAOExample();
-		oie.createCriteria().andOrderIdEqualTo(id);
+		oie.createCriteria().andSOrderIdEqualTo(id);
 		return itemMapper.selectByExample(oie).stream().map(this::convertToItemVO).collect(Collectors.toList());
 	}
 
@@ -251,7 +250,7 @@ public class OrderServiceImpl implements OrderService {
 			ShippingAddressDAOExample addExample = new ShippingAddressDAOExample();
 			addExample.createCriteria().andCustomerNameLike("%"+example.getReceiverName()+"%");
 			final List<ShippingAddressDAO> shippingAddressDAOS = shippingAddressDAOMapper.selectByExample(addExample);
-			final List<String> ids = shippingAddressDAOS.stream().map(ShippingAddressDAO::getOrderId).collect(Collectors.toList());
+			final List<String> ids = shippingAddressDAOS.stream().map(ShippingAddressDAO::getsOrderId).collect(Collectors.toList());
 			criteria.andIdIn(ids);
 		}
 		String orderBy = Optional.ofNullable(page.getOrderBy()).orElse("created_time desc ");

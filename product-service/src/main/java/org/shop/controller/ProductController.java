@@ -56,14 +56,14 @@ public class ProductController {
 	                                                                         @PathVariable(name = "pageSize") int pageSize,
 	                                                                         @RequestParam(name = "orderBy", required = false) String order,
 	                                                                         @RequestParam(name = "name", required = false) String name,
-	                                                                         @RequestParam(name = "category", required = false) Integer category,
+	                                                                         @RequestParam(name = "categoryId", required = false) Integer categoryId,
 	                                                                         @RequestParam(name = "status", required = false) String status,
-	                                                                         @RequestParam(name = "brand", required = false) Integer brand,
+	                                                                         @RequestParam(name = "brandId", required = false) Integer brandId,
 	                                                                         @RequestParam(name = "itemNo", required = false) String itemNo
 	) {
 		Page<ProductQueryVO> of = Page.of(page, Math.max(5, Math.min(pageSize, this.pageSize)), order);
 		return ResponseEntity.ok(Result.of(service.getAll(
-				new ProductQueryVO(name, category, Status.valueOf(Optional.ofNullable(status).orElse("ON_SALE")), brand, itemNo), of)));
+				new ProductQueryVO(name, categoryId, Status.valueOf(Optional.ofNullable(status).orElse("ON_SALE")), brandId, itemNo), of)));
 	}
 
 	@GetMapping("/findByCategoryId/{id}/{page}/{pageSize}")

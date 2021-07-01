@@ -15,7 +15,7 @@ public class ProductReturnVO {
 	@NotBlank(message = "产品名称不能为空")
 	private String name;
 	@NotNull(message = "必须指定产品目录")
-	private Integer category;
+	private Integer categoryId;
 
 	private Integer weight;
 
@@ -27,7 +27,7 @@ public class ProductReturnVO {
 
 	private String standardImg;
 
-	private Integer brand;
+	private Integer brandId;
 	private List<SkuReturnVO> skuList;
 	private String subtitle;
 

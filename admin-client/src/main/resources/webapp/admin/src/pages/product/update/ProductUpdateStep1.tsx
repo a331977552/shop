@@ -122,9 +122,9 @@ function ProductUpdateStep1({productModel, updateProduct, form,moveToNextStep} :
                     />
                 </Form.Item>
 
-                <Form.Item label="品牌" name={"brand"}
+                <Form.Item label="品牌" name={"brandId"}
                            rules={[{required: true, message: '必须选择品牌'}]}
-                           initialValue={String(productModel?.brand)}
+                           initialValue={String(productModel?.brandId)}
                            hasFeedback={true}
                 >
                     <Select

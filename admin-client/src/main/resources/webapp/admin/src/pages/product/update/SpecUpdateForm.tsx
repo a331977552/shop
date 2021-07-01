@@ -8,10 +8,10 @@ function SpecUpdateForm(
     props: {
         initialSpecs:string|undefined,
         onCategoryChangeFuncSpecRef:(onCategoryChange:()=>void)=>void,
-        category?: number
+        categoryId?: number
     }
 ) {
-    const {category,onCategoryChangeFuncSpecRef,initialSpecs} = props;
+    const {categoryId,onCategoryChangeFuncSpecRef,initialSpecs} = props;
     const [specs, setSpecs] = useState<KeyVals>(() => {
         return initialSpecs ? JSON.parse(initialSpecs) : {};
     });
@@ -21,8 +21,8 @@ function SpecUpdateForm(
         setSpecs({});
     });
     useEffect(() => {
-        if (category) {
-            getProductSpecListAPI({example: {categoryId: category}}).then((result) => {
+        if (categoryId) {
+            getProductSpecListAPI({example: {categoryId: categoryId}}).then((result) => {
                 const specsForm = result.result?.items?.map(item => ({
                     ...item, valueArray: Array.from(new Set(item.value?.split("\n")))
                 }));
@@ -31,7 +31,7 @@ function SpecUpdateForm(
                 message.error(error.msgDetail, 3);
             })
         }
-    }, [setProductSpecs, category,setSpecs]);
+    }, [setProductSpecs, categoryId,setSpecs]);
 
 
     function onSpecValueChange(changedFields: any, allFields: { [key: string]: string[] }) {

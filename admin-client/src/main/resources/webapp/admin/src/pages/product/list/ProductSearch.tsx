@@ -74,7 +74,7 @@ function ProductSearch({setProductQueryModel}: { setProductQueryModel: React.Dis
                 </StyledColHOC>
                 <StyledColHOC>
                     <Form.Item label="商品分类"
-                               name="category">
+                               name="categoryId">
                         <TreeSelect allowClear={true}
                                     loading={categoryReducer.categoryList.status === 'loading'}
                                     treeData={uiTree}
@@ -83,7 +83,7 @@ function ProductSearch({setProductQueryModel}: { setProductQueryModel: React.Dis
                 </StyledColHOC>
                 <StyledColHOC>
                     <Form.Item label="商品品牌"
-                               name="brand"
+                               name="brandId"
                     >
                         <Select
                             allowClear={true}

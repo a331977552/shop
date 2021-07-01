@@ -20,10 +20,10 @@ function removeSpecsFromCache() {
 function SpecAddForm(
     props: {
         onCategoryChangeFuncSpecRef: (onCategoryChange: () => void) => void,
-        category?: number
+        categoryId?: number
     }
 ) {
-    const {category, onCategoryChangeFuncSpecRef} = props;
+    const {categoryId, onCategoryChangeFuncSpecRef} = props;
     const [specs, setSpecs] = useState<KeyVals>(() => {
         const specs = loadSpecs();
         return specs ? JSON.parse(specs) : {};
@@ -36,8 +36,8 @@ function SpecAddForm(
     });
     useEffect(() => {
         let isMounted = true;
-        if (category) {
-            let promis = getProductSpecListAPI({example: {categoryId: category}});
+        if (categoryId) {
+            let promis = getProductSpecListAPI({example: {categoryId: categoryId}});
             promis.then((result) => {
                 const specsForm = result.result?.items?.map(item => ({
                     ...item, valueArray: Array.from(new Set(item.value?.split("\n")))
@@ -51,7 +51,7 @@ function SpecAddForm(
         return ()=>{
             isMounted = false;
         }
-    }, [setProductSpecs, category, setSpecs]);
+    }, [setProductSpecs, categoryId, setSpecs]);
 
 
     function onSpecValueChange(changedFields: any, allFields: { [key: string]: string[] }) {

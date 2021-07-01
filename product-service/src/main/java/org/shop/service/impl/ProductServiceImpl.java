@@ -97,12 +97,12 @@ public class ProductServiceImpl implements ProductService {
 		productDAO.setUpdatedTime(LocalDateTime.now());
 		productDAO.setUpdatedTime(LocalDateTime.now());
 		mapper.updateByPrimaryKeySelective(productDAO);
-		if (example.getBrand() != null) {
+		if (example.getBrandId() != null) {
 			BrandDAOExample brexample = new BrandDAOExample();
-			brexample.createCriteria().andIdEqualTo(example.getBrand());
+			brexample.createCriteria().andIdEqualTo(example.getBrandId());
 			final long l = brandDAOMapper.countByExample(brexample);
 			if (l <= 0) {
-				log.error("产品更新失败， brand ID: {} 错误 ", example.getBrand());
+				log.error("产品更新失败， brand ID: {} 错误 ", example.getBrandId());
 				throw new ProductUpdateException("产品更新失败， brand ID 错误");
 			}
 		}
@@ -146,14 +146,14 @@ public class ProductServiceImpl implements ProductService {
 		if (TextUtil.hasText(example.getName())) {
 			criteria.andNameEqualTo(example.getName());
 		}
-		if (example.getBrand() != null) {
-			criteria.andBrandEqualTo(example.getBrand());
+		if (example.getBrandId() != null) {
+			criteria.andBrandIdEqualTo(example.getBrandId());
 		}
 		if (example.getStatus() != null) {
 			criteria.andStatusEqualTo(example.getStatus().name());
 		}
-		if (example.getCategory() != null) {
-			criteria.andCategoryEqualTo(example.getCategory());
+		if (example.getCategoryId() != null) {
+			criteria.andCategoryIdEqualTo(example.getCategoryId());
 		}
 
 		return mapper.countByExample(productDAOExample);
@@ -168,7 +168,7 @@ public class ProductServiceImpl implements ProductService {
 	public Page<ProductReturnVO> getProductsByCategoryId(Integer id, Page page) {
 		ProductDAOExample productDAOExample = createExample();
 		ProductDAOExample.Criteria criteria = productDAOExample.createCriteria();
-		criteria.andCategoryEqualTo(id);
+		criteria.andCategoryIdEqualTo(id);
 
 		String orderBy = Optional.ofNullable(page.getOrderBy()).orElse("updated_time desc ");
 		productDAOExample.setOrderByClause(orderBy + " limit " + page.getPageSize() + " offset " + page.getOffset());
@@ -188,7 +188,7 @@ public class ProductServiceImpl implements ProductService {
 	public long countProductsByCategoryId(Integer id) {
 		ProductDAOExample productDAOExample = createExample();
 		ProductDAOExample.Criteria criteria = productDAOExample.createCriteria();
-		criteria.andCategoryEqualTo(id);
+		criteria.andCategoryIdEqualTo(id);
 		return mapper.countByExample(productDAOExample);
 	}
 
@@ -217,13 +217,13 @@ public class ProductServiceImpl implements ProductService {
 		}
 
 		criteria.andStatusEqualTo(exampleParameter.getStatus().name());
-		final Integer category = exampleParameter.getCategory();
+		final Integer category = exampleParameter.getCategoryId();
 
 		if (category != null) {
-			criteria.andCategoryEqualTo(category);
+			criteria.andCategoryIdEqualTo(category);
 		}
-		if (exampleParameter.getBrand() != null) {
-			criteria.andBrandEqualTo(exampleParameter.getBrand());
+		if (exampleParameter.getBrandId() != null) {
+			criteria.andBrandIdEqualTo(exampleParameter.getBrandId());
 		}
 		if (TextUtil.hasText(exampleParameter.getItemNo())) {
 			criteria.andItemNoLike("%"+exampleParameter.getItemNo()+"%");

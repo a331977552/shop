@@ -8,9 +8,9 @@ public class ProductDAO {
 
     private String name;
 
-    private Integer category;
+    private Integer categoryId;
 
-    private Integer brand;
+    private Integer brandId;
 
     private Integer weight;
 
@@ -62,20 +62,20 @@ public class ProductDAO {
         this.name = name;
     }
 
-    public Integer getCategory() {
-        return category;
+    public Integer getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategory(Integer category) {
-        this.category = category;
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
     }
 
-    public Integer getBrand() {
-        return brand;
+    public Integer getBrandId() {
+        return brandId;
     }
 
-    public void setBrand(Integer brand) {
-        this.brand = brand;
+    public void setBrandId(Integer brandId) {
+        this.brandId = brandId;
     }
 
     public Integer getWeight() {

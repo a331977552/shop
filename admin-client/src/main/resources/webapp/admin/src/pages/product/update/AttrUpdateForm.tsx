@@ -46,10 +46,10 @@ function AttrUpdateForm(props: {
     initAttrValues: { stock: string, price: string, img: string | undefined, attribute: string }[] | undefined, //
     setDataSource: (dataSource: SkuKeyVal[] | undefined) => void,
     onCategoryChangeRef: (onCategoryChange: () => void) => void,
-    category?: number,
+    categoryId?: number,
 
 }) {
-    const {setDataSource, dataSource, category, onCategoryChangeRef, initAttrValues} = props;
+    const {setDataSource, dataSource, categoryId, onCategoryChangeRef, initAttrValues} = props;
     const [productAttrs, setProductAttrs] = useState<Array<ProductAttrModel>>();//product attributes example:{'规格':['1','2']}
     const [attrValues, setAttrValues] = useState<KeyVals>(() => transformSkuListToForm(initAttrValues));// selected product attribute values{规格:'1'}
     onCategoryChangeRef(() => {
@@ -67,15 +67,15 @@ function AttrUpdateForm(props: {
     const [attrForm] = Form.useForm();
 
     useEffect(() => {
-        if (category) {
-            getProductAttrListAPI({example: {categoryId: category}}).then((result) => {
+        if (categoryId) {
+            getProductAttrListAPI({example: {categoryId: categoryId}}).then((result) => {
                 const items = result.result?.items;
                 setProductAttrs(items);
             }).catch((error) => {
                 message.error(error.msgDetail, 3);
             })
         }
-    }, [setProductAttrs, category]);
+    }, [setProductAttrs, categoryId]);
 
     if ((productAttrs?.length || 0) === 0)
         return null;

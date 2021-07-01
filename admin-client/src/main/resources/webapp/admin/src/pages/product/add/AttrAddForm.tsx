@@ -58,9 +58,9 @@ function AttrAddForm(props: {
     dataSource: SkuKeyVal[] | undefined,
     setDataSource: (dataSource: SkuKeyVal[] | undefined) => void,
     onCategoryChangeRef:(onCategoryChange:()=>void)=>void,
-    category?: number
+    categoryId?: number
 }) {
-    const {setDataSource, dataSource, category,onCategoryChangeRef} = props;
+    const {setDataSource, dataSource, categoryId,onCategoryChangeRef} = props;
     const [productAttrs, setProductAttrs] = useState<Array<ProductAttrModel>>();
     const [attrValues, setAttrValues] = useState<KeyVals>(() => {
         const attrs = loadAttrs();
@@ -80,8 +80,8 @@ function AttrAddForm(props: {
     //load attrs from server once category is changed
     useEffect(() => {
         let isMounted = true;
-        if (category) {
-            getProductAttrListAPI({example: {categoryId: category}}).then((result) => {
+        if (categoryId) {
+            getProductAttrListAPI({example: {categoryId: categoryId}}).then((result) => {
                 const items = result.result?.items;
                 if (isMounted){
                     setProductAttrs(items);
@@ -93,7 +93,7 @@ function AttrAddForm(props: {
         return () => {
             isMounted = false
         }
-    }, [setProductAttrs, category]);
+    }, [setProductAttrs, categoryId]);
 
     if ((productAttrs?.length || 0) === 0)
         return null;

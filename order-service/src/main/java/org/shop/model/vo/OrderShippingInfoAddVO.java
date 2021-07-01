@@ -20,6 +20,6 @@ public class OrderShippingInfoAddVO {
     private String deliveryCompanyName;
 
     @IDValid
-    private String orderId;
+    private String sOrderId;
 
 }

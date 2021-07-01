@@ -4,9 +4,9 @@ export interface ProductModel {
 
     name: string;
 
-    category: number;
+    categoryId: number;
 
-    brand: number;
+    brandId: number;
 
     weight?: number;
 
@@ -44,8 +44,8 @@ export type Sku = {
 }
 
 export interface ProductQueryModel {
-    category: number;
+    categoryId: number;
     name: string;
     status: "OUT_OF_ORDER" | "ON_SALE";
-    brand:number,
+    brandId:number,
 }

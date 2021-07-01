@@ -246,123 +246,123 @@ public class ProductDAOExample {
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIsNull() {
-            addCriterion("category is null");
+        public Criteria andCategoryIdIsNull() {
+            addCriterion("category_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIsNotNull() {
-            addCriterion("category is not null");
+        public Criteria andCategoryIdIsNotNull() {
+            addCriterion("category_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryEqualTo(Integer value) {
-            addCriterion("category =", value, "category");
+        public Criteria andCategoryIdEqualTo(Integer value) {
+            addCriterion("category_id =", value, "categoryId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryNotEqualTo(Integer value) {
-            addCriterion("category <>", value, "category");
+        public Criteria andCategoryIdNotEqualTo(Integer value) {
+            addCriterion("category_id <>", value, "categoryId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryGreaterThan(Integer value) {
-            addCriterion("category >", value, "category");
+        public Criteria andCategoryIdGreaterThan(Integer value) {
+            addCriterion("category_id >", value, "categoryId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryGreaterThanOrEqualTo(Integer value) {
-            addCriterion("category >=", value, "category");
+        public Criteria andCategoryIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("category_id >=", value, "categoryId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryLessThan(Integer value) {
-            addCriterion("category <", value, "category");
+        public Criteria andCategoryIdLessThan(Integer value) {
+            addCriterion("category_id <", value, "categoryId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryLessThanOrEqualTo(Integer value) {
-            addCriterion("category <=", value, "category");
+        public Criteria andCategoryIdLessThanOrEqualTo(Integer value) {
+            addCriterion("category_id <=", value, "categoryId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIn(List<Integer> values) {
-            addCriterion("category in", values, "category");
+        public Criteria andCategoryIdIn(List<Integer> values) {
+            addCriterion("category_id in", values, "categoryId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryNotIn(List<Integer> values) {
-            addCriterion("category not in", values, "category");
+        public Criteria andCategoryIdNotIn(List<Integer> values) {
+            addCriterion("category_id not in", values, "categoryId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryBetween(Integer value1, Integer value2) {
-            addCriterion("category between", value1, value2, "category");
+        public Criteria andCategoryIdBetween(Integer value1, Integer value2) {
+            addCriterion("category_id between", value1, value2, "categoryId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryNotBetween(Integer value1, Integer value2) {
-            addCriterion("category not between", value1, value2, "category");
+        public Criteria andCategoryIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("category_id not between", value1, value2, "categoryId");
             return (Criteria) this;
         }
 
-        public Criteria andBrandIsNull() {
-            addCriterion("brand is null");
+        public Criteria andBrandIdIsNull() {
+            addCriterion("brand_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andBrandIsNotNull() {
-            addCriterion("brand is not null");
+        public Criteria andBrandIdIsNotNull() {
+            addCriterion("brand_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andBrandEqualTo(Integer value) {
-            addCriterion("brand =", value, "brand");
+        public Criteria andBrandIdEqualTo(Integer value) {
+            addCriterion("brand_id =", value, "brandId");
             return (Criteria) this;
         }
 
-        public Criteria andBrandNotEqualTo(Integer value) {
-            addCriterion("brand <>", value, "brand");
+        public Criteria andBrandIdNotEqualTo(Integer value) {
+            addCriterion("brand_id <>", value, "brandId");
             return (Criteria) this;
         }
 
-        public Criteria andBrandGreaterThan(Integer value) {
-            addCriterion("brand >", value, "brand");
+        public Criteria andBrandIdGreaterThan(Integer value) {
+            addCriterion("brand_id >", value, "brandId");
             return (Criteria) this;
         }
 
-        public Criteria andBrandGreaterThanOrEqualTo(Integer value) {
-            addCriterion("brand >=", value, "brand");
+        public Criteria andBrandIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("brand_id >=", value, "brandId");
             return (Criteria) this;
         }
 
-        public Criteria andBrandLessThan(Integer value) {
-            addCriterion("brand <", value, "brand");
+        public Criteria andBrandIdLessThan(Integer value) {
+            addCriterion("brand_id <", value, "brandId");
             return (Criteria) this;
         }
 
-        public Criteria andBrandLessThanOrEqualTo(Integer value) {
-            addCriterion("brand <=", value, "brand");
+        public Criteria andBrandIdLessThanOrEqualTo(Integer value) {
+            addCriterion("brand_id <=", value, "brandId");
             return (Criteria) this;
         }
 
-        public Criteria andBrandIn(List<Integer> values) {
-            addCriterion("brand in", values, "brand");
+        public Criteria andBrandIdIn(List<Integer> values) {
+            addCriterion("brand_id in", values, "brandId");
             return (Criteria) this;
         }
 
-        public Criteria andBrandNotIn(List<Integer> values) {
-            addCriterion("brand not in", values, "brand");
+        public Criteria andBrandIdNotIn(List<Integer> values) {
+            addCriterion("brand_id not in", values, "brandId");
             return (Criteria) this;
         }
 
-        public Criteria andBrandBetween(Integer value1, Integer value2) {
-            addCriterion("brand between", value1, value2, "brand");
+        public Criteria andBrandIdBetween(Integer value1, Integer value2) {
+            addCriterion("brand_id between", value1, value2, "brandId");
             return (Criteria) this;
         }
 
-        public Criteria andBrandNotBetween(Integer value1, Integer value2) {
-            addCriterion("brand not between", value1, value2, "brand");
+        public Criteria andBrandIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("brand_id not between", value1, value2, "brandId");
             return (Criteria) this;
         }
 

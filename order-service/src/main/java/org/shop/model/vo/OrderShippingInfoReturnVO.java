@@ -12,6 +12,6 @@ public class OrderShippingInfoReturnVO {
 
 	private String deliveryCompanyName;
 
-	private String orderId;
+	private String sOrderId;
 
 }

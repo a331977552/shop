@@ -14,7 +14,7 @@ public class OrderItemReturnVO {
 
 	private String customerId;
 
-	private String orderId;
+	private String sOrderId;
 
 	private Integer skuId;
 

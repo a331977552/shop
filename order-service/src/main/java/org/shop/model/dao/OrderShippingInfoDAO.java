@@ -5,11 +5,11 @@ public class OrderShippingInfoDAO {
 
     private String trackingNum;
 
-    private Integer deliveryNameId;
+    private Integer deliveryCompanyId;
 
     private String deliveryCompanyName;
 
-    private String orderId;
+    private String sOrderId;
 
     public String getId() {
         return id;
@@ -27,12 +27,12 @@ public class OrderShippingInfoDAO {
         this.trackingNum = trackingNum;
     }
 
-    public Integer getDeliveryNameId() {
-        return deliveryNameId;
+    public Integer getDeliveryCompanyId() {
+        return deliveryCompanyId;
     }
 
-    public void setDeliveryNameId(Integer deliveryNameId) {
-        this.deliveryNameId = deliveryNameId;
+    public void setDeliveryCompanyId(Integer deliveryCompanyId) {
+        this.deliveryCompanyId = deliveryCompanyId;
     }
 
     public String getDeliveryCompanyName() {
@@ -43,11 +43,11 @@ public class OrderShippingInfoDAO {
         this.deliveryCompanyName = deliveryCompanyName;
     }
 
-    public String getOrderId() {
-        return orderId;
+    public String getsOrderId() {
+        return sOrderId;
     }
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
+    public void setsOrderId(String sOrderId) {
+        this.sOrderId = sOrderId;
     }
 }

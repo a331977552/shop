@@ -42,7 +42,7 @@ function LoginPage() {
     return (
         <Spin spinning={status === 'loading'}>
             <div style={{display: "flex", height: '100vh', flexDirection:'column', justifyContent: "center", alignItems: 'center'}}>
-                <div style={{marginBottom:'2vh'}}><h1>商城管理系统</h1></div>
+                <div style={{marginBottom:'2vh'}}><h1 style={{fontWeight:'bold',fontSize:'xxx-large'}}><span style={{color:'#50C11D'}}>C</span>ody's <span style={{color:'#50C11D'}}>S</span>hop</h1></div>
                 <Form
                     {...layout}
                     name="basic"

@@ -16,8 +16,6 @@ import java.util.List;
 public class ProductAddVO {
 	@NotBlank(message = "产品名称不能为空")
 	private String name;
-	@NotNull(message = "必须指定产品目录")
-	private Integer category;
 
 //	@NotEmpty(message = "商品 sku不能为空")
 	private List<SkuAddVO> skuList;
@@ -37,8 +35,11 @@ public class ProductAddVO {
 	@NotNull
 	private String standardImg;
 
+	@NotNull(message = "必须指定产品目录")
+	private Integer categoryId;
+
 	@Min(1)
-	private Integer brand;
+	private Integer brandId;
 
 	@NotEmpty(message = "subtitle cannot be empty")
 	private String subtitle;
