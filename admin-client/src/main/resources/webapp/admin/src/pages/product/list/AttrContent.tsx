@@ -1,6 +1,6 @@
 import React from 'react';
-import {KeyStr, KeyValMix, ProductModel} from "../../../model";
-import {Table, Image} from "antd";
+import {KeyStr, ProductModel} from "../../../model";
+import {Table} from "antd";
 import ProductImage from "../ProductImage";
 import { TableItem} from "../ProductCommon";
 

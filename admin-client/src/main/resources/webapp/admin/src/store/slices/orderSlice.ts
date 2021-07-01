@@ -7,7 +7,7 @@ import {
     OrderModel,
     PageModel,
     PageQueryModel,
-    OrderQueryModel, ProductModel
+    OrderQueryModel
 } from "../../model";
 import {RootState} from "../store";
 import { createGenericSlice, GenericState} from "../hooks";

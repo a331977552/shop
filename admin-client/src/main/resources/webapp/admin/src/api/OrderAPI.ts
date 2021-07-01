@@ -1,5 +1,5 @@
-import {OrderModel, OrderQueryModel, PageModel, PageQueryModel} from "../model";
-import {get, httpDelete, put} from "../store/HttpClient";
+import {OrderModel, OrderQueryModel, PageModel, PageQueryModel, ShippingAddressModel} from "../model";
+import {get, httpDelete} from "../store/HttpClient";
 
 export function getOrderListAPI(pageQueryModel:PageQueryModel<OrderQueryModel>) {
 
@@ -9,5 +9,11 @@ export function getOrderListAPI(pageQueryModel:PageQueryModel<OrderQueryModel>) 
 export function deleteOrderAPI(orderId:string) {
 
     return httpDelete<string>("/api-gateway/order-service/api/order/"+orderId)
+
+}
+
+export function getShippingAddressByOrderIdAPI(orderId:string) {
+
+    return get<ShippingAddressModel>("/api-gateway/order-service/api/order/address?oid="+orderId)
 
 }

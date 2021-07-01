@@ -9,7 +9,6 @@ const {Content} = Layout;
 
 
 function ContentMain() {
-    console.log("contentMain")
     return (
         <Content
             style={{

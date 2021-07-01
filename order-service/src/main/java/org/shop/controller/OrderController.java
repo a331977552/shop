@@ -44,7 +44,6 @@ public class OrderController {
 		return Result.of(shippingService.shipOrder(vo));
 	}
 
-
 	@DeleteMapping("/{orderID}")
 	public void deleteOrder(@Valid @NotEmpty(message = "订单ID不能为空")@PathVariable(name = "orderID") String orderID) {
 		service.deleteOrder(orderID);
@@ -59,9 +58,7 @@ public class OrderController {
 	                                                                     @RequestParam(name = "orderSource", required = false) String orderSource,
 	                                                                     @RequestParam(name = "status", required = false) String status,
 	                                                                     @RequestParam(name = "username", required = false) String username
-
 	) {
-
 		Page<OrderQueryVO> of = Page.of(page, Math.max(5, Math.min(pageSize, this.pageSize)), order);
 		final OrderQueryVO orderQueryVO = new OrderQueryVO(receiverName,username, orderNum, orderSource, status);
 		return ResponseEntity.ok(Result.of(service.findAllOrders(orderQueryVO, of)));

@@ -6,11 +6,12 @@ import loginAPI from "../../api/UserAPI";
 import {setTokenToStorage} from "../../store/TokenConfig";
 import {RouterState} from "../../model";
 import {parseSearchParams} from "../../services";
+import {UserOutlined,LockOutlined} from "@ant-design/icons";
 
 
 const layout = {
-    labelCol: {span: 8},
-    wrapperCol: {span: 16},
+    labelCol: {span: 0},
+    wrapperCol: {span: 24},
 };
 const tailLayout = {
     wrapperCol: {offset: 8, span: 16},
@@ -45,24 +46,23 @@ function LoginPage() {
                 <div style={{marginBottom:'2vh'}}><h1 style={{fontWeight:'bold',fontSize:'xxx-large'}}><span style={{color:'#50C11D'}}>C</span>ody's <span style={{color:'#50C11D'}}>S</span>hop</h1></div>
                 <Form
                     {...layout}
+                    style={{width:'250px'}}
                     name="basic"
                     initialValues={{remember: true}}
                     onFinish={onFinish}
                 >
                     <Form.Item
-                        label="Username"
                         name="username"
                         rules={[{required: true, message: '用户名不能为空'}]}
                     >
-                        <Input/>
+                        <Input prefix={<UserOutlined />} placeholder={"用户名"}/>
                     </Form.Item>
 
                     <Form.Item
-                        label="Password"
                         name="password"
                         rules={[{required: true, min: 6, max: 50, message: '密码长度不正确'}]}
                     >
-                        <Input.Password/>
+                        <Input.Password prefix={<LockOutlined />}  placeholder={"密码"}/>
                     </Form.Item>
 
                     <div style={{color: '#ff4d4f'}}>
@@ -70,12 +70,12 @@ function LoginPage() {
                     </div>
 
                     <Form.Item {...tailLayout} name="remember" valuePropName="checked">
-                        <Checkbox>Remember me</Checkbox>
+                        <Checkbox>记住我</Checkbox>
                     </Form.Item>
 
                     <Form.Item {...tailLayout}>
                         <Button type="primary" htmlType="submit">
-                            Submit
+                            登录
                         </Button>
                     </Form.Item>
 

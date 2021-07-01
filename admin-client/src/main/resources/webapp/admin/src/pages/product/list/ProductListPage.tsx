@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Image, Space, Table} from "antd";
+import {Table} from "antd";
 import {getProductList, selectProductReducer} from "../../../store/slices/productSlice";
 import {useAppDispatch, useAppSelector} from "../../../store/hooks";
 import StatusView from "../../../components/StatusView";

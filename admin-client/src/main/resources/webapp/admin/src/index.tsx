@@ -7,7 +7,6 @@ import 'antd/dist/antd.css';
 import {
     addTokenToHeader,
     addResponseTransformInterceptor,
-    authenticationInterceptor
 } from "./store/HttpConfig";
 import {
     BrowserRouter as Router,
@@ -27,10 +26,6 @@ Spin.setDefaultIndicator(antIcon);
 
 function Index() {
     let history = useHistory();
-    // authenticationInterceptor(() => {
-    //     removeTokenFromStorage();
-    //     history.push("/login?redirect_url="+encodeURI(window.location.href));
-    // });
     addResponseTransformInterceptor(() => {
         removeTokenFromStorage();
         history.push("/login?redirect_url="+encodeURI(window.location.href));

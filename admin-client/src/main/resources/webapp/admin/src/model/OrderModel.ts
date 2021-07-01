@@ -24,7 +24,7 @@ export interface OrderModel {
 
     autoConfirmDays?: number;
 
-    address?: ShippingAddressModel[];
+    address?: ShippingAddressModel;
     
     items?: OrderItem[];
 
