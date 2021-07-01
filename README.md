@@ -41,6 +41,11 @@
 <br/>
 ![alt text](https://github.com/a331977552/shop/blob/main/docs/product_specs.png?raw=true)
 
+sql uml diagram:
+<br/>
+![alt text](https://github.com/a331977552/shop/blob/main/docs/db_uml/shop.png?raw=true)
+
+
 
 
 
