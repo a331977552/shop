@@ -21,14 +21,17 @@
 
 
 
-目前可以展示的部分页面(part of demonstrable pages): 
 
 
-front admin page code struture(under adming-client folder): 
+admin 前端代码结构(/admin-client/src/main/resources/webapp/admin/src/) 
+[front admin page code struture]:
+  
 
 ![alt text](https://github.com/a331977552/shop/blob/main/docs/front_admin_client_code_structure.png?raw=true)
 
 
+
+目前可以展示的部分页面(part of demonstrable pages): 
 
 ![alt text](https://github.com/a331977552/shop/blob/main/docs/product_list.png?raw=true)
 <br/>
