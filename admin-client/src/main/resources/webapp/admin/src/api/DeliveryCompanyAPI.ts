@@ -6,7 +6,7 @@ import {PageModel} from "../model";
 
 
 export function getDeliveryCompanyListAPI(queryVO:DeliveryCompanyQueryModel|undefined) {
-    return get<PageModel<DeliveryCompanyModel>>
+    return get<DeliveryCompanyModel[]>
     ("/api-gateway/order-service/api/delivery_company/all",
         queryVO);
 }
