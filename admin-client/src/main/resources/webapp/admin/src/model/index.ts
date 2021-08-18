@@ -12,3 +12,4 @@ export * from './BrandModel';
 export * from './ImgModel';
 export * from './CommonTypes'
 export * from './OrderModel'
+export * from './DeliveryCompanyModel'

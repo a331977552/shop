@@ -16,10 +16,10 @@ public class OrderShippingInfoAddVO {
     @NotEmpty
     private Integer deliveryNameId;
 
-    @NotEmpty
-    private String deliveryCompanyName;
 
     @IDValid
     private String sOrderId;
+
+
 
 }

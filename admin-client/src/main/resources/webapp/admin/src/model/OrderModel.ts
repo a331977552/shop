@@ -39,7 +39,7 @@ export interface OrderItem {
 
     customerId?: string;
 
-    orderId?: string;
+    sorderId?: string;
 
     skuId?: number;
 
@@ -64,7 +64,7 @@ export interface ShippingAddressModel {
 
     id?: string;
 
-    orderId?: string;
+    sorderId?: string;
 
     customerName?: string;
 

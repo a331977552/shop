@@ -36,6 +36,7 @@ export function addResponseTransformInterceptor(onAuthenticationFailure?: Functi
         console.log("http error:", reason.toJSON());
         if (reason.response?.status === 401){
             onAuthenticationFailure&&onAuthenticationFailure();
+            return Promise.reject(reason.response.data)
         }else
         if (reason.response?.data) {
             return Promise.reject(reason.response.data)

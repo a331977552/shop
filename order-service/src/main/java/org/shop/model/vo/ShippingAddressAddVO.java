@@ -20,5 +20,4 @@ public class ShippingAddressAddVO {
 	@IsPhone
 	private String phoneNumber;
 
-
 }

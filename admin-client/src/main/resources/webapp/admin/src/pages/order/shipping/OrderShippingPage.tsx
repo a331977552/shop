@@ -1,60 +1,79 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {useHistory} from "react-router-dom";
-import {parseSearchParams} from "../../../services";
 import {getShippingAddressByOrderIdAPI} from "../../../api/OrderAPI";
 import {GenericState} from "../../../store/hooks";
 import {ShippingAddressModel} from "../../../model";
 import StatusView from "../../../components/StatusView";
-import {Form, Input, InputNumber, Button} from "antd";
+import {Form, Input, Button} from "antd";
+
 const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 16 },
+    labelCol: {span: 6},
+    wrapperCol: {span: 18},
 };
-function OrderShippingPage() {
-    const [shippingAddressModel,setShippingAddressModel ] = useState<GenericState<ShippingAddressModel>>({status:'loading'});
-    let history = useHistory();
-    let search = history.location.search;
-    let params = parseSearchParams(search);
 
-    const orderId = params['oid'] as string;
-    const getAddress = useCallback(()=>{
+function OrderShippingPage(props:{oid:string}) {
+    const [shippingAddressModel, setShippingAddressModel] = useState<GenericState<ShippingAddressModel>>({status: 'loading'});
+    const shippingAddress = shippingAddressModel.data;
+    const orderId = props.oid;
+
+    const retrieveAddressInfo = useCallback(() => {
+        setShippingAddressModel({status:'loading'})
         getShippingAddressByOrderIdAPI(orderId).then(r => {
-            setShippingAddressModel({status:'finished',data:r.result})
-        }).catch((error)=>{
-            setShippingAddressModel({status:'error',errorMsg:error.errorMsg})
+            setShippingAddressModel({status: 'finished', data: r.result})
+        }).catch((error) => {
+            setShippingAddressModel({status: 'error', errorMsg: error.errorMsg})
         });
-    },[setShippingAddressModel,orderId]);
+    }, [setShippingAddressModel, orderId]);
 
-    useEffect(()=>{
-        getAddress()
-    },[getAddress]);
+    useEffect(() => {
+        retrieveAddressInfo()
+    }, [retrieveAddressInfo]);
 
 
-    function onFinish(value:ShippingAddressModel) {
-
+    function onFinish(value: ShippingAddressModel) {
+        console.log(value);
     }
-
     return (
-        <StatusView status={shippingAddressModel.status} retry={getAddress} errorMsg={shippingAddressModel.errorMsg}>
-            <Form {...layout} name="nest-messages" onFinish={onFinish} >
-                <Form.Item name={['user', 'name']} label="Name" rules={[{ required: true }]}>
+        <StatusView status={shippingAddressModel.status} retry={retrieveAddressInfo} errorMsg={shippingAddressModel.errorMsg}>
+            <Form {...layout} onFinish={onFinish} labelAlign={'right'}>
+                <Form.Item name={'id'} hidden={true} initialValue={shippingAddress?.id}>
+                    <Input/>
+                </Form.Item>
+                <Form.Item name={'sOrderId'} hidden={true} initialValue={shippingAddress?.sorderId}>
+                    <Input/>
+                </Form.Item>
+                <Form.Item name={"customerName"} label="收货人姓名"  rules={[{required: true,message:'收货人姓名不能为空'}]}
+                           initialValue={shippingAddress?.customerName}>
+                    <Input readOnly={true}/>
+                </Form.Item>
+                <Form.Item name={"homeAddress"} label="收货人地址" rules={[{required: true,message:'收货人地址不能为空'}]}
+                           initialValue={shippingAddress?.homeAddress} >
+                    <Input  readOnly={true}/>
+                </Form.Item>
+                <Form.Item name={"phoneNumber"} label="收货人电话" rules={[{required: true,message:'收货人电话不能为空'}]}
+                           initialValue={shippingAddress?.phoneNumber}>
+                    <Input  readOnly={true}/>
+                </Form.Item>
+                <Form.Item name={"postCode"} label="邮编" initialValue={shippingAddress?.postCode}>
+                    <Input  readOnly={true}/>
+                </Form.Item>
+
+
+                <Form.Item name={"trackingNum"} label="快递单号" rules={[{required: true,message:'快递单号不能为空'}]}>
                     <Input />
                 </Form.Item>
-                <Form.Item name={['user', 'email']} label="Email" rules={[{ type: 'email' }]}>
-                    <Input />
+
+
+                <Form.Item name={"deliveryNameId"} label="快递公司" rules={[{required: true,message:'快递单号不能为空'}]}>
+                    <Input  />
                 </Form.Item>
-                <Form.Item name={['user', 'age']} label="Age" rules={[{ type: 'number', min: 0, max: 99 }]}>
-                    <InputNumber />
-                </Form.Item>
-                <Form.Item name={['user', 'website']} label="Website">
-                    <Input />
-                </Form.Item>
-                <Form.Item name={['user', 'introduction']} label="Introduction">
-                    <Input.TextArea />
-                </Form.Item>
-                <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
+
+
+
+                <Form.Item wrapperCol={{
+                    offset:6
+                }}>
                     <Button type="primary" htmlType="submit">
-                        Submit
+                        确认发货
                     </Button>
                 </Form.Item>
             </Form>

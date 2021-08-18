@@ -4,12 +4,6 @@ import {Table} from "antd";
 import ProductImage from "../ProductImage";
 import { TableItem} from "../ProductCommon";
 
-const keyStrMap:KeyStr = {
-    "sales":"销量",
-    "stock":'库存',
-    "price":'价格',
-    'img':'图片'
-}
 
 export const columnsPart2 =
     [
@@ -42,7 +36,7 @@ function AttrContent(record: ProductModel) {
         delete copiedSku.attribute;
         return copiedSku;
     })
-    if (!skuList || skuList.length == 0)
+    if (!skuList || skuList.length === 0)
         return null;
 
 

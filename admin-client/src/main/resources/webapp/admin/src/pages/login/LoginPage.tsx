@@ -35,7 +35,8 @@ function LoginPage() {
                 history.push({pathname:"/",state:{updateMenu:true}})
             }
         }).catch(reason => {
-            setStatus("error")
+            setStatus("error");
+            console.log(reason)
             setErrorMsg(reason.msgDetail);
         });
     }

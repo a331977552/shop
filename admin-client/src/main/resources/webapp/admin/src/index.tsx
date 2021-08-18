@@ -28,7 +28,9 @@ function Index() {
     let history = useHistory();
     addResponseTransformInterceptor(() => {
         removeTokenFromStorage();
-        history.push("/login?redirect_url="+encodeURI(window.location.href));
+        if (history.location.pathname !== '/login'){
+            history.push("/login?redirect_url="+encodeURI(window.location.href));
+        }
     });
     addTokenToHeader();
     return <Switch>

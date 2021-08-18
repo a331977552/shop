@@ -30,7 +30,6 @@ public class OrderShippingServiceImpl implements OrderShippingService {
 	public OrderShippingInfoReturnVO shipOrder(OrderShippingInfoAddVO addVO) {
 		final OrderShippingInfoDAO dao = BeanConvertor.convert(addVO, OrderShippingInfoDAO.class);
 		dao.setId(UUIDUtils.generateID());
-
 		orderShippingInfoDAOMapper.insert(dao);
 		return BeanConvertor.convert(dao, OrderShippingInfoReturnVO.class);
 	}
