@@ -23,6 +23,13 @@
 
 目前可以展示的部分页面(part of demonstrable pages): 
 
+
+front admin page code struture(under adming-client folder): 
+
+![alt text](https://github.com/a331977552/shop/blob/main/docs/front_admin_client_code_structure.png?raw=true)
+
+
+
 ![alt text](https://github.com/a331977552/shop/blob/main/docs/product_list.png?raw=true)
 <br/>
 ![alt text](https://github.com/a331977552/shop/blob/main/docs/product_add1.png?raw=true)
@@ -40,6 +47,7 @@
 ![alt text](https://github.com/a331977552/shop/blob/main/docs/product_attri.png?raw=true)
 <br/>
 ![alt text](https://github.com/a331977552/shop/blob/main/docs/product_specs.png?raw=true)
+
 
 sql uml diagram:
 <br/>
