@@ -6,12 +6,12 @@ import {DeliveryCompanyModel, DeliveryCompanyQueryModel, ErrorModel, PageModel, 
 import {getDeliveryCompanyListAPI} from "../../api";
 
 
-const initialState: GenericState<PageModel<DeliveryCompanyModel>> = {
+const initialState: GenericState<DeliveryCompanyModel[]> = {
     status: 'loading'
 };
 
 
-export const getDeliveryCompanyList = createAsyncThunk<ResultModel<PageModel<DeliveryCompanyModel>>, DeliveryCompanyQueryModel | undefined, ErrorModel>(
+export const getDeliveryCompanyList = createAsyncThunk<ResultModel<DeliveryCompanyModel[]>, DeliveryCompanyQueryModel | undefined, ErrorModel>(
     'delivery_company/list',
     async (queryModel, {rejectWithValue}) => {
         try {
@@ -47,5 +47,5 @@ export const deliveryCompanySlice = createSlice({
 
 
 export const selectDeliveryCompanyReducer = (state: RootState) => state.deliveryCompany;
-export const selectDeliveryCompanyList = (state: RootState) => state.deliveryCompany.data?.items;
+export const selectDeliveryCompanyList = (state: RootState) => state.deliveryCompany.data;
 export default deliveryCompanySlice.reducer;

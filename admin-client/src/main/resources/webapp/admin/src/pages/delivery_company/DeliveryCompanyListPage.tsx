@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {Button, Table, Tag, Space} from "antd";
-import {DeliveryCompanyModel, RouterState} from "../../model";
+import {DeliveryCompanyModel} from "../../model";
 import DeliveryOperation from "./DeliveryOperation";
 import StatusView from "../../components/StatusView";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
@@ -65,9 +65,9 @@ function DeliveryCompanyListPage() {
         <div style={{width: '100%', flex: '1 0 0px', overflow: 'auto', marginTop: '10px'}}>
     <StatusView retry={onRetry} status={status} loadOnce={true}  errorMsg={errorMsg}>
     <Table childrenColumnName={"null"} rowKey={"id"}
-    dataSource={data?.items}
+    dataSource={data}
     columns={columns}
-    pagination={{defaultPageSize: 20, total: data?.totalElements}}
+    pagination={{defaultPageSize: 20, total: data?.length}}
     />
     </StatusView>
     </div>
